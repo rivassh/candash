@@ -2,6 +2,16 @@
 
 **آخرین به‌روزرسانی:** ۲۰۲۶-۰۶-۲۰
 
+## نحوه اجرای follow-upها
+
+```bash
+/opt/llfs/cursor/scripts/run-chat-followups.sh
+```
+
+جزئیات: [`scripts/run-chat-followups.sh`](scripts/run-chat-followups.sh)
+
+---
+
 ## اولویت بالا
 
 - [ ] **commit + push** تغییرات `/opt/stage-deployer` (~۳۹ فایل: `project_archive.py`, UI, YAMLها) — الان `main` حدود ۱۲ commit جلوتر از origin

@@ -1,0 +1,3 @@
+# chat_id<TAB>title<TAB>script<TAB>enabled(1|0)
+# Add a row per chat; run-chat-followups.sh executes enabled scripts in order.
+2026-06-19-stage-archive	بایگانی پروژه‌های استیج	2026-06-19-stage-archive.sh	1
