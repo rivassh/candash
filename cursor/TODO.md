@@ -1,9 +1,9 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-19 (Passbolt chat closeout) + prior 2026-06-20 items  
+**Last updated:** 2026-06-07 (stage-deployer closeout)  
 **Purpose:** keep unfinished tasks from past prompts after closing long chats.
 
-See also: [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+See also: [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
 
 ## Passbolt / DNS (from 2026-06-19 chat)
 
@@ -23,7 +23,8 @@ See also: [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops
 
 ## High Priority
 
-- [ ] **MR `release/0.7.0` → `main`** — `infra/stage-deployer` (چت `b8973106`, 2026-06-18) — [detail](todos/2026-06-18-opt-devops-chat-open.md)
+- [ ] **Stage-deployer chat (2026-06-07)** — GitLab CI green, System Hook, mix-proj CI, stage-deployer push — [detail](todos/2026-06-07-stage-deployer-chat-open.md)
+- [ ] **Stage health/deploy chat (2026-06-19)** — modular-gps build, stage-deployer push, sanaradyab-ws 502 — [detail](todos/2026-06-19-stage-health-deploy-chat-open.md)
 - [ ] **Persian SMS end-to-end test** — send one controlled Persian SMS through the active Novin `send-sync` path and verify the phone renders Persian, not `???`.
 - [ ] **Recover old `???` Persian files only if source exists** — old reports/templates with literal question marks cannot be decoded back automatically.
 - [ ] **Split and commit `debops` work safely** — the working tree contains many unrelated changes; split by topic and scan for secrets before any commit/push.

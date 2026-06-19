@@ -60,6 +60,10 @@ CSV مخارج: `~/.config/cursor-usage.env` + `cursor/scripts/fetch-cursor-usag
 | debops Cursor cost | [reports/2026-06-20-debops-cursor-usage-cost.md](reports/2026-06-20-debops-cursor-usage-cost.md) |
 | modular-gps Cursor cost | [reports/2026-06-20-modular-gps-cursor-cost.md](reports/2026-06-20-modular-gps-cursor-cost.md) |
 | **stage-deployer UI chat (۲۰ ژوئن)** | [chats/2026-06-20-stage-deployer-ui-cursor-session.md](chats/2026-06-20-stage-deployer-ui-cursor-session.md) |
+| **stage health/deploy (۱۹ ژوئن)** | [chats/2026-06-19-stage-health-deploy-closeout.md](chats/2026-06-19-stage-health-deploy-closeout.md) |
+| TODO باز ۱۹ ژوئن | [cursor/todos/2026-06-19-stage-health-deploy-chat-open.md](cursor/todos/2026-06-19-stage-health-deploy-chat-open.md) |
+| Cost ۱۹ ژوئن stage health | [cursor/usage/stage-health-deploy-2026-06-18_2026-06-20-cost-by-prompt.md](cursor/usage/stage-health-deploy-2026-06-18_2026-06-20-cost-by-prompt.md) |
+| Git daily ۱۹ ژوئن stage health | [reports/2026-06-19-stage-health-deploy-git-daily.md](reports/2026-06-19-stage-health-deploy-git-daily.md) |
 | **opt/devops chat (۱۷–۲۰ ژوئن)** | [cursor/chats/2026-06-18-opt-stage-deployer-devops-session.md](cursor/chats/2026-06-18-opt-stage-deployer-devops-session.md) |
 | opt/devops learnings | [chats/2026-06-20-opt-stage-deployer-chat-learnings.md](chats/2026-06-20-opt-stage-deployer-chat-learnings.md) |
 | opt/devops git daily | [reports/2026-06-18-20-opt-devops-git-daily.md](reports/2026-06-18-20-opt-devops-git-daily.md) |
