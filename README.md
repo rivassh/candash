@@ -38,6 +38,11 @@ curl -fsSL https://raw.githubusercontent.com/rivassh/llfs/main/cursor/scripts/bo
 | debops Cursor cost | [reports/2026-06-20-debops-cursor-usage-cost.md](reports/2026-06-20-debops-cursor-usage-cost.md) |
 | modular-gps Cursor cost | [reports/2026-06-20-modular-gps-cursor-cost.md](reports/2026-06-20-modular-gps-cursor-cost.md) |
 | **stage-deployer UI chat (۲۰ ژوئن)** | [chats/2026-06-20-stage-deployer-ui-cursor-session.md](chats/2026-06-20-stage-deployer-ui-cursor-session.md) |
+| **opt/devops chat (۱۷–۲۰ ژوئن)** | [cursor/chats/2026-06-18-opt-stage-deployer-devops-session.md](cursor/chats/2026-06-18-opt-stage-deployer-devops-session.md) |
+| opt/devops learnings | [chats/2026-06-20-opt-stage-deployer-chat-learnings.md](chats/2026-06-20-opt-stage-deployer-chat-learnings.md) |
+| opt/devops git daily | [reports/2026-06-18-20-opt-devops-git-daily.md](reports/2026-06-18-20-opt-devops-git-daily.md) |
+| opt/devops cost | [cursor/usage/2026-06-18-opt-devops-cost-by-prompt.md](cursor/usage/2026-06-18-opt-devops-cost-by-prompt.md) |
+| opt/devops TODO | [cursor/todos/2026-06-18-opt-devops-chat-open.md](cursor/todos/2026-06-18-opt-devops-chat-open.md) |
 | stage-deployer UI cost | [reports/2026-06-20-stage-deployer-ui-cursor-cost.md](reports/2026-06-20-stage-deployer-ui-cursor-cost.md) |
 | stage-deployer UI git | [reports/2026-06-18-20-stage-deployer-ui-git-daily.md](reports/2026-06-18-20-stage-deployer-ui-git-daily.md) |
 | stage-deployer UI TODO | [cursor/todos/stage-deployer-ui-chat-open.md](cursor/todos/stage-deployer-ui-chat-open.md) |
