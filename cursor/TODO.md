@@ -1,9 +1,21 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-07 (stage-deployer closeout)  
+**Last updated:** 2026-06-20 (stage-deployer production/UI closeout)  
 **Purpose:** keep unfinished tasks from past prompts after closing long chats.
 
-See also: [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+See also: [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+
+## Stage-deployer production / UI / webhook (from 2026-06-18–20 chat)
+
+- [ ] **push stage-deployer** — ~15 commits ahead of origin; push GitLab when ready
+- [ ] **webhook secrets** — GitLab #1597 / GitHub `403` → align secrets with `.env`
+- [ ] **SMS alarm env** — `WEBHOOK_ALERT_SMS_MOBILE`, `ALERT_SMS_HTTP_URL` (user sets `.env`)
+- [ ] **Nextcloud submodule remote** — create `infra/nextcloud.git` + push submodule
+- [ ] **Production SSH** — `prod_host`/`prod_path` for erp-guarantie & mix-proj if real prod deploy
+- [ ] **AD LDAP Nextcloud** — `occ ldap:test-config` still failing (DC/network)
+- [ ] **Rotate Cursor session** — cookie pasted again in 2026-06-20 closeout prompt
+
+Detail: [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md)
 
 ## Passbolt / DNS (from 2026-06-19 chat)
 
