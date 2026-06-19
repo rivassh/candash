@@ -37,3 +37,7 @@ curl -fsSL https://raw.githubusercontent.com/rivassh/llfs/main/cursor/scripts/bo
 | modular-gps git | [reports/2026-06-19-20-modular-gps-git-daily.md](reports/2026-06-19-20-modular-gps-git-daily.md) |
 | debops Cursor cost | [reports/2026-06-20-debops-cursor-usage-cost.md](reports/2026-06-20-debops-cursor-usage-cost.md) |
 | modular-gps Cursor cost | [reports/2026-06-20-modular-gps-cursor-cost.md](reports/2026-06-20-modular-gps-cursor-cost.md) |
+| **stage-deployer UI chat (۲۰ ژوئن)** | [chats/2026-06-20-stage-deployer-ui-cursor-session.md](chats/2026-06-20-stage-deployer-ui-cursor-session.md) |
+| stage-deployer UI cost | [reports/2026-06-20-stage-deployer-ui-cursor-cost.md](reports/2026-06-20-stage-deployer-ui-cursor-cost.md) |
+| stage-deployer UI git | [reports/2026-06-18-20-stage-deployer-ui-git-daily.md](reports/2026-06-18-20-stage-deployer-ui-git-daily.md) |
+| stage-deployer UI TODO | [cursor/todos/stage-deployer-ui-chat-open.md](cursor/todos/stage-deployer-ui-chat-open.md) |
