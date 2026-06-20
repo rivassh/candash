@@ -12,22 +12,26 @@ Personal archive of Cursor chat summaries, prompts, lessons learned, and daily g
 ## Follow-ups (اجرای کارهای باقی‌مانده چت)
 
 ```bash
-LLFS_DIR=/opt/new/debops/llfs bash llfs/cursor/scripts/bootstrap-followups.sh
+LLFS_DIR=/opt/llfs bash /opt/llfs/cursor/scripts/bootstrap-followups.sh
 ```
 
-یا: `llfs/cursor/scripts/run-chat-followups.sh`
+یا: `bash /opt/llfs/cursor/scripts/run-chat-followups.sh`
 
 ## بستن چت (کم‌توکن)
 
-به‌جای پرامپت بلند، فقط بگو:
-
 ```
-llfs close debops
+llfs close TOPIC
 ```
 
-Playbook: [`cursor/CLOSE-CHAT.md`](cursor/CLOSE-CHAT.md) · Rule: `.cursor/rules/llfs-close-chat.mdc` (در debops)
+Playbook: [`cursor/CLOSE-CHAT.md`](cursor/CLOSE-CHAT.md) · Rule: [`cursor/rules/llfs-close-chat.mdc`](cursor/rules/llfs-close-chat.mdc)
 
-CSV مخارج: `~/.config/cursor-usage.env` + `cursor/scripts/fetch-cursor-usage-csv.sh` — **cookie در چت نفرست.**
+```bash
+bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC
+# agent: Learnings + TODO
+bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC --push
+```
+
+CSV: `~/.config/cursor-usage.env` + `fetch-cursor-usage-csv.sh` — **cookie در چت نفرست.**
 
 ## فهرست — Passbolt / debops (۱۹ ژوئن ۲۰۲۶)
 

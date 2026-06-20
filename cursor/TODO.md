@@ -138,3 +138,14 @@ Detail: [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-
 ## Security Reminder
 
 - [ ] **Rotate Cursor web session** — browser cookie/session token was pasted into chat (network closeout + prior chats). Logout/login or revoke.
+
+## stage-subdomain-github-webhook (from 2026-06-20 chat)
+
+- [ ] **GitHub webhook Secret** — align GitHub with `GITHUB_WEBHOOK_SECRET` in stage-deployer `.env`
+- [ ] **subdomain modular-gps** — nginx + env or stage-deployer feature
+- [ ] **push stage-deployer** — webhook secret loading fixes
+- [ ] **Rotate Cursor session** — cookie pasted in chat
+
+Detail: [todos/2026-06-20-stage-subdomain-github-webhook-chat-open.md](todos/2026-06-20-stage-subdomain-github-webhook-chat-open.md)
+
+**Last updated:** 2026-06-20 (stage-subdomain-github-webhook closeout)
