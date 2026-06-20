@@ -30,6 +30,9 @@ curl -fsSL https://raw.githubusercontent.com/rivassh/llfs/main/cursor/scripts/bo
 
 | تاریخ | فایل |
 |--------|------|
+| debops closeout | [chats/2026-06-20-debops-closeout.md](chats/2026-06-20-debops-closeout.md) |
+| debops daily 2026-06-20 | [reports/2026-06-20-debops-daily.md](reports/2026-06-20-debops-daily.md) |
+| debops cost by prompt | [cursor/usage/debops-2026-06-14_2026-06-20-cost-by-prompt.md](cursor/usage/debops-2026-06-14_2026-06-20-cost-by-prompt.md) |
 | debops git | [reports/2026-06-16-20-debops-git-daily.md](reports/2026-06-16-20-debops-git-daily.md) |
 | modular-gps git | [reports/2026-06-19-20-modular-gps-git-daily.md](reports/2026-06-19-20-modular-gps-git-daily.md) |
 | debops Cursor cost | [reports/2026-06-20-debops-cursor-usage-cost.md](reports/2026-06-20-debops-cursor-usage-cost.md) |

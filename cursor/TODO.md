@@ -1,33 +1,56 @@
-# TODO — باقی‌مانده از چت بایگانی استیج
+# TODO — follow-ups left from Cursor chats
 
-**آخرین به‌روزرسانی:** ۲۰۲۶-۰۶-۲۰
+**Last updated:** 2026-06-20  
+**Purpose:** keep unfinished tasks from past prompts after closing long chats.
 
-## نحوه اجرای follow-upها
+## High Priority
 
-```bash
-/opt/llfs/cursor/scripts/run-chat-followups.sh
-```
+- [ ] **Persian SMS end-to-end test** — send one controlled Persian SMS through the active Novin `send-sync` path and verify the phone renders Persian, not `???`.
+- [ ] **Recover old `???` Persian files only if source exists** — old reports/templates with literal question marks cannot be decoded back automatically.
+- [ ] **Split and commit `debops` work safely** — the working tree contains many unrelated changes; split by topic and scan for secrets before any commit/push.
+- [ ] **Critical backup activation** — keep heavy backups disabled until storage is available; enable only via explicit flags and dry-run first.
 
-جزئیات: [`scripts/run-chat-followups.sh`](scripts/run-chat-followups.sh)
+## Debops Backup System
 
----
+- [ ] `backup-dry-run-monitoring` — run `daily-critical-backup.sh --dry-run` on monitoring with the current flag file.
+- [ ] `backup-heavy-storage-plan` — define storage destination, retention, and capacity for heavy jobs.
+- [ ] `backup-zabbix-stale-alert` — add alert for stale/missing backup manifests after real backup scheduling is approved.
+- [ ] `sana-gps-postgres-heavy` — deploy and test heavy PostgreSQL backup path only after storage decision.
 
-## اولویت بالا
+## Monitoring / Encoding
 
-- [ ] **commit + push** تغییرات `/opt/stage-deployer` (~۳۹ فایل: `project_archive.py`, UI, YAMLها) — الان `main` حدود ۱۲ commit جلوتر از origin
-- [ ] **modular-gps 502** — postgres/rabbitmq بالا؛ سرویس اپ احتمالاً down؛ deploy یا compose up
-- [ ] **minicrm-sms** — خارج از keep list ولی `archived: false` و stack بالا؛ تصمیم: بایگانی مجدد یا اضافه به keep
+- [x] `backup-control-utf8` — fixed UTF-8 content and live Nginx `charset=utf-8`.
+- [x] `audit-page-utf8` — fixed UTF-8 content and live Nginx `charset=utf-8`.
+- [x] `sms-json-utf8-headers` — changed active SMS scripts to send `application/json; charset=utf-8`.
+- [ ] `legacy-report-cleanup` — regenerate old corrupted Persian reports from source data where possible.
 
-## اولویت متوسط
+## Nexus / Developer Access
 
-- [ ] **verify همه URLهای keep** بعد از deploy نهایی
-- [ ] **push مستندات llfs** — repo محلی `/opt/llfs` آماده؛ نیاز به SSH key برای `git@github.com:rivassh/llfs.git`
-- [ ] **stage-deployer deploy رسمی** — restart انجام شد؛ commit/push + rule استیج بعد از merge
+- [ ] `nexus-vpn-onboarding` — turn the VPN + Nexus usage notes into a short developer onboarding page.
+- [ ] `nexus-client-smoke` — test `setup-nexus-client.sh` on one clean dev VM/laptop profile.
 
-## انجام‌شده ✓
+## Stage / AD / Adminer Follow-ups From Earlier Prompts
 
-- [x] سیستم archive/unarchive + bulk
-- [x] UI: گروه مهدی پیش‌فرض + کوکی + فیلتر بایگانی
-- [x] انتقال ~۲۴ پوشه به `/opt/archived`
-- [x] nginx regenerate + reload (رفع 502 داشبورد)
-- [x] مستند usage + گزارش روزانه در `/opt/llfs/cursor/`
+- [ ] `ad-nextcloud-bind` — finish `nextcloud-svc` bind and `occ ldap:test-config s01`.
+- [ ] `ad-login-smoke` — verify AD login to Stage dashboards and `devops_portal`.
+- [ ] `analytics-db-localhost` — fix or document `support_analytics@localhost` vs `@%`.
+- [ ] `stage-db-adminer-map` — provide clear Adminer access path for Stage DBs via monitoring.
+- [ ] `stage-db-proxy` — decide whether to publish/socat MySQL/Postgres from Stage for Adminer.
+
+## Arvan / Edge / SSL
+
+- [ ] `arvan-dns-export` — export all registrar/Arvan DNS records before CDN cutover work.
+- [ ] `arvan-edge-vps-wg-le` — pilot VPS edge with WireGuard and Let's Encrypt, without touching production DNS first.
+- [ ] `arvan-cutover-doc` — write reversible cutover/rollback checklist.
+- [ ] `gps-tile-no-cdn-plan` — handle GPS/tile traffic separately from simple web SSL replacement.
+
+## VM Factory / OSS Infrastructure
+
+- [ ] `esxi-golden-docker-2404` — build a golden Ubuntu/Docker/Nexus-ready image.
+- [ ] `esxi-vm-factory-mvp` — simple VM creation flow before evaluating larger platforms.
+- [ ] `proxmox-eval-migrate` — evaluate Proxmox as UI-first VM factory.
+- [ ] `foreman-content-nexus` — evaluate Foreman/Katello only if content lifecycle needs justify it.
+
+## Security Reminder
+
+- [ ] **Rotate Cursor web session** — a browser cookie/session token was pasted into chat. It was not committed, but the browser session should be logged out/in or revoked.
