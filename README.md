@@ -12,10 +12,22 @@ Personal archive of Cursor chat summaries, prompts, lessons learned, and daily g
 ## Follow-ups (اجرای کارهای باقی‌مانده چت)
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rivassh/llfs/main/cursor/scripts/bootstrap-followups.sh | bash
+LLFS_DIR=/opt/new/debops/llfs bash llfs/cursor/scripts/bootstrap-followups.sh
 ```
 
-یا بعد از clone: `cursor/scripts/run-chat-followups.sh`
+یا: `llfs/cursor/scripts/run-chat-followups.sh`
+
+## بستن چت (کم‌توکن)
+
+به‌جای پرامپت بلند، فقط بگو:
+
+```
+llfs close debops
+```
+
+Playbook: [`cursor/CLOSE-CHAT.md`](cursor/CLOSE-CHAT.md) · Rule: `.cursor/rules/llfs-close-chat.mdc` (در debops)
+
+CSV مخارج: `~/.config/cursor-usage.env` + `cursor/scripts/fetch-cursor-usage-csv.sh` — **cookie در چت نفرست.**
 
 ## فهرست — Passbolt / debops (۱۹ ژوئن ۲۰۲۶)
 
@@ -56,3 +68,7 @@ curl -fsSL https://raw.githubusercontent.com/rivassh/llfs/main/cursor/scripts/bo
 | stage-deployer UI cost | [reports/2026-06-20-stage-deployer-ui-cursor-cost.md](reports/2026-06-20-stage-deployer-ui-cursor-cost.md) |
 | stage-deployer UI git | [reports/2026-06-18-20-stage-deployer-ui-git-daily.md](reports/2026-06-18-20-stage-deployer-ui-git-daily.md) |
 | stage-deployer UI TODO | [cursor/todos/stage-deployer-ui-chat-open.md](cursor/todos/stage-deployer-ui-chat-open.md) |
+| **infra audit chat (۲۰ ژوئن)** | [chats/2026-06-20-debops-infra-audit-session.md](chats/2026-06-20-debops-infra-audit-session.md) |
+| infra audit cost | [cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md](cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md) |
+| infra audit git daily | [reports/2026-06-20-debops-infra-audit-daily.md](reports/2026-06-20-debops-infra-audit-daily.md) |
+| infra audit TODO | [cursor/todos/infra-audit-chat-open.md](cursor/todos/infra-audit-chat-open.md) |
