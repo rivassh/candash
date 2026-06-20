@@ -1,8 +1,22 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-16 (VoIP/analytics closeout) · 2026-06-20 (stage-deployer)
+**Last updated:** 2026-06-11 (Nexus/OpenVPN) · 2026-06-16 (VoIP/analytics) · 2026-06-20 (stage-deployer)
 
-See also: [todos/2026-06-16-debops-voip-analytics-chat-open.md](todos/2026-06-16-debops-voip-analytics-chat-open.md) · [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+See also: [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [todos/2026-06-16-debops-voip-analytics-chat-open.md](todos/2026-06-16-debops-voip-analytics-chat-open.md) · [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+
+## Nexus / OpenVPN (from 2026-06-10 chat)
+
+- [ ] `nexus-apt-noble` — apt via Nexus on stage (404 / InRelease)
+- [ ] `nexus-mikrotik-dns` — `MIKROTIK_PASSWORD` + script
+- [ ] `nexus-elk-e2e` — pull-elk-via-nexus.sh monitoring
+- [ ] `nexus-client-jira-mm-voip` — unreachable hosts
+- [ ] `nexus-admin-password` — stable password in `.env`
+- [ ] `nexus-gitlab-ci-vars` — GitLab UI variables
+- [ ] `nc-mikrotik-openvpn-deploy` — occ enable on NC server
+- [ ] `nexus-vpn-onboarding` — developer doc file
+- [ ] `nexus-client-smoke` — one clean dev VM test
+
+Detail: [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md)
 
 ## VoIP 9902 / Metabase / Grafana (2026-06-16 chat)
 
