@@ -1,9 +1,18 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-20  
+**Last updated:** 2026-06-20 (network/GitLab/stage chat closeout)  
 **Purpose:** keep unfinished tasks from past prompts after closing long chats.
 
 See also: [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md)
+
+## Network / GitLab / stage Docker (from 2026-06-20 chat)
+
+- [ ] **modular-gps subnet migration** — recreate stack with `infrastructure/docker-compose.stage-net-pin.yml` (`192.168.208.0/20`); maintenance window.
+- [ ] **Commit debops mahdi-apps guard** — `scripts/infra/mahdi-apps/templates/*` + `apply-stage-erp-docker-net-guard.sh` (currently uncommitted in debops).
+- [ ] **MikroTik backup** — if live filter rule for GitLab was added manually: `./mikrotik/backup-mikrotik.sh`.
+- [ ] **Do NOT auto-apply `default-address-pools`** on stage Docker without test — broke dockerd once (`fully subnetted`); see `templates/stage-docker-daemon.json.example`.
+- [x] **gitlab-vm-route.service** on stage — `/32` route to GitLab VM.
+- [x] **erp-guarantie compose pinning** — templates + `compose.sh` on stage.
 
 ## High Priority
 
@@ -56,4 +65,4 @@ See also: [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops
 
 ## Security Reminder
 
-- [ ] **Rotate Cursor web session** — a browser cookie/session token was pasted into chat. It was not committed, but the browser session should be logged out/in or revoked.
+- [ ] **Rotate Cursor web session** — browser cookie/session token was pasted into chat (network closeout + prior chats). Logout/login or revoke.
