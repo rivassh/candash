@@ -1,8 +1,17 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-11 (Nexus/OpenVPN) · 2026-06-16 (VoIP/analytics) · 2026-06-20 (stage-deployer)
+**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer)
 
-See also: [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [todos/2026-06-16-debops-voip-analytics-chat-open.md](todos/2026-06-16-debops-voip-analytics-chat-open.md) · [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+See also: [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+
+## Metabase / Nextcloud / Stage (from 2026-06-10 chat)
+
+- [ ] **persist-stage-fixes** — nginx redirect guard, cookie_path, apache :18062 in debops templates
+- [ ] **cypress-e2e-verify** — run `nextcloud/e2e` docker compose locally
+- [ ] **disk-monitor-stage** — alert when `/` on 172.16.1.150 > 80%
+- [ ] **ca-client-rollout** · **mikrotik-dns-verify** · **elk-via-nexus** · **bi-bot-cleanup**
+
+Detail: [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md)
 
 ## Nexus / OpenVPN (from 2026-06-10 chat)
 
