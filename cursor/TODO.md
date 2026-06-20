@@ -1,9 +1,18 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-20 (stage-deployer production/UI closeout)  
-**Purpose:** keep unfinished tasks from past prompts after closing long chats.
+**Last updated:** 2026-06-16 (VoIP/analytics closeout) · 2026-06-20 (stage-deployer)
 
-See also: [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+See also: [todos/2026-06-16-debops-voip-analytics-chat-open.md](todos/2026-06-16-debops-voip-analytics-chat-open.md) · [todos/2026-06-07-stage-deployer-chat-open.md](todos/2026-06-07-stage-deployer-chat-open.md) · [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [todos/2026-06-19-stage-health-deploy-chat-open.md](todos/2026-06-19-stage-health-deploy-chat-open.md) · [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+
+## VoIP 9902 / Metabase / Grafana (2026-06-16 chat)
+
+- [ ] `metabase-dashboard-9902` — UI datasource + dashboard
+- [ ] `grafana-wallboard-verify` — http://172.16.1.164:3000/d/support-queue-9902-wallboard
+- [ ] `freepbx-ivr-key3-smoke` — members 302–305
+- [ ] `env-wordpress-db-password` + cron log check
+- [ ] `debops-commit-split` — analytics, Makefile, activity log
+
+Detail: [todos/2026-06-16-debops-voip-analytics-chat-open.md](todos/2026-06-16-debops-voip-analytics-chat-open.md)
 
 ## Stage-deployer production / UI / webhook (from 2026-06-18–20 chat)
 
