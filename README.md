@@ -76,7 +76,7 @@ CSV: `~/.config/cursor-usage.env` + `fetch-cursor-usage-csv.sh` — **cookie د�
 | stage-deployer UI cost | [reports/2026-06-20-stage-deployer-ui-cursor-cost.md](reports/2026-06-20-stage-deployer-ui-cursor-cost.md) |
 | stage-deployer UI git | [reports/2026-06-18-20-stage-deployer-ui-git-daily.md](reports/2026-06-18-20-stage-deployer-ui-git-daily.md) |
 | stage-deployer UI TODO | [cursor/todos/stage-deployer-ui-chat-open.md](cursor/todos/stage-deployer-ui-chat-open.md) |
-| **infra audit chat (۲۰ ژوئن)** | [chats/2026-06-20-debops-infra-audit-session.md](chats/2026-06-20-debops-infra-audit-session.md) |
+| **llfs close automation (۲۰ ژوئن)** | [cursor/CLOSE-CHAT.md](cursor/CLOSE-CHAT.md) · [chats/2026-06-20-stage-subdomain-github-webhook-closeout.md](chats/2026-06-20-stage-subdomain-github-webhook-closeout.md) |
 | infra audit cost | [cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md](cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md) |
 | infra audit git daily | [reports/2026-06-20-debops-infra-audit-daily.md](reports/2026-06-20-debops-infra-audit-daily.md) |
 | infra audit TODO | [cursor/todos/infra-audit-chat-open.md](cursor/todos/infra-audit-chat-open.md) |

@@ -64,6 +64,14 @@ llfs_git_push() {
       commit -m "$message"
   local branch
   branch="$(git rev-parse --abbrev-ref HEAD)"
+  git fetch origin "$branch" 2>/dev/null || true
+  if git rev-parse "origin/${branch}" >/dev/null 2>&1; then
+    GIT_AUTHOR_EMAIL="${GIT_EMAIL:-devops@artandev.ir}" \
+    GIT_AUTHOR_NAME="${GIT_NAME:-llfs-close}" \
+    GIT_COMMITTER_EMAIL="${GIT_EMAIL:-devops@artandev.ir}" \
+    GIT_COMMITTER_NAME="${GIT_NAME:-llfs-close}" \
+      git rebase "origin/${branch}" || return 1
+  fi
   if git rev-parse --abbrev-ref "${branch}@{upstream}" >/dev/null 2>&1; then
     git push origin "$branch"
   else
