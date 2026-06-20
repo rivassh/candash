@@ -17,6 +17,16 @@ curl -fsSL https://raw.githubusercontent.com/rivassh/llfs/main/cursor/scripts/bo
 
 یا بعد از clone: `cursor/scripts/run-chat-followups.sh`
 
+## فهرست — Passbolt / debops (۱۹ ژوئن ۲۰۲۶)
+
+| نوع | فایل |
+|-----|------|
+| یادگیری‌ها | [chats/2026-06-19-passbolt-closeout.md](chats/2026-06-19-passbolt-closeout.md) |
+| پرامپت‌ها | [cursor/chats/2026-06-19-passbolt-prompts.md](cursor/chats/2026-06-19-passbolt-prompts.md) |
+| هزینه Cursor | [cursor/usage/passbolt-chat-2026-06-19-cost.md](cursor/usage/passbolt-chat-2026-06-19-cost.md) |
+| گزارش روزانه Git | [reports/2026-06-19-debops-passbolt-daily.md](reports/2026-06-19-debops-passbolt-daily.md) |
+| TODO باز | [cursor/TODO.md](cursor/TODO.md) |
+
 ## فهرست — stage-deployer (۱۹ ژوئن ۲۰۲۶)
 
 | نوع | فایل |

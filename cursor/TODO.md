@@ -1,9 +1,16 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-20 (network/GitLab/stage chat closeout)  
+**Last updated:** 2026-06-19 (Passbolt chat closeout) + prior 2026-06-20 items  
 **Purpose:** keep unfinished tasks from past prompts after closing long chats.
 
-See also: [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md)
+See also: [todos/2026-06-18-opt-devops-chat-open.md](todos/2026-06-18-opt-devops-chat-open.md) · [todos/stage-deployer-ui-chat-open.md](todos/stage-deployer-ui-chat-open.md) · [chats/2026-06-19-passbolt-prompts.md](../chats/2026-06-19-passbolt-prompts.md)
+
+## Passbolt / DNS (from 2026-06-19 chat)
+
+- [ ] `passbolt-dns-mikrotik` — set `passbolt.monitoring.artandev.ir` → `172.16.1.164` on MikroTik (`172.16.1.1`); live check resolved to `172.16.1.134`.
+- [ ] `passbolt-dns-windows` — add/fix `passbolt.artandev.ir` on Windows DNS (`172.16.1.246`); was `NXDOMAIN` during live check.
+- [ ] `passbolt-traefik-18780-login` — Traefik on `:18780` returned `404` for `/auth/login`; direct `:8443/auth/login/` works.
+- [ ] `passbolt-runbook-url` — update `debops/mikrotik/runbooks/INTERNAL-MONITORING.md` with working URL and trailing-slash note.
 
 ## Network / GitLab / stage Docker (from 2026-06-20 chat)
 
