@@ -1,8 +1,21 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer)
+**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout)
 
-See also: [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+See also: [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+
+## GitLab reorg + printer/Zabbix (from 2026-06-20 chat)
+
+- [ ] `gitlab-registry-cleanup-then-transfer` — move blocked projects after container registry tag cleanup (`apps/sana-gps`, `apps/tile-server`, `apps/cms-site-builder`, `apps/shop-app`).
+- [ ] `printer-172.16.1.141-network` — investigate/restore device reachability (ARP/ICMP unreachable from monitoring and client LAN).
+- [ ] `gitlab-post-reorg-cleanup` — validate and optionally delete empty/duplicate leftovers (`prompts/map`, possible duplicate `iot/tracker/voip-out`).
+
+## GPS / Activity closeout (from 2026-06-20 chat)
+
+- [ ] `device-sana-gps-service-root-cause` — `device.sana-gps.ir` ping دارد اما HTTP/HTTPS و پورت‌های محتمل timeout شدند؛ NAT/Firewall/MikroTik و سرویس پشت `94.182.193.115` بررسی شود.
+- [ ] `device-sana-gps-port-inventory` — پورت واقعی سرویس GPS/Traccar/device listener از config عملیاتی یا MikroTik NAT استخراج و در runbook ثبت شود.
+- [ ] `cursor-usage-exact-chat-cost` — بعد از بسته شدن چت، CSV جدید Cursor Usage بدون cookie خام import شود تا eventهای انتهایی closeout هم حساب شوند.
+- [ ] `rotate-cursor-web-session` — چون cookie/session token داخل prompt paste شده، session مرورگر Cursor logout/login یا revoke شود.
 
 ## Metabase / Nextcloud / Stage (from 2026-06-10 chat)
 
