@@ -62,6 +62,13 @@ Detail: [todos/2026-06-16-debops-voip-analytics-chat-open.md](todos/2026-06-16-d
 
 Detail: [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-06-18-stage-deployer-production-ui-chat-open.md)
 
+## Sana-GPS / MikroTik / Monitoring (from 2026-06-14 .. 2026-06-20 chat)
+
+- [ ] `mikrotik-dstnat-harden-interface` — convert key NAT rules from fixed `dst-address=94.182.193.115` to `in-interface=pppoe-out-Shatel-Radio` for IP-change resilience.
+- [ ] `mikrotik-postchange-backup` — run `./mikrotik/backup-mikrotik.sh` after live RouterOS edits made during outage recovery.
+- [ ] `watchdog-e2e-controlled-test` — run one controlled outage simulation to verify full chain (SMS first, voice call after 60s).
+- [ ] `arvan-sana-api-access` — provision correct Arvan API key with access to `sana-gps.ir` for scripted origin checks/updates.
+
 ## Passbolt / DNS (from 2026-06-19 chat)
 
 - [ ] `passbolt-dns-mikrotik` — set `passbolt.monitoring.artandev.ir` → `172.16.1.164` on MikroTik (`172.16.1.1`); live check resolved to `172.16.1.134`.
