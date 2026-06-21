@@ -1,4 +1,4 @@
-# Prompt log — Nexus + OpenVPN chat
+# Prompt log ï¿½ Nexus + OpenVPN chat
 
 **Transcript:** `82328549-acd5-4f23-9467-1f30d653c78c`  
 **First message:** 2026-06-10 20:11 +0330

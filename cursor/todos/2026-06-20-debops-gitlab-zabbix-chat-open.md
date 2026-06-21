@@ -1,4 +1,4 @@
-# Open TODO — debops GitLab/Zabbix chat — 2026-06-20
+# Open TODO ï¿½ debops GitLab/Zabbix chat ï¿½ 2026-06-20
 
 **Master list:** [../TODO.md](../TODO.md)
 

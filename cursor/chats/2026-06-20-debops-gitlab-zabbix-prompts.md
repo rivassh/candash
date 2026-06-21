@@ -1,4 +1,4 @@
-# Prompt summary — debops GitLab/Zabbix chat
+# Prompt summary ï¿½ debops GitLab/Zabbix chat
 
 ## Timeline of prompts (technical only)
 

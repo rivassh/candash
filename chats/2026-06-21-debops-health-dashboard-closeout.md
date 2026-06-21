@@ -1,4 +1,4 @@
-# Debops health dashboard closeout — 2026-06-21
+# Debops health dashboard closeout ï¿½ 2026-06-21
 
 <div dir="rtl" style="text-align: right;">
 

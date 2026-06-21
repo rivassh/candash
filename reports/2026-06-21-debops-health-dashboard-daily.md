@@ -1,4 +1,4 @@
-# Daily git report — debops health dashboard — 2026-06-21
+# Daily git report ï¿½ debops health dashboard ï¿½ 2026-06-21
 
 <div dir="rtl" style="text-align: right;">
 

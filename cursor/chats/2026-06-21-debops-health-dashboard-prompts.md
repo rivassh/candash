@@ -1,4 +1,4 @@
-# Prompt summary — debops health dashboard
+# Prompt summary ï¿½ debops health dashboard
 
 ## Timeline of prompts
 

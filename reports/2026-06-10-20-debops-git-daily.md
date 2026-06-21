@@ -1,4 +1,4 @@
-# Git daily — debops (2026-06-10 … 2026-06-20)
+# Git daily ï¿½ debops (2026-06-10 ï¿½ 2026-06-20)
 
 **Repo:** `/opt/new/debops`  
 **Focus:** GitLab reorg + Zabbix printer alert incident + chat closeout docs

@@ -1,4 +1,4 @@
-# Daily report — debops GitLab/Zabbix chat (2026-06-10 … 2026-06-20)
+# Daily report ï¿½ debops GitLab/Zabbix chat (2026-06-10 ï¿½ 2026-06-20)
 
 ## Worklog summary
 

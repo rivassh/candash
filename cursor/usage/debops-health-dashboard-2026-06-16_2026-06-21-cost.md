@@ -1,4 +1,4 @@
-# Cursor usage cost — debops health dashboard (best effort)
+# Cursor usage cost ï¿½ debops health dashboard (best effort)
 
 <div dir="rtl" style="text-align: right;">
 

@@ -1,4 +1,4 @@
-# Daily git report — Nexus + OpenVPN chat
+# Daily git report ï¿½ Nexus + OpenVPN chat
 
 **Repo:** `/opt/new/debops`  
 **Transcript:** `82328549-acd5-4f23-9467-1f30d653c78c`  
@@ -23,7 +23,7 @@ None on 2026-06-10/11 for Nexus work. Nearest: `e979982` (2026-06-11, Zabbix SMS
 
 | Date | Timing | Topic | Summary |
 |---|---|---|---|
-| 1405/03/20 | Outside office hours | Nexus | Reset + repos + nginx 5000–5003 |
+| 1405/03/20 | Outside office hours | Nexus | Reset + repos + nginx 5000ï¿½5003 |
 | 1405/03/20 | Outside office hours | Clients | nexus, gitlab, monitoring, sana-gps, stage OK (Docker) |
 | 1405/03/20 | Outside office hours | DNS | Windows OK; MikroTik pending |
 | 1405/03/20 | Outside office hours | NC app | mikrotik_openvpn PPP secret CRUD |

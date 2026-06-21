@@ -1,4 +1,4 @@
-# Debops closeout — GitLab reorg + printer/Zabbix
+# Debops closeout ï¿½ GitLab reorg + printer/Zabbix
 
 **Workspace:** `/opt/new/debops`  
 **Date:** 2026-06-20  
