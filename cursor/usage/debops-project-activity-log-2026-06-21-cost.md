@@ -1,30 +1,35 @@
-# Cursor usage cost - debops project activity log
+# هزینه Cursor — debops project activity log 2026 06 21 cost
 
 <div dir="rtl" style="text-align: right;">
 
-## Source
+## منبع
 
-- Fresh Cursor Usage CSV was not fetched during this closeout.
-- No browser cookie was requested or pasted.
-- Exact token/cost accounting remains pending until a fresh Cursor Usage CSV is imported through the existing llfs workflow.
+- CSV: `cursor/usage/2026-06-14_2026-06-20.csv`
+- روش: تقسیم مصرف روزانه اکانت بین پرامپت‌های این چت
+- **جمع توکن (برآورد):** 342,687,288
+- **جمع رویداد:** 447
+- **هزینه نقدی در CSV:** $0.00 (Included/Free)
 
-## Best-Effort Prompt Buckets
+> محدودیت: CSV شناسه conversation ندارد؛ اعداد با **تقسیم مصرف روزانه** بین پرامپت‌های همان چت برآورد شده‌اند.
 
-| Date | Prompt topic | Coverage | Notes |
-|------|--------------|----------|-------|
-| 2026-06-14 | Sanaradyab/Zabbix/MikroTik/OpenVPN/VoIP/Nextcloud operations | not_measured | Large operational chat, multiple production changes and diagnostics. |
-| 2026-06-16 | Project activity log generation | not_measured | Transcript extraction and grouping into work-log rows. |
-| 2026-06-21 | llfs closeout | not_measured | Closeout docs, TODOs, prompt summary, cost note, daily report. |
+## پرامپت‌ها و مصرف
 
-## Follow-up for Exact Cost
+| تاریخ | موضوع | پوشش | رویداد | توکن | هزینه |
+|---|---|---|---:|---:|---|
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-14 | prompt | estimated_daily_split | 44 | 37,045,536 | Included/Free only |
+| 2026-06-16 | prompt | estimated_daily_split | 139 | 83,368,536 | Included/Free only |
+| 2026-06-21 | prompt | outside_csv_range | 0 | 0 | No CSV row |
 
-Use the existing llfs workflow when a fresh Cursor Usage export is available:
+## یادداشت
 
-```bash
-bash llfs/cursor/scripts/fetch-cursor-usage-csv.sh 2026-06-14 2026-06-21 \
-  > llfs/cursor/usage/2026-06-14_2026-06-21.csv
-```
-
-Then bucket events for `debops-project-activity-log`.
+- فایل پرامپت: `cursor/chats/2026-06-21-debops-project-activity-log-prompts.md`
+- برای دقت بیشتر CSV تازه‌تر import کنید.
+- تاریخ‌های خارج از CSV: 2026-06-21
 
 </div>
