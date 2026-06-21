@@ -1,14 +1,14 @@
-# Open TODOs — debops project activity log closeout
+# Open TODOs - debops project activity log closeout
 
 <div dir="rtl" style="text-align: right;">
 
 ## Remaining Work
 
-- [ ] `arvan-sanaradyab-panel-fix` — ?? ??? Arvan ????? `sanaradyab.ir`? origin ?? ??? `94.182.193.115` ?? HTTP ? ???? ????? (`8080`/`8089`) ????? ? cache ?? purge ????.
-- [ ] `sanaradyab-origin-e2e` — ??? ?? ????? Arvan? `https://sanaradyab.ir/` ?? ?? ?????? Zabbix ? edge proxy ??? ????.
-- [ ] `ad-dc-172-16-1-246-recovery` — VM/???? Domain Controller ?? IP `172.16.1.246` ?? ?????????? MikroTik ? stage ?? ?? ping/LDAP ??????????.
-- [ ] `nextcloud-ldap-watchdog-green` — ??? ?? ????? AD? `occ ldap:test-config s01` ? cron watchdog ??? monitoring ?? green ????.
-- [ ] `mikrotik-nat-hardening` — rule??? ??? RouterOS ?? ?? `dst-address=94.182.193.115` ?? ??? resilient?? ??? `in-interface=pppoe-out-Shatel-Radio` ????? ????.
-- [ ] `cursor-usage-exact-project-activity-log` — CSV ???? Cursor Usage ?? ???? paste ???? cookie ???? ? ????? ???? ??? closeout ?? ?????? ????.
+- [ ] `arvan-sanaradyab-panel-fix` - set `sanaradyab.ir` origin in Arvan panel to `94.182.193.115` with HTTP and a prepared port (`8080` or `8089`), then purge cache.
+- [ ] `sanaradyab-origin-e2e` - after the Arvan fix, test `https://sanaradyab.ir/` externally, from Zabbix, and through the edge proxy.
+- [ ] `ad-dc-172-16-1-246-recovery` - restore VM/network reachability for the Domain Controller at `172.16.1.246`; MikroTik and stage could not reach it.
+- [ ] `nextcloud-ldap-watchdog-green` - after AD recovery, re-run `occ ldap:test-config s01` and the monitoring watchdog.
+- [ ] `mikrotik-nat-hardening` - move critical RouterOS NAT rules from fixed `dst-address=94.182.193.115` toward a more resilient condition such as `in-interface=pppoe-out-Shatel-Radio`.
+- [ ] `cursor-usage-exact-project-activity-log` - import a fresh Cursor Usage CSV and calculate exact cost for this closeout.
 
 </div>

@@ -1,4 +1,4 @@
-# Daily git report — debops project activity log
+# Daily git report - debops project activity log
 
 <div dir="rtl" style="text-align: right;">
 

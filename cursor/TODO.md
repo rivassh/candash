@@ -1,8 +1,8 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout) · 2026-06-21 (Health dashboard + Activity log)
+**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout) · 2026-06-21 (Health dashboard + Activity log + project activity log)
 
-See also: [todos/2026-06-21-debops-activity-log-chat-open.md](todos/2026-06-21-debops-activity-log-chat-open.md) · [todos/2026-06-21-debops-health-dashboard-chat-open.md](todos/2026-06-21-debops-health-dashboard-chat-open.md) · [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+See also: [todos/2026-06-21-debops-project-activity-log-chat-open.md](todos/2026-06-21-debops-project-activity-log-chat-open.md) · [todos/2026-06-21-debops-activity-log-chat-open.md](todos/2026-06-21-debops-activity-log-chat-open.md) · [todos/2026-06-21-debops-health-dashboard-chat-open.md](todos/2026-06-21-debops-health-dashboard-chat-open.md) · [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
 
 ## Activity log from transcript 1241c6d0 (from 2026-06-21 closeout)
 
@@ -14,6 +14,15 @@ See also: [todos/2026-06-21-debops-activity-log-chat-open.md](todos/2026-06-21-d
 - [ ] `activity-log-usage-cost-exact` — import Cursor Usage CSV for transcript `1241c6d0`.
 
 Detail: [todos/2026-06-21-debops-activity-log-chat-open.md](todos/2026-06-21-debops-activity-log-chat-open.md)
+
+## Debops project activity log (from 2026-06-21 closeout)
+
+- [ ] `arvan-sanaradyab-panel-fix` — set/purge `sanaradyab.ir` origin in Arvan panel; current API key cannot access that domain.
+- [ ] `ad-dc-172-16-1-246-recovery` — restore reachability to Windows AD/LDAP/DC at `172.16.1.246`.
+- [ ] `nextcloud-ldap-watchdog-green` — re-run `occ ldap:test-config s01` and monitoring watchdog after AD is reachable.
+- [ ] `cursor-usage-exact-project-activity-log` — import fresh Cursor Usage CSV and calculate exact cost for this closeout.
+
+Detail: [todos/2026-06-21-debops-project-activity-log-chat-open.md](todos/2026-06-21-debops-project-activity-log-chat-open.md)
 
 ## Health dashboard / Monitoring portal (from 2026-06-21 chat)
 

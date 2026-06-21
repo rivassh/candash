@@ -1,4 +1,4 @@
-# Cursor usage cost — debops project activity log
+# Cursor usage cost - debops project activity log
 
 <div dir="rtl" style="text-align: right;">
 
