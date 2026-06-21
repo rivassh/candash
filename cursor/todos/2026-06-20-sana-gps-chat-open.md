@@ -1,4 +1,4 @@
-# Open follow-ups — sana-gps / MikroTik chat
+# Open follow-ups ï¿½ sana-gps / MikroTik chat
 
 Date range: 2026-06-14 .. 2026-06-20  
 Workspace: `/opt/new/debops`

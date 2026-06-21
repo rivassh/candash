@@ -1,4 +1,4 @@
-# Debops chat closeout — Passbolt access — 2026-06-19
+# Debops chat closeout ï¿½ Passbolt access ï¿½ 2026-06-19
 
 **Workspace:** `/opt/new/debops`  
 **Transcript:** `9b52136b-ac4b-4a73-973d-697cd6c1e004`  
@@ -33,7 +33,7 @@
 
 These are the gaps this short chat exposed:
 
-1. **Passbolt is not only a public hostname.** Internally it is published on monitoring at port `8443`, while docs also mention `8443` and Traefik `18780` — they are not equivalent.
+1. **Passbolt is not only a public hostname.** Internally it is published on monitoring at port `8443`, while docs also mention `8443` and Traefik `18780` ï¿½ they are not equivalent.
 2. **Trailing slash matters in Passbolt routes.** `/auth/login/` returns `200`, but `/auth/login` without slash can return `404`.
 3. **Redirects depend on DNS.** `/login` redirects to `https://passbolt.artandev.ir/...`; if DNS is wrong, the browser fails even when the service is healthy on IP.
 4. **Healthy container ? working edge path.** Traefik on `18780` answered with Passbolt headers but still returned `404` for login paths during testing.

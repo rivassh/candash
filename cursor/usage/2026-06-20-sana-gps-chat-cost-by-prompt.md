@@ -1,4 +1,4 @@
-# Cursor cost breakdown by prompt (estimated) — sana-gps chat
+# Cursor cost breakdown by prompt (estimated) ï¿½ sana-gps chat
 
 Source used: `curl .../export-usage-events-csv?startDate=1781395200000&endDate=1781999999999&strategy=tokens`  
 Fetched at: 2026-06-20 (local run)  

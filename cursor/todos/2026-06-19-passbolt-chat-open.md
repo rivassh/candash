@@ -1,4 +1,4 @@
-# Open TODO — Passbolt chat — 2026-06-19
+# Open TODO ï¿½ Passbolt chat ï¿½ 2026-06-19
 
 **Transcript:** `9b52136b-ac4b-4a73-973d-697cd6c1e004`  
 **Master list:** [../TODO.md](../TODO.md)
@@ -12,5 +12,5 @@
 
 ## Verified working now
 
-- `http://172.16.1.164:8443/auth/login/` — internal login page loads
+- `http://172.16.1.164:8443/auth/login/` ï¿½ internal login page loads
 - `platform-passbolt` container healthy on monitoring

@@ -1,4 +1,4 @@
-# Daily report — debops — 2026-06-20
+# Daily report ï¿½ debops ï¿½ 2026-06-20
 
 **Repo:** `/opt/new/debops`  
 **Remote context:** `debops` / DevOps infrastructure  

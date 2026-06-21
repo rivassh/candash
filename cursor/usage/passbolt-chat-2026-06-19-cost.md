@@ -1,23 +1,23 @@
-# Cursor usage/cost — Passbolt chat — 2026-06-19
+# Cursor usage/cost ï¿½ Passbolt chat ï¿½ 2026-06-19
 
 **Workspace:** `/opt/new/debops`  
 **Transcript:** `9b52136b-ac4b-4a73-973d-697cd6c1e004`  
-**Dashboard window requested:** `2026-06-14T00:00:00Z` … `2026-06-20T23:59:59Z` (`strategy=tokens`)  
+**Dashboard window requested:** `2026-06-14T00:00:00Z` ï¿½ `2026-06-20T23:59:59Z` (`strategy=tokens`)  
 **CSV source used:** `cursor/usage/2026-06-14_2026-06-20.csv` (local import)  
-**Live API fetch:** failed — session cookie returned WorkOS auth redirect (expired/invalid)  
+**Live API fetch:** failed ï¿½ session cookie returned WorkOS auth redirect (expired/invalid)  
 **Security:** no browser cookies or session tokens are stored in this repo.
 
 ## Executive Summary
 
 | Scope | Events | Total tokens | Cash cost in CSV |
 |---|---:|---:|---|
-| Account, 2026-06-14..20 | 915 | 809,713,176 | `$0.00` (905× Included, 10× Free) |
+| Account, 2026-06-14..20 | 915 | 809,713,176 | `$0.00` (905ï¿½ Included, 10ï¿½ Free) |
 | Account, 2026-06-19 only | 158 | 217,262,358 | Included |
 | **This Passbolt chat (est.)** | ~2 user prompts + tool turns | not isolated in CSV | Included |
 
 The Cursor export does **not** include conversation IDs, so per-prompt dollar/token billing for this chat cannot be proven exactly. Engineering attribution below is by date bucket + work phase.
 
-## This Chat — Prompt Attribution (approximate)
+## This Chat ï¿½ Prompt Attribution (approximate)
 
 | Prompt | Topic | Work performed | Cost evidence |
 |---|---|---|---|

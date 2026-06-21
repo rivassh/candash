@@ -1,4 +1,4 @@
-# Daily report — sana-gps / MikroTik / monitoring closeout
+# Daily report ï¿½ sana-gps / MikroTik / monitoring closeout
 
 Date: 2026-06-20  
 Project repo worked: `/opt/new/debops`  

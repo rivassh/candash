@@ -1,4 +1,4 @@
-# Prompt summary — sana-gps outage to monitoring escalation
+# Prompt summary ï¿½ sana-gps outage to monitoring escalation
 
 Conversation period: 2026-06-14 .. 2026-06-20
 
