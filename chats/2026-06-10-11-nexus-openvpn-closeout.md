@@ -1,4 +1,4 @@
-# Debops chat closeout — Nexus rollout + Nextcloud OpenVPN
+# Debops chat closeout ï¿½ Nexus rollout + Nextcloud OpenVPN
 
 **Workspace:** `/opt/new/debops`  
 **Transcript:** `82328549-acd5-4f23-9467-1f30d653c78c`  
@@ -10,7 +10,7 @@
 | # | Topic | Result |
 |---:|---|---|
 | 1 | All projects should use internal Nexus | Reset broken Nexus DB/auth; fresh install + repos |
-| 2 | Start / continue | `setup-nexus-repos.sh`, EULA, docker/apt/pypi/npm, nginx 5000–5003 |
+| 2 | Start / continue | `setup-nexus-repos.sh`, EULA, docker/apt/pypi/npm, nginx 5000ï¿½5003 |
 | 3 | Continue rollout | Client scripts, docs, multi-host rollout |
 | 4 | STAGE_SUDO_PASSWORD; MikroTik | Windows DNS OK; MikroTik DNS failed (no password) |
 | 5 | Guide developer for new project | Onboarding checklist (Docker/pip/npm/CI) |
@@ -23,14 +23,14 @@
 
 1. Nexus may need **full data reset** if H2 DB / admin auth is broken.
 2. Client trust needs **OS CA + Docker certs.d** both.
-3. **`sudo -S` + stdin pipes** break CA install — use temp files.
-4. **docker group ? root** on monitoring — exceptional path only.
-5. **Windows DNS ? MikroTik DNS** — verify each resolver separately.
-6. **apt via Nexus** harder than Docker — do Docker/npm/pip first.
+3. **`sudo -S` + stdin pipes** break CA install ï¿½ use temp files.
+4. **docker group ? root** on monitoring ï¿½ exceptional path only.
+5. **Windows DNS ? MikroTik DNS** ï¿½ verify each resolver separately.
+6. **apt via Nexus** harder than Docker ï¿½ do Docker/npm/pip first.
 7. **Remote devs need VPN** before Nexus URLs work.
-8. **NC infra apps** — encrypt SSH creds; delegate via NC group.
-9. **Long infra agent chats** are token-heavy — split by topic.
-10. **Never paste Cursor cookies** — use local `cursor-usage.env`; rotate session.
+8. **NC infra apps** ï¿½ encrypt SSH creds; delegate via NC group.
+9. **Long infra agent chats** are token-heavy ï¿½ split by topic.
+10. **Never paste Cursor cookies** ï¿½ use local `cursor-usage.env`; rotate session.
 
 ## Related files
 

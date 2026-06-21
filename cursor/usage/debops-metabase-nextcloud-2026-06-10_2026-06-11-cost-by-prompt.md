@@ -1,14 +1,14 @@
-# Cursor usage/cost — debops Metabase / Nextcloud / Stage chat
+# Cursor usage/cost ï¿½ debops Metabase / Nextcloud / Stage chat
 
 **Transcript:** `351ee9ef-bdc6-434d-8891-227c43eae6d0`  
-**Export window needed:** 2026-06-10 … 2026-06-11 (`1781037000000` … `1781209799999`)
+**Export window needed:** 2026-06-10 ï¿½ 2026-06-11 (`1781037000000` ï¿½ `1781209799999`)
 
 ## Fetch status (2026-06-11 closeout)
 
 | Attempt | Result |
 |---|---|
-| API curl with pasted cookie | **HTTP 307** — session expired |
-| CSV `2026-06-14_2026-06-20.csv` in repo | **No rows** for Jun 10–11 |
+| API curl with pasted cookie | **HTTP 307** ï¿½ session expired |
+| CSV `2026-06-14_2026-06-20.csv` in repo | **No rows** for Jun 10ï¿½11 |
 
 **Per-prompt cost for this chat: not available** until fresh CSV import.
 
@@ -20,7 +20,7 @@ curl 'https://cursor.com/api/dashboard/export-usage-events-csv?startDate=1781037
   -o llfs/cursor/usage/2026-06-10_2026-06-11.csv
 ```
 
-Note: user close prompt used Jun 14–20 range — that window **does not include this chat**.
+Note: user close prompt used Jun 14ï¿½20 range ï¿½ that window **does not include this chat**.
 
 ## Qualitative drivers
 
@@ -28,4 +28,4 @@ Long SSH/curl debug loops (Nextcloud login, stage outage), Metabase API bootstra
 
 ## Security
 
-Session token pasted — rotate Cursor login. No auth data in this file.
+Session token pasted ï¿½ rotate Cursor login. No auth data in this file.

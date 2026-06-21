@@ -1,4 +1,4 @@
-# Daily git report — debops — 2026-06-10 / 2026-06-11
+# Daily git report ï¿½ debops ï¿½ 2026-06-10 / 2026-06-11
 
 **Repo:** `/opt/new/debops`  
 **Chat:** Metabase BI + Nextcloud portal + stage incident  
@@ -6,7 +6,7 @@
 
 ## Git commits (main, period)
 
-No commits on `origin/main` during 2026-06-10 … 2026-06-11 for this work.
+No commits on `origin/main` during 2026-06-10 ï¿½ 2026-06-11 for this work.
 
 ## Uncommitted artifacts (local)
 

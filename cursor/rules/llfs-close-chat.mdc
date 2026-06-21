@@ -1,0 +1,56 @@
+---
+description: llfs close — بستن چت کم‌توکن (TODO، CSV، git daily، push)
+alwaysApply: true
+---
+
+# llfs close
+
+<div dir="rtl">
+
+## Trigger
+
+اگر پیام کاربر **`llfs close TOPIC`** یا **`llfs close`** (+ topic) یا فقط **`llfs`** با intent بستن چت بود:
+
+1. **هرگز** پرامپت بلند closeout (TODO + curl cookie + push…) را از کاربر نخواه و در چت تکرار نکن.
+2. **هرگز** `WorkosCursorSessionToken` / cookie Cursor را در چت ننویس و commit نکن.
+3. اگر ریپوی محلی `llfs` پیدا نشد، `git@github.com:rivassh/llfs.git` را در `~/.local/share/llfs` clone کن و همان را LLFS root بگیر.
+
+## مرحله ۱ — مکانیک (shell)
+
+```bash
+bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC \
+  --workspace "${WORKSPACE:-/opt/stage-deployer}" \
+  --repos /opt/stage-deployer/devops
+```
+
+- `TOPIC`: slug کوتاه (`stage-webhook`, `debops`, `modular-gps`)
+- اگر CSV لازم نیست: `--skip-csv`
+
+## مرحله ۲ — فقط Agent (کم‌توکن)
+
+در فایل تولید‌شده `chats/YYYY-MM-DD-TOPIC-closeout.md`:
+
+- **Learnings** — حداکثر ۵ bullet (چیزهایی که کاربر احتمالاً نمی‌دانست)
+- **Prompt summary** — جدول کوتاه (یک خط per turn)
+
+در `cursor/todos/YYYY-MM-DD-TOPIC-chat-open.md`:
+
+- TODOهای **ناتمام این چت**؛ سپس mirror در `cursor/TODO.md`
+
+**ننویس:** cost essay طولانی اگر CSV موجود است — فقط pointer.
+
+## مرحله ۳ — push
+
+```bash
+bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC --push
+```
+
+## follow-up فنی
+
+Deploy/verify → `bash /opt/llfs/cursor/scripts/run-chat-followups.sh` (جدا از close).
+
+## Playbook
+
+`/opt/llfs/cursor/CLOSE-CHAT.md`
+
+</div>

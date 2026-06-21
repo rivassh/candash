@@ -12,22 +12,26 @@ Personal archive of Cursor chat summaries, prompts, lessons learned, and daily g
 ## Follow-ups (اجرای کارهای باقی‌مانده چت)
 
 ```bash
-LLFS_DIR=/opt/new/debops/llfs bash llfs/cursor/scripts/bootstrap-followups.sh
+LLFS_DIR=/opt/llfs bash /opt/llfs/cursor/scripts/bootstrap-followups.sh
 ```
 
-یا: `llfs/cursor/scripts/run-chat-followups.sh`
+یا: `bash /opt/llfs/cursor/scripts/run-chat-followups.sh`
 
 ## بستن چت (کم‌توکن)
 
-به‌جای پرامپت بلند، فقط بگو:
-
 ```
-llfs close debops
+llfs close TOPIC
 ```
 
-Playbook: [`cursor/CLOSE-CHAT.md`](cursor/CLOSE-CHAT.md) · Rule: `.cursor/rules/llfs-close-chat.mdc` (در debops)
+Playbook: [`cursor/CLOSE-CHAT.md`](cursor/CLOSE-CHAT.md) · Rule: [`cursor/rules/llfs-close-chat.mdc`](cursor/rules/llfs-close-chat.mdc)
 
-CSV مخارج: `~/.config/cursor-usage.env` + `cursor/scripts/fetch-cursor-usage-csv.sh` — **cookie در چت نفرست.**
+```bash
+bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC
+# agent: Learnings + TODO
+bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC --push
+```
+
+CSV: `~/.config/cursor-usage.env` + `fetch-cursor-usage-csv.sh` — **cookie در چت نفرست.**
 
 ## فهرست — Passbolt / debops (۱۹ ژوئن ۲۰۲۶)
 
@@ -72,7 +76,12 @@ CSV مخارج: `~/.config/cursor-usage.env` + `cursor/scripts/fetch-cursor-usag
 | stage-deployer UI cost | [reports/2026-06-20-stage-deployer-ui-cursor-cost.md](reports/2026-06-20-stage-deployer-ui-cursor-cost.md) |
 | stage-deployer UI git | [reports/2026-06-18-20-stage-deployer-ui-git-daily.md](reports/2026-06-18-20-stage-deployer-ui-git-daily.md) |
 | stage-deployer UI TODO | [cursor/todos/stage-deployer-ui-chat-open.md](cursor/todos/stage-deployer-ui-chat-open.md) |
-| **infra audit chat (۲۰ ژوئن)** | [chats/2026-06-20-debops-infra-audit-session.md](chats/2026-06-20-debops-infra-audit-session.md) |
+| **llfs close automation (۲۰ ژوئن)** | [cursor/CLOSE-CHAT.md](cursor/CLOSE-CHAT.md) · [chats/2026-06-20-stage-subdomain-github-webhook-closeout.md](chats/2026-06-20-stage-subdomain-github-webhook-closeout.md) |
 | infra audit cost | [cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md](cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md) |
 | infra audit git daily | [reports/2026-06-20-debops-infra-audit-daily.md](reports/2026-06-20-debops-infra-audit-daily.md) |
 | infra audit TODO | [cursor/todos/infra-audit-chat-open.md](cursor/todos/infra-audit-chat-open.md) |
+| **Sana GPS NAT closeout (۲۱ ژوئن)** | [chats/2026-06-21-debops-sana-gps-nat-closeout.md](chats/2026-06-21-debops-sana-gps-nat-closeout.md) |
+| Sana GPS NAT prompts | [cursor/chats/2026-06-21-debops-sana-gps-nat-prompts.md](cursor/chats/2026-06-21-debops-sana-gps-nat-prompts.md) |
+| Sana GPS NAT cost | [cursor/usage/debops-sana-gps-nat-2026-06-14_2026-06-21-cost.md](cursor/usage/debops-sana-gps-nat-2026-06-14_2026-06-21-cost.md) |
+| Sana GPS NAT git daily | [reports/2026-06-21-debops-sana-gps-nat-git-daily.md](reports/2026-06-21-debops-sana-gps-nat-git-daily.md) |
+| Sana GPS NAT TODO | [cursor/todos/2026-06-21-debops-sana-gps-nat-chat-open.md](cursor/todos/2026-06-21-debops-sana-gps-nat-chat-open.md) |

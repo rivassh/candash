@@ -1,8 +1,36 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout)
+**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout) · 2026-06-21 (Health dashboard + Activity log + project activity log)
 
-See also: [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+See also: [todos/2026-06-21-debops-project-activity-log-chat-open.md](todos/2026-06-21-debops-project-activity-log-chat-open.md) · [todos/2026-06-21-debops-activity-log-chat-open.md](todos/2026-06-21-debops-activity-log-chat-open.md) · [todos/2026-06-21-debops-health-dashboard-chat-open.md](todos/2026-06-21-debops-health-dashboard-chat-open.md) · [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+
+## Activity log from transcript 1241c6d0 (from 2026-06-21 closeout)
+
+- [ ] `monitoring-disk-100gb` — ESXi attach + LVM extend on `172.16.1.164` (disk not visible; no LVM).
+- [ ] `zoiper-305-split-tunnel` — client split tunnel + REGISTER; password `654JY&`.
+- [ ] `support-queue-register-302-305` — queue operators must register Zoiper/VPN.
+- [ ] `activity-log-full-rows-restore` — optional restore 18-row log superseded by `e8d3564` summary.
+- [ ] `activity-log-timestamp-crosscheck` — inferred dates (JSONL lacks message timestamps).
+- [ ] `activity-log-usage-cost-exact` — import Cursor Usage CSV for transcript `1241c6d0`.
+
+Detail: [todos/2026-06-21-debops-activity-log-chat-open.md](todos/2026-06-21-debops-activity-log-chat-open.md)
+
+## Debops project activity log (from 2026-06-21 closeout)
+
+- [ ] `arvan-sanaradyab-panel-fix` — set/purge `sanaradyab.ir` origin in Arvan panel; current API key cannot access that domain.
+- [ ] `ad-dc-172-16-1-246-recovery` — restore reachability to Windows AD/LDAP/DC at `172.16.1.246`.
+- [ ] `nextcloud-ldap-watchdog-green` — re-run `occ ldap:test-config s01` and monitoring watchdog after AD is reachable.
+- [ ] `cursor-usage-exact-project-activity-log` — import fresh Cursor Usage CSV and calculate exact cost for this closeout.
+
+Detail: [todos/2026-06-21-debops-project-activity-log-chat-open.md](todos/2026-06-21-debops-project-activity-log-chat-open.md)
+
+## Health dashboard / Monitoring portal (from 2026-06-21 chat)
+
+- [ ] `health-dashboard-deploy` — deploy `monitoring/portal/health.html` to monitoring and smoke-test `http://172.16.1.164:8090/health.html`.
+- [ ] `debops-main-integrate-push-health` — integrate `origin/main` safely, then push commit `d611b81`.
+- [ ] `health-basic-auth-or-sso` — choose quick `nginx basic auth` vs SSO front door.
+- [ ] `monitoring-authentik-pilot` — if SSO is selected, pilot `authentik` with local users before AD/LDAP.
+- [ ] `health-dashboard-usage-cost-exact` — import fresh Cursor Usage CSV and calculate exact cost for this chat.
 
 ## GitLab reorg + printer/Zabbix (from 2026-06-20 chat)
 
@@ -138,3 +166,26 @@ Detail: [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-
 ## Security Reminder
 
 - [ ] **Rotate Cursor web session** — browser cookie/session token was pasted into chat (network closeout + prior chats). Logout/login or revoke.
+
+## stage-subdomain-github-webhook (from 2026-06-20 chat)
+
+- [ ] **GitHub webhook Secret** — align GitHub with `GITHUB_WEBHOOK_SECRET` in stage-deployer `.env`
+- [ ] **subdomain modular-gps** — nginx + env or stage-deployer feature
+- [ ] **push stage-deployer** — webhook secret loading fixes
+- [ ] **Rotate Cursor session** — cookie pasted in chat
+
+Detail: [todos/2026-06-20-stage-subdomain-github-webhook-chat-open.md](todos/2026-06-20-stage-subdomain-github-webhook-chat-open.md)
+
+**Last updated:** 2026-06-20 (stage-subdomain-github-webhook closeout)
+
+## debops-sana-gps-nat (from 2026-06-21 chat)
+
+- [ ] `rotate-cursor-web-session` — چون Cookie/Session Cursor داخل چت paste شد، session مرورگر Cursor logout/login یا revoke شود.
+- [ ] `cursor-usage-exact-2026-06-21` — CSV جدید Cursor Usage برای 2026-06-21 با روش امن `~/.config/cursor-usage.env` گرفته شود.
+- [ ] `llfs-global-user-rule` — اگر ابزار User Rule سراسری Cursor در workspace بعدی در دسترس بود، مفهوم `llfs close TOPIC` به User Rule سراسری اضافه شود.
+- [ ] `sana-gps-nat-runbook` — ruleهای ضروری Traccar listener (`5015`, `5023`, `7700` TCP/UDP به `172.16.1.134`) در runbook عملیاتی ثبت شوند.
+- [ ] `sana-gps-nat-monitor` — مانیتور ingestion واقعی اضافه شود: recent positions، online count و NAT counters، نه فقط HTTP 200.
+
+Detail: [todos/2026-06-21-debops-sana-gps-nat-chat-open.md](todos/2026-06-21-debops-sana-gps-nat-chat-open.md)
+
+**Last updated:** 2026-06-21 (debops-sana-gps-nat closeout)
