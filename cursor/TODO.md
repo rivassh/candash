@@ -1,8 +1,16 @@
 # TODO — follow-ups left from Cursor chats
 
-**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout)
+**Last updated:** 2026-06-11 (Metabase/NC/Stage + Nexus/OpenVPN) · 2026-06-16 (VoIP) · 2026-06-20 (stage-deployer + GPS/activity closeout) · 2026-06-21 (Health dashboard)
 
-See also: [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+See also: [todos/2026-06-21-debops-health-dashboard-chat-open.md](todos/2026-06-21-debops-health-dashboard-chat-open.md) · [todos/2026-06-20-gps-activity-closeout-chat-open.md](todos/2026-06-20-gps-activity-closeout-chat-open.md) · [todos/2026-06-20-debops-gitlab-zabbix-chat-open.md](todos/2026-06-20-debops-gitlab-zabbix-chat-open.md) · [todos/debops-metabase-nextcloud-stage-chat-open.md](todos/debops-metabase-nextcloud-stage-chat-open.md) · [todos/2026-06-10-11-nexus-openvpn-chat-open.md](todos/2026-06-10-11-nexus-openvpn-chat-open.md) · [chats/2026-06-10-debops-metabase-nextcloud-closeout.md](../chats/2026-06-10-debops-metabase-nextcloud-closeout.md)
+
+## Health dashboard / Monitoring portal (from 2026-06-21 chat)
+
+- [ ] `health-dashboard-deploy` — deploy `monitoring/portal/health.html` to monitoring and smoke-test `http://172.16.1.164:8090/health.html`.
+- [ ] `debops-main-integrate-push-health` — integrate `origin/main` safely, then push commit `d611b81`.
+- [ ] `health-basic-auth-or-sso` — choose quick `nginx basic auth` vs SSO front door.
+- [ ] `monitoring-authentik-pilot` — if SSO is selected, pilot `authentik` with local users before AD/LDAP.
+- [ ] `health-dashboard-usage-cost-exact` — import fresh Cursor Usage CSV and calculate exact cost for this chat.
 
 ## GitLab reorg + printer/Zabbix (from 2026-06-20 chat)
 
