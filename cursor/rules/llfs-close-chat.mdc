@@ -12,7 +12,8 @@ alwaysApply: true
 اگر پیام کاربر **`llfs close TOPIC`** یا **`llfs close`** (+ topic) یا فقط **`llfs`** با intent بستن چت بود:
 
 1. **هرگز** پرامپت بلند closeout (TODO + curl cookie + push…) را از کاربر نخواه و در چت تکرار نکن.
-2. **هرگز** `WorkosCursorSessionToken` / cookie Cursor را در چat ننویس و commit نکن.
+2. **هرگز** `WorkosCursorSessionToken` / cookie Cursor را در چت ننویس و commit نکن.
+3. اگر ریپوی محلی `llfs` پیدا نشد، `git@github.com:rivassh/llfs.git` را در `~/.local/share/llfs` clone کن و همان را LLFS root بگیر.
 
 ## مرحله ۱ — مکانیک (shell)
 

@@ -177,3 +177,15 @@ Detail: [todos/2026-06-18-stage-deployer-production-ui-chat-open.md](todos/2026-
 Detail: [todos/2026-06-20-stage-subdomain-github-webhook-chat-open.md](todos/2026-06-20-stage-subdomain-github-webhook-chat-open.md)
 
 **Last updated:** 2026-06-20 (stage-subdomain-github-webhook closeout)
+
+## debops-sana-gps-nat (from 2026-06-21 chat)
+
+- [ ] `rotate-cursor-web-session` — چون Cookie/Session Cursor داخل چت paste شد، session مرورگر Cursor logout/login یا revoke شود.
+- [ ] `cursor-usage-exact-2026-06-21` — CSV جدید Cursor Usage برای 2026-06-21 با روش امن `~/.config/cursor-usage.env` گرفته شود.
+- [ ] `llfs-global-user-rule` — اگر ابزار User Rule سراسری Cursor در workspace بعدی در دسترس بود، مفهوم `llfs close TOPIC` به User Rule سراسری اضافه شود.
+- [ ] `sana-gps-nat-runbook` — ruleهای ضروری Traccar listener (`5015`, `5023`, `7700` TCP/UDP به `172.16.1.134`) در runbook عملیاتی ثبت شوند.
+- [ ] `sana-gps-nat-monitor` — مانیتور ingestion واقعی اضافه شود: recent positions، online count و NAT counters، نه فقط HTTP 200.
+
+Detail: [todos/2026-06-21-debops-sana-gps-nat-chat-open.md](todos/2026-06-21-debops-sana-gps-nat-chat-open.md)
+
+**Last updated:** 2026-06-21 (debops-sana-gps-nat closeout)
