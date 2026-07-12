@@ -7,7 +7,21 @@ Personal archive of Cursor chat summaries, prompts, lessons learned, and daily g
 - `chats/` — session summaries (markdown)
 - `reports/` — daily git + activity + Cursor usage/cost reports
 - `cursor/` — stage VM docs, follow-up scripts, usage CSV
+- `cursor/reminders/` — یادآوری‌های دائمی per-person (sync با git)
 - root — standalone learnings / cross-cutting notes
+
+## یادآوری محمد مهدی سنایی (هر دستگاه)
+
+لیست مشترک: [`cursor/reminders/mohammad-mahdi-senaie-todos.md`](cursor/reminders/mohammad-mahdi-senaie-todos.md)
+
+Rule: [`cursor/rules/mohammad-mahdi-senaie-reminder.mdc`](cursor/rules/mohammad-mahdi-senaie-reminder.mdc) — در هر چت می‌پرسد «کی کار می‌کند» و موارد باز را یادآوری می‌کند.
+
+نصب rule در پروژه یا **همه چت‌ها** (user rule):
+
+```bash
+./ai-workflow-playbook/scripts/install-senaie-reminder.sh --user   # همه پروژه‌ها
+./ai-workflow-playbook/scripts/install-senaie-reminder.sh /path/to/project
+```
 
 ## Follow-ups (اجرای کارهای باقی‌مانده چت)
 
