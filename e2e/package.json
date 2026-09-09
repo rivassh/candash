@@ -1,0 +1,17 @@
+{
+  "name": "candash-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "cucumber-js --format @cucumber/pretty-formatter",
+    "test:ci": "cucumber-js --format @cucumber/pretty-formatter --format json:cucumber-report.json"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^11.3.0",
+    "@cucumber/pretty-formatter": "^2.4.1",
+    "@types/node": "^20.19.43",
+    "playwright": "^1.49.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

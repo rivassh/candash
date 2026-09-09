@@ -1,0 +1,26 @@
+# E2E smoke suite for candash
+# Run: docker compose -f e2e/docker-compose.yml up --abort-on-container-exit
+services:
+  e2e:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: candash-e2e
+    restart: "no"
+    networks:
+      - sail
+    environment:
+      CANDASH_API: https://candash.adlr.ir
+    volumes:
+      - ./features:/tests/features
+      - ./step_definitions:/tests/step_definitions
+      - ./support:/tests/support
+      - ./reports:/tests/reports
+      - /root/.cache/ms-playwright:/root/.cache/ms-playwright
+    # Reuse already-running API/Frontend via candash.adlr.ir (host nginx)
+    extra_hosts:
+      - "candash.adlr.ir:172.26.0.1"
+
+networks:
+  sail:
+    external: true
