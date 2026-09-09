@@ -9,9 +9,9 @@
         "ext-pdo": "*",
         "ext-pdo_pgsql": "*",
         "ext-mbstring": "*",
-        "laravel/framework": "^11.0",
+        "laravel/framework": "^13.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^2.9",
+        "laravel/tinker": "^3.0",
         "guzzlehttp/guzzle": "^7.9",
         "nesbot/carbon": "^3.0",
         "predis/predis": "^2.0"

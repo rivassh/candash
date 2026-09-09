@@ -8,6 +8,15 @@ return [
         'timeout' => 10,
     ],
 
+    'jobvision' => [
+        'username'    => env('JOBVISION_USERNAME'),
+        'password'    => env('JOBVISION_PASSWORD'),
+        'captcha'     => env('JOBVISION_CAPTCHA_TOKEN'),
+        'cookie'      => env('JOBVISION_COOKIE'),
+        'account_url' => env('JOBVISION_ACCOUNT_URL', 'https://account.jobvision.ir'),
+        'api_url'     => env('JOBVISION_API_URL', 'https://employerapi.jobvision.ir'),
+    ],
+
     'ai' => [
         'driver' => env('AI_DRIVER', 'mock'),
         'resume_extractor' => env('RESUME_EXTRACTOR_DRIVER', 'mock'),

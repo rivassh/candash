@@ -12,7 +12,7 @@ async function handleLogin() {
   error.value = ''
   loading.value = true
   try {
-    await authStore.login({ email: email.value, password: password.value })
+    await authStore.login(email.value, password.value)
     router.push('/dashboard')
   } catch (e: any) {
     error.value = e.message

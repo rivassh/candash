@@ -8,6 +8,7 @@ use App\Contracts\Resume\ResumeExtractorInterface;
 use App\Contracts\Enrichment\EnrichmentInterface;
 use App\Services\JobSource\MockDriver;
 use App\Services\JobSource\ExternalApiDriver;
+use App\Services\JobSource\JobVisionDriver;
 use App\Services\Resume\MockResumeExtractor;
 use App\Services\Enrichment\MockEnrichmentService;
 use App\Services\Matching\MatchingService;
@@ -24,6 +25,7 @@ class DomainServiceProvider extends ServiceProvider
                     config('talentmatch.client.base_url'),
                     config('talentmatch.client.token'),
                 ),
+                'jobvision' => new JobVisionDriver(),
                 default => new MockDriver(),
             };
         });
