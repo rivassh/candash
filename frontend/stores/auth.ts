@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('auth', {
     userName: (state) => state.user?.name ?? '',
   },
   actions: {
-    async login({ email, password }) {
+    async login(email: string, password: string) {
       const config = useRuntimeConfig()
       const { data, error } = await useFetch(`${config.public.apiBase}/auth/login`, {
         method: 'POST',
