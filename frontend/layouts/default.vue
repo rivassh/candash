@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'default', middleware: 'auth' })
+definePageMeta({ layout: 'default' })
 
 const nav = [
   { label: 'داشبورد', icon: '📊', to: '/dashboard' },

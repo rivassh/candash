@@ -1,6 +1,10 @@
 # ---- Base ----
 FROM php:8.4-fpm-alpine AS base
 
+# Create a non-root user for the application
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+
+# Install required packages
 RUN apk add --no-cache \
         git curl unzip libpq-dev icu-dev oniguruma-dev libzip-dev \
         autoconf g++ make linux-headers tzdata \
@@ -23,15 +27,16 @@ RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist --no-in
     composer install --no-dev --no-scripts --prefer-dist --no-interaction
 
 # ---- Runtime ----
-FROM base AS runtime
+FROM vendor AS runtime
 
-COPY --from=vendor /var/www/html/vendor ./vendor
 COPY . .
 
 RUN composer dump-autoload --optimize --no-interaction \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+    && chown -R appgroup:appuser storage bootstrap/cache
 
 EXPOSE 8000
+
+USER appuser
 
 CMD ["sh", "-c", "php artisan config:clear && php artisan route:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]

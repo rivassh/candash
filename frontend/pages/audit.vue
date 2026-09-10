@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'default', middleware: 'auth' })
+definePageMeta({ layout: 'default' })
 
 const api = useApi()
 const { data, pending, refresh } = await useAsyncData('audit', () =>
