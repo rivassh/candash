@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class JobVisionRawPayload extends Model
 {
+    protected $table = 'jobvision_raw_payloads';
+
     protected $fillable = [
         'endpoint',
         'entity_type',

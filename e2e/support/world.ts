@@ -5,4 +5,6 @@ export class CustomWorld extends World {
   token: string | null
   lastResponse: any
   lastJobPositionId: number | null
+  lastCandidateId: string | null
+  lastMatchResultId: string | null
 }

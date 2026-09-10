@@ -24,6 +24,7 @@ class JobVisionDriver implements JobSourceInterface
             ->get();
 
         if ($payloads->isEmpty()) {
+            $this->crawler->authenticate();
             $this->crawler->crawlJobPosts(1, 50);
             $payloads = JobVisionRawPayload::where('entity_type', JobVisionRawPayload::ENTITY_JOB_POST)
                 ->get();
@@ -41,6 +42,7 @@ class JobVisionDriver implements JobSourceInterface
             ->first();
 
         if (!$payload) {
+            $this->crawler->authenticate();
             $this->crawler->crawlJobPosts(1, 50);
             $payload = JobVisionRawPayload::where('entity_type', JobVisionRawPayload::ENTITY_JOB_POST)
                 ->where('external_id', $externalId)

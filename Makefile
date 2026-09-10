@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-COMPOSE := docker compose
+COMPOSE := docker compose -f /root/nginx-certbot/ymls/candash.yml --env-file /root/nginx-certbot/ymls/candash.env
 EXEC_API := $(COMPOSE) exec -T api
 EXEC_FRONTEND := $(COMPOSE) exec -T frontend
 

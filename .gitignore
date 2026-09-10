@@ -33,3 +33,8 @@ api/.phpunit.cache/
 
 # DB init scripts (keep these)
 # db/  is NOT ignored
+.mim*
+.mimocode/
+
+# E2E node_modules
+e2e/node_modules/

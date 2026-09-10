@@ -2,8 +2,8 @@
 Feature: Job Positions CRUD
 
   Background:
-    Given the API is reachable at "http://172.26.0.1:8085"
-    And I am authenticated as "admin@talentmatch.local" with password "admin123"
+    Given the mock API server is ready
+    And I am authenticated for candidates with mock credentials
 
   @list
   Scenario: Can list job positions
@@ -19,7 +19,6 @@ Feature: Job Positions CRUD
         "title": "E2E Test Position",
         "department": "Engineering",
         "level": "mid",
-        "employment_type": "full_time",
         "min_experience_years": 2,
         "education_requirements": "کارشناسی",
         "description": "تست E2E",

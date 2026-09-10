@@ -1,0 +1,12 @@
+FROM node:20-slim
+
+WORKDIR /tests
+
+COPY package.json package-lock.json ./
+RUN npm ci --legacy-peer-deps 2>/dev/null || npm install --legacy-peer-deps 2>/dev/null
+
+COPY mock-server.ts ./mock-server.ts
+COPY cucumber.js ./cucumber.js
+COPY tsconfig.json ./tsconfig.json
+
+CMD ["npm", "run", "mock"]

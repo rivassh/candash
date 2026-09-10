@@ -1,6 +1,20 @@
-# E2E smoke suite for candash
-# Run: docker compose -f e2e/docker-compose.yml up --abort-on-container-exit
+# E2E smoke suite for candash - runs entirely inside Docker
+# Run: docker compose -f e2e/docker-compose.yml up --build --abort-on-container-exit
 services:
+  mock-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock
+      args:
+        - NODE_ENV=production
+    container_name: candash-e2e-mock-api
+    restart: "no"
+    networks:
+      - sail
+    environment:
+      PORT: "8086"
+    command: ["npm", "run", "mock"]
+
   e2e:
     build:
       context: .
@@ -9,17 +23,16 @@ services:
     restart: "no"
     networks:
       - sail
+    depends_on:
+      - mock-api
     environment:
-      CANDASH_API: https://candash.adlr.ir
+      MOCK_API_URL: http://mock-api:8086
     volumes:
       - ./features:/tests/features
       - ./step_definitions:/tests/step_definitions
       - ./support:/tests/support
       - ./reports:/tests/reports
       - /root/.cache/ms-playwright:/root/.cache/ms-playwright
-    # Reuse already-running API/Frontend via candash.adlr.ir (host nginx)
-    extra_hosts:
-      - "candash.adlr.ir:172.26.0.1"
 
 networks:
   sail:
