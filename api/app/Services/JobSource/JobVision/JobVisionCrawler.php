@@ -16,6 +16,18 @@ class JobVisionCrawler
         return config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
     }
 
+    private function loadExistingCookies(): void
+    {
+        $cookieValue = config('talentmatch.jobvision.cookie');
+        if ($cookieValue) {
+            foreach (preg_split('/[\s;]+/', $cookieValue) as $part) {
+                if (preg_match('/^([^=]+)=(.*)$/', $part, $m)) {
+                    $this->cookies[$m[1]] = $m[2];
+                }
+            }
+        }
+    }
+
     private function apiUrl(): string
     {
         return config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir');
@@ -48,6 +60,13 @@ class JobVisionCrawler
 
     public function authenticate(): string
     {
+        $this->loadExistingCookies();
+
+        $cookieValue = config('talentmatch.jobvision.cookie');
+        if ($cookieValue) {
+            return $this->bearerToken ?? '';
+        }
+
         $username = config('talentmatch.jobvision.username');
         $password = config('talentmatch.jobvision.password');
         $captcha  = config('talentmatch.jobvision.captcha');

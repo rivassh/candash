@@ -5,7 +5,7 @@ const api = useApi()
 const router = useRouter()
 
 const { data, pending, refresh } = await useAsyncData('positions', () =>
-  api.get<any>('/job-positions')
+  api.get<any>('/JobPositions')
 )
 
 const showModal = ref(false)
@@ -46,7 +46,7 @@ async function submit() {
   saving.value = true
   error.value = ''
   try {
-    await api.post('/job-positions', {
+    await api.post('/JobPositions', {
       ...form.value,
       required_skills: form.value.required_skills.filter(s => s.name.trim()),
     })

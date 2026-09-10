@@ -16,7 +16,7 @@ const candidatesRes = await useAsyncData('match-candidates', () =>
   api.get<any>('/candidates', { paginate: 'false' })
 )
 const positionsRes = await useAsyncData('match-positions', () =>
-  api.get<any>('/job-positions')
+  api.get<any>('/JobPositions')
 )
 
 watchEffect(() => {
