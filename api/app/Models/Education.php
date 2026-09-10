@@ -10,6 +10,8 @@ class Education extends Model
 {
     use HasFactory;
 
+    protected $table = 'educations';
+
     protected $fillable = [
         'candidate_id', 'degree', 'field_of_study',
         'institution', 'graduation_year', 'confidence', 'source',

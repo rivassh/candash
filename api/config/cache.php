@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'driver' => env('CACHE_DRIVER', 'redis'),
+    'default' => env('CACHE_DRIVER', 'redis'),
     'stores' => [
         'array' => [
             'driver' => 'array',
@@ -9,7 +9,7 @@ return [
         ],
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
+            'connection' => 'cache',
             'lock_connection' => 'default',
         ],
     ],

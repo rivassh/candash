@@ -11,10 +11,10 @@
         "ext-mbstring": "*",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
-        "laravel/tinker": "^11.0",
+        "laravel/tinker": "^2.9",
         "guzzlehttp/guzzle": "^7.9",
         "nesbot/carbon": "^3.0",
-        "morilog/jalali": "^3.0"
+        "predis/predis": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

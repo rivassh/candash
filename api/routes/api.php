@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('api')->prefix('api')->group(function () {
+Route::middleware('api')->group(function () {
 
     // Public
     Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
