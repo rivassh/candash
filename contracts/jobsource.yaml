@@ -1,0 +1,152 @@
+openapi: 3.0.3
+info:
+  title: JobSource Contract
+  description: |
+    قرارداد منبع شغلی TalentMatch.
+    این سرویس داده‌های موقعیت‌های شغلی و رزومه‌های متصل را ارائه می‌دهد.
+  version: 1.0.0
+
+servers:
+  - url: http://mock-jobsource:4000
+    description: Mock JobSource server
+  - url: https://jobsource.example.com
+    description: Production JobSource server
+
+paths:
+  /api/v1/positions:
+    get:
+      summary: دریافت لیست موقعیت‌های شغلی
+      description: تمام موقعیت‌های شغلی فعال را برمی‌گرداند.
+      tags:
+        - positions
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [open, closed, draft]
+        - in: query
+          name: department
+          schema:
+            type: string
+      responses:
+        '200':
+          description: لیست موقعیت‌ها
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Position'
+
+  /api/v1/positions/{id}:
+    get:
+      summary: دریافت یک موقعیت شغلی
+      tags:
+        - positions
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: موقعیت شغلی
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+
+  /api/v1/candidates:
+    get:
+      summary: دریافت لیست کاندیداهای متصل
+      tags:
+        - candidates
+      responses:
+        '200':
+          description: لیست کاندیداها
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Candidate'
+
+  /api/v1/candidates/{id}/resume:
+    get:
+      summary: دریافت رزومه یک کاندیدا
+      tags:
+        - candidates
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: رزومه کاندیدا
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resume'
+
+components:
+  schemas:
+    Position:
+      type: object
+      required: [external_id, title, department, level]
+      properties:
+        external_id:
+          type: string
+          example: EXT-1001
+        title:
+          type: string
+          example: Senior Backend Developer
+        department:
+          type: string
+          example: Engineering
+        level:
+          type: string
+          enum: [junior, mid, senior]
+        employment_type:
+          type: string
+          enum: [full_time, part_time, contract, internship]
+        min_experience_years:
+          type: integer
+        description:
+          type: string
+        required_skills:
+          type: array
+          items:
+            type: object
+            required: [name, weight]
+            properties:
+              name: { type: string }
+              weight: { type: integer, minimum: 1, maximum: 10 }
+              min_years: { type: integer }
+        preferred_skills:
+          type: array
+          items: { type: string }
+
+    Candidate:
+      type: object
+      properties:
+        external_id: { type: string }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+
+    Resume:
+      type: object
+      properties:
+        candidate_external_id: { type: string }
+        raw_text: { type: string }
+        attachments:
+          type: array
+          items:
+            type: object
+            properties:
+              url: { type: string }
+              type: { type: string }

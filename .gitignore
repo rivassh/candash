@@ -1,1 +1,35 @@
 .venv-pdf/
+# Logs & temp
+logs/
+*.log
+.env
+.env.local
+
+# Data (credentials, certificates)
+data/
+
+# Archives
+archive/
+websites/*/node_modules
+websites/*/.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+
+# Frontend runtime
+frontend/node_modules/
+frontend/.nuxt/
+frontend/.output/
+frontend/dist/
+
+# PHP
+api/vendor/
+api/.phpunit.cache/
+
+# DB init scripts (keep these)
+# db/  is NOT ignored

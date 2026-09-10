@@ -1,0 +1,12 @@
+{
+  "name": "talentmatch-mock-jobsource",
+  "version": "1.0.0",
+  "description": "Mock JobSource service for TalentMatch",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

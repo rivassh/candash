@@ -1,101 +1,117 @@
-# llfs — Learning & session logs
+# TalentMatch
 
-Personal archive of Cursor chat summaries, prompts, lessons learned, and daily git reports.
+سامانه هوشمند تحلیل و مدیریت استعداد (Client-based).
 
-## Structure
+> این فاز بر پایه Mock و فرمول‌های قطعی ساخته شده و هیچ اتصالی به API هوش مصنوعی واقعی ندارد.
 
-- `chats/` — session summaries (markdown)
-- `reports/` — daily git + activity + Cursor usage/cost reports
-- `cursor/` — stage VM docs, follow-up scripts, usage CSV
-- `cursor/reminders/` — یادآوری‌های دائمی per-person (sync با git)
-- root — standalone learnings / cross-cutting notes
+## معماری
 
-## یادآوری محمد مهدی سنایی (هر دستگاه)
+- **api** — Laravel 11 + PHP 8.4 — موتور تطبیق، REST API، احراز هویت Sanctum
+- **frontend** — Nuxt 3 + Vue 3 + Tailwind — رابط فارسی RTL
+- **db** — PostgreSQL 16 + pgvector
+- **redis** — صف و کش
+- **mock-jobsource** — سرویس Node.js برای شبیه‌سازی منبع شغلی
 
-لیست مشترک: [`cursor/reminders/mohammad-mahdi-senaie-todos.md`](cursor/reminders/mohammad-mahdi-senaie-todos.md)
-
-Rule: [`cursor/rules/mohammad-mahdi-senaie-reminder.mdc`](cursor/rules/mohammad-mahdi-senaie-reminder.mdc) — در هر چت می‌پرسد «کی کار می‌کند» و موارد باز را یادآوری می‌کند.
-
-نصب rule در پروژه یا **همه چت‌ها** (user rule):
+## شروع سریع
 
 ```bash
-./ai-workflow-playbook/scripts/install-senaie-reminder.sh --user   # همه پروژه‌ها
-./ai-workflow-playbook/scripts/install-senaie-reminder.sh /path/to/project
+make init DOMAINS=""  # یا make up
+make migrate
+make seed
 ```
 
-## Follow-ups (اجرای کارهای باقی‌مانده چت)
+سپس:
+- فرانت‌اند: http://localhost:3000
+- API: http://localhost:8080/api
+- Mock JobSource: http://localhost:4000
+
+**اطلاعات ورود:**
+- `admin@talentmatch.local` / `admin123` (ادمین)
+- `hr@talentmatch.local` / `hr123456` (کارشناس HR)
+
+## ساختار پروژه
+
+```
+.
+├── api/                # Laravel application
+│   ├── app/
+│   │   ├── Contracts/      # اینترفیس‌های دامنه (JobSource, Resume, Enrichment)
+│   │   ├── Services/       # پیاده‌سازی (Mock, External)
+│   │   │   ├── Matching/   # موتور تطبیق فرمولی
+│   │   │   ├── JobSource/
+│   │   │   ├── Resume/
+│   │   │   └── Enrichment/
+│   │   ├── Models/         # Eloquent models
+│   │   ├── DTOs/
+│   │   ├── Enums/
+│   │   └── Http/Controllers/Api/
+│   ├── database/migrations/  # مایگریشن‌ها
+│   ├── database/seeders/     # سیدرها
+│   └── routes/api.php
+├── frontend/           # Nuxt 3 (RTL + Tailwind)
+│   ├── pages/
+│   │   ├── index.vue         # ورود
+│   │   ├── dashboard.vue     # داشبورد
+│   │   ├── positions/        # مدیریت موقعیت‌ها
+│   │   ├── candidates/       # کاندیداها + پروفایل
+│   │   ├── matches.vue       # موتور تطبیق
+│   │   ├── skills.vue        # دیکشنری مهارت‌ها
+│   │   └── audit.vue         # گزارش تغییرات
+│   ├── layouts/default.vue
+│   ├── stores/auth.ts
+│   └── composables/useApi.ts
+├── contracts/
+│   └── jobsource.yaml   # قرارداد OpenAPI منبع شغلی
+├── mock-jobsource/      # شبیه‌ساز Node.js
+└── db/init/             # اسکریپت‌های pgvector
+```
+
+## موتور تطبیق (Matching Engine)
+
+فرمول قطعی و قابل توضیح:
+
+```
+total = 0.40 × required_skills
+      + 0.20 × experience
+      + 0.15 × seniority
+      + 0.10 × education
+      + 0.10 × preferred_skills
+      + 0.05 × stability
+```
+
+پیاده‌سازی: `api/app/Services/Matching/MatchingService.php`
+
+خروجی هر تطبیق:
+- `total_score` (۰ تا ۱۰۰)
+- `breakdown` (jsonb با ریز نمرات)
+- `strengths` (آرایه فارسی از نقاط قوت)
+- `gaps` (آرایه فارسی از کمبودها)
+
+## لایه Mock
+
+تمام سرویس‌های خارجی فقط از طریق اینترفیس‌ها قابل استفاده‌اند:
+- `App\Contracts\JobSource\JobSourceInterface` → `MockDriver` / `ExternalApiDriver`
+- `App\Contracts\Resume\ResumeExtractorInterface` → `MockResumeExtractor`
+- `App\Contracts\Enrichment\EnrichmentInterface` → `MockEnrichmentService`
+
+تغییر درایور: `JOBSOURCE_DRIVER=external` در `.env`
+
+## دستورات Make
+
+| دستور | توضیح |
+|------|------|
+ `make up` | ساخت و راه‌اندازی همه سرویس‌ها |
+| `make down` | توقف و حذف کانتینرها |
+| `make migrate` | اجرای مایگریشن‌ها |
+| `make seed` | اجرای سیدرها |
+| `make fresh` | مایگریشن از صفر + سید |
+| `make test` | اجرای تست‌های PHPUnit |
+| `make bash-api` | ورود به شل api |
+
+## تست
 
 ```bash
-LLFS_DIR=/opt/llfs bash /opt/llfs/cursor/scripts/bootstrap-followups.sh
+make test
 ```
 
-یا: `bash /opt/llfs/cursor/scripts/run-chat-followups.sh`
-
-## بستن چت (کم‌توکن)
-
-```
-llfs close TOPIC
-```
-
-Playbook: [`cursor/CLOSE-CHAT.md`](cursor/CLOSE-CHAT.md) · Rule: [`cursor/rules/llfs-close-chat.mdc`](cursor/rules/llfs-close-chat.mdc)
-
-```bash
-bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC
-# agent: Learnings + TODO
-bash /opt/llfs/cursor/scripts/close-chat.sh TOPIC --push
-```
-
-CSV: `~/.config/cursor-usage.env` + `fetch-cursor-usage-csv.sh` — **cookie در چت نفرست.**
-
-## فهرست — Passbolt / debops (۱۹ ژوئن ۲۰۲۶)
-
-| نوع | فایل |
-|-----|------|
-| یادگیری‌ها | [chats/2026-06-19-passbolt-closeout.md](chats/2026-06-19-passbolt-closeout.md) |
-| پرامپت‌ها | [cursor/chats/2026-06-19-passbolt-prompts.md](cursor/chats/2026-06-19-passbolt-prompts.md) |
-| هزینه Cursor | [cursor/usage/passbolt-chat-2026-06-19-cost.md](cursor/usage/passbolt-chat-2026-06-19-cost.md) |
-| گزارش روزانه Git | [reports/2026-06-19-debops-passbolt-daily.md](reports/2026-06-19-debops-passbolt-daily.md) |
-| TODO باز | [cursor/TODO.md](cursor/TODO.md) |
-
-## فهرست — stage-deployer (۱۹ ژوئن ۲۰۲۶)
-
-| نوع | فایل |
-|-----|------|
-| یادگیری‌ها | [2026-06-19-stage-deployer-chat-learnings.md](2026-06-19-stage-deployer-chat-learnings.md) |
-| گزارش روزانه Git | [reports/2026-06-19-daily-git-report.md](reports/2026-06-19-daily-git-report.md) |
-| پرامپت‌ها + TODO | [cursor/chats/2026-06-19-stage-archive-prompts.md](cursor/chats/2026-06-19-stage-archive-prompts.md) |
-| Usage ۱۴–۲۰ ژوئن | [cursor/usage/summary-2026-06-14_2026-06-20.md](cursor/usage/summary-2026-06-14_2026-06-20.md) |
-
-## سایر گزارش‌ها
-
-| تاریخ | فایل |
-|--------|------|
-| debops closeout | [chats/2026-06-20-debops-closeout.md](chats/2026-06-20-debops-closeout.md) |
-| debops daily 2026-06-20 | [reports/2026-06-20-debops-daily.md](reports/2026-06-20-debops-daily.md) |
-| debops cost by prompt | [cursor/usage/debops-2026-06-14_2026-06-20-cost-by-prompt.md](cursor/usage/debops-2026-06-14_2026-06-20-cost-by-prompt.md) |
-| debops git | [reports/2026-06-16-20-debops-git-daily.md](reports/2026-06-16-20-debops-git-daily.md) |
-| modular-gps git | [reports/2026-06-19-20-modular-gps-git-daily.md](reports/2026-06-19-20-modular-gps-git-daily.md) |
-| debops Cursor cost | [reports/2026-06-20-debops-cursor-usage-cost.md](reports/2026-06-20-debops-cursor-usage-cost.md) |
-| modular-gps Cursor cost | [reports/2026-06-20-modular-gps-cursor-cost.md](reports/2026-06-20-modular-gps-cursor-cost.md) |
-| **stage-deployer UI chat (۲۰ ژوئن)** | [chats/2026-06-20-stage-deployer-ui-cursor-session.md](chats/2026-06-20-stage-deployer-ui-cursor-session.md) |
-| **stage health/deploy (۱۹ ژوئن)** | [chats/2026-06-19-stage-health-deploy-closeout.md](chats/2026-06-19-stage-health-deploy-closeout.md) |
-| TODO باز ۱۹ ژوئن | [cursor/todos/2026-06-19-stage-health-deploy-chat-open.md](cursor/todos/2026-06-19-stage-health-deploy-chat-open.md) |
-| Cost ۱۹ ژوئن stage health | [cursor/usage/stage-health-deploy-2026-06-18_2026-06-20-cost-by-prompt.md](cursor/usage/stage-health-deploy-2026-06-18_2026-06-20-cost-by-prompt.md) |
-| Git daily ۱۹ ژوئن stage health | [reports/2026-06-19-stage-health-deploy-git-daily.md](reports/2026-06-19-stage-health-deploy-git-daily.md) |
-| **opt/devops chat (۱۷–۲۰ ژوئن)** | [cursor/chats/2026-06-18-opt-stage-deployer-devops-session.md](cursor/chats/2026-06-18-opt-stage-deployer-devops-session.md) |
-| opt/devops learnings | [chats/2026-06-20-opt-stage-deployer-chat-learnings.md](chats/2026-06-20-opt-stage-deployer-chat-learnings.md) |
-| opt/devops git daily | [reports/2026-06-18-20-opt-devops-git-daily.md](reports/2026-06-18-20-opt-devops-git-daily.md) |
-| opt/devops cost | [cursor/usage/2026-06-18-opt-devops-cost-by-prompt.md](cursor/usage/2026-06-18-opt-devops-cost-by-prompt.md) |
-| opt/devops TODO | [cursor/todos/2026-06-18-opt-devops-chat-open.md](cursor/todos/2026-06-18-opt-devops-chat-open.md) |
-| stage-deployer UI cost | [reports/2026-06-20-stage-deployer-ui-cursor-cost.md](reports/2026-06-20-stage-deployer-ui-cursor-cost.md) |
-| stage-deployer UI git | [reports/2026-06-18-20-stage-deployer-ui-git-daily.md](reports/2026-06-18-20-stage-deployer-ui-git-daily.md) |
-| stage-deployer UI TODO | [cursor/todos/stage-deployer-ui-chat-open.md](cursor/todos/stage-deployer-ui-chat-open.md) |
-| **llfs close automation (۲۰ ژوئن)** | [cursor/CLOSE-CHAT.md](cursor/CLOSE-CHAT.md) · [chats/2026-06-20-stage-subdomain-github-webhook-closeout.md](chats/2026-06-20-stage-subdomain-github-webhook-closeout.md) |
-| infra audit cost | [cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md](cursor/usage/debops-infra-audit-chat-2026-06-19-20-cost.md) |
-| infra audit git daily | [reports/2026-06-20-debops-infra-audit-daily.md](reports/2026-06-20-debops-infra-audit-daily.md) |
-| infra audit TODO | [cursor/todos/infra-audit-chat-open.md](cursor/todos/infra-audit-chat-open.md) |
-| **Sana GPS NAT closeout (۲۱ ژوئن)** | [chats/2026-06-21-debops-sana-gps-nat-closeout.md](chats/2026-06-21-debops-sana-gps-nat-closeout.md) |
-| Sana GPS NAT prompts | [cursor/chats/2026-06-21-debops-sana-gps-nat-prompts.md](cursor/chats/2026-06-21-debops-sana-gps-nat-prompts.md) |
-| Sana GPS NAT cost | [cursor/usage/debops-sana-gps-nat-2026-06-14_2026-06-21-cost.md](cursor/usage/debops-sana-gps-nat-2026-06-14_2026-06-21-cost.md) |
-| Sana GPS NAT git daily | [reports/2026-06-21-debops-sana-gps-nat-git-daily.md](reports/2026-06-21-debops-sana-gps-nat-git-daily.md) |
-| Sana GPS NAT TODO | [cursor/todos/2026-06-21-debops-sana-gps-nat-chat-open.md](cursor/todos/2026-06-21-debops-sana-gps-nat-chat-open.md) |
+تست نمونه موتور تطبیق در `api/tests/Unit/MatchingServiceTest.php`.
