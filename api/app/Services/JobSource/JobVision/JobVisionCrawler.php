@@ -275,7 +275,6 @@ public function authenticate(): string
         $response = Http::timeout(30)
             ->withHeaders($headers)
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
-            ->retry(2, 500)
             ->post($url, $payload);
 
         $body = $response->body();
@@ -389,7 +388,6 @@ public function authenticate(): string
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
-            ->retry(2, 500)
             ->post($url, [
                 'jobPostId' => $jobPostId,
                 'listOfApplicationsId' => $applicationIds,
@@ -438,7 +436,6 @@ public function authenticate(): string
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
-            ->retry(2, 500)
             ->get($fullUrl);
 
         Log::info('[JobVision] Response: crawlApplicationHeader', [
@@ -485,7 +482,6 @@ public function authenticate(): string
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
-            ->retry(2, 500)
             ->get($fullUrl);
 
         Log::info('[JobVision] Response: crawlApplicationDetails', [
