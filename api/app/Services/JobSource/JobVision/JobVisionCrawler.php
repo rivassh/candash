@@ -108,8 +108,10 @@ class JobVisionCrawler
             'Accept' => 'application/json, text/plain, */*',
             'Accept-Language' => 'en-US,en;q=0.5',
             'Accept-Encoding' => 'gzip, deflate, br, zstd',
+            'Content-Type' => 'application/json',
             'Origin' => 'https://employer.jobvision.ir',
             'Referer' => 'https://employer.jobvision.ir/',
+            'Connection' => 'keep-alive',
             'Sec-Fetch-Dest' => 'empty',
             'Sec-Fetch-Mode' => 'cors',
             'Sec-Fetch-Site' => 'same-site',
@@ -128,6 +130,11 @@ class JobVisionCrawler
 
 public function authenticate(): string
     {
+        // Load cookies from config if available (needed for API access)
+        if (empty($this->cookies)) {
+            $this->loadExistingCookies();
+        }
+
         // Use bearer token directly if available (no captcha required)
         if (! $this->bearerToken) {
             $this->loadBearerToken();
@@ -210,21 +217,24 @@ public function authenticate(): string
 
     public function crawlJobPosts(int $pageNumber = 1, int $pageSize = 50): array
     {
-        $url = $this->apiUrl() . '/api/v1.0/JobPost/GetListOfJobPosts';
+        $url = $this->apiUrl() . '/api/v1.0/JobPost/GetListOfJobPostBadges';
+
+        // Build payload with job post IDs - using a default set if none specified
+        $jobPostIds = [
+            1503606, 1426362, 1426184, 1425037, 1422232,
+            1219058, 1219051, 1219050, 1219047, 1205337
+        ];
 
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
             ->retry(2, 500)
             ->post($url, [
-                'statusId' => -1,
-                'keyword' => '',
-                'pageNumber' => $pageNumber,
-                'pageSize' => $pageSize,
+                'jobPostIds' => $jobPostIds,
             ]);
 
         if ($response->failed()) {
-            Log::error('JobVision GetListOfJobPosts failed', [
+            Log::error('JobVision GetListOfJobPostBadges failed', [
                 'status' => $response->status(),
                 'body' => $response->body(),
             ]);
@@ -233,7 +243,7 @@ public function authenticate(): string
 
         $data = $response->json() ?? [];
 
-        $items = $data['items'] ?? $data['result'] ?? $data['data'] ?? ($data['value'] ?? []);
+        $items = $data['data']['listOfJobPostBadges'] ?? $data['listOfJobPostBadges'] ?? [];
         if (!is_array($items)) {
             $items = [];
         }
