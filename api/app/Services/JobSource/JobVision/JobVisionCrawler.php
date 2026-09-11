@@ -62,11 +62,6 @@ class JobVisionCrawler
     {
         $this->loadExistingCookies();
 
-        $cookieValue = config('talentmatch.jobvision.cookie');
-        if ($cookieValue) {
-            return $this->bearerToken ?? '';
-        }
-
         $username = config('talentmatch.jobvision.username');
         $password = config('talentmatch.jobvision.password');
         $captcha  = config('talentmatch.jobvision.captcha');
