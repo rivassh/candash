@@ -11,7 +11,7 @@
     "@cucumber/cucumber": "^11.3.0",
     "@cucumber/pretty-formatter": "^2.4.1",
     "@types/node": "^20.19.43",
-    "playwright": "^1.49.0",
+    "playwright": "^1.55.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "express": "^4.18.2",
