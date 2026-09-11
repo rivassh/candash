@@ -323,48 +323,52 @@ public function authenticate(): string
             'payload' => ['jobPostIds' => $jobPostIds],
         ]);
 
-        $response = Http::timeout(30)
-            ->withHeaders($this->authHeaders())
-            ->withCookies($this->cookies, 'employerapi.jobvision.ir')
-            ->retry(2, 500)
-            ->post($url, [
+        try {
+            $response = $this->sendRequest('crawlJobPosts', $url, [
                 'jobPostIds' => $jobPostIds,
             ]);
 
-        if ($response->failed()) {
-            Log::error('JobVision GetListOfJobPostBadges failed', [
-                'status' => $response->status(),
-                'body' => $response->body(),
+            if ($response['status'] >= 400) {
+                Log::error('JobVision GetListOfJobPostBadges failed', [
+                    'status' => $response['status'],
+                    'body' => $response['body'],
+                ]);
+                return [];
+            }
+
+            $data = json_decode($response['body'], true) ?? [];
+
+            $items = $data['data']['listOfJobPostBadges'] ?? $data['listOfJobPostBadges'] ?? [];
+            if (!is_array($items)) {
+                $items = [];
+            }
+
+            foreach ($items as $item) {
+                $jobPostId = (string) ($item['jobPostId'] ?? $item['id'] ?? '');
+                if (!$jobPostId) {
+                    continue;
+                }
+                JobVisionRawPayload::updateOrCreate(
+                    [
+                        'endpoint' => $url,
+                        'entity_type' => JobVisionRawPayload::ENTITY_JOB_POST,
+                        'external_id' => $jobPostId,
+                    ],
+                    [
+                        'payload' => $item,
+                        'fetched_at' => now(),
+                    ]
+                );
+            }
+
+            return $items;
+        } catch (\Exception $e) {
+            Log::error('JobVision GetListOfJobPostBadges exception', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
             return [];
         }
-
-        $data = $response->json() ?? [];
-
-        $items = $data['data']['listOfJobPostBadges'] ?? $data['listOfJobPostBadges'] ?? [];
-        if (!is_array($items)) {
-            $items = [];
-        }
-
-        foreach ($items as $item) {
-            $jobPostId = (string) ($item['jobPostId'] ?? $item['id'] ?? '');
-            if (!$jobPostId) {
-                continue;
-            }
-            JobVisionRawPayload::updateOrCreate(
-                [
-                    'endpoint' => $url,
-                    'entity_type' => JobVisionRawPayload::ENTITY_JOB_POST,
-                    'external_id' => $jobPostId,
-                ],
-                [
-                    'payload' => $item,
-                    'fetched_at' => now(),
-                ]
-            );
-        }
-
-        return $items;
     }
 
     public function crawlApplicationsSummary(int $jobPostId, array $applicationIds): void
