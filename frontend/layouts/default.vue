@@ -7,7 +7,7 @@ definePageMeta({ layout: 'default' })
 
 const nav = [
   { label: 'داشبورد', icon: '📊', to: '/dashboard' },
-  { label: ' موقعیت‌های شغلی', icon: '💼', to: '/positions' },
+  { label: 'موقعیت‌های شغلی', icon: '💼', to: '/positions' },
   { label: 'کاندیداها', icon: '👤', to: '/candidates' },
   { label: 'تطبیق', icon: '🔗', to: '/matches' },
   { label: 'مهارت‌ها', icon: '🎯', to: '/skills' },
@@ -17,10 +17,15 @@ const nav = [
 const route = useRoute()
 const authStore = useAuthStore()
 const router = useRouter()
-const sidebarOpen = ref(false)
+const sidebarOpen = ref(true)
 const isMobile = ref(false)
 
-const sidebarVisible = computed(() => !isMobile.value || sidebarOpen.value)
+const sidebarVisible = computed(() => {
+  if (isMobile.value) {
+    return sidebarOpen.value
+  }
+  return true
+})
 
 function toggleSidebar() {
   sidebarOpen.value = !sidebarOpen.value
@@ -34,6 +39,7 @@ async function logout() {
 onMounted(() => {
   const updateIsMobile = () => {
     isMobile.value = window.matchMedia('(max-width: 767px)').matches
+    if (isMobile.value) sidebarOpen.value = false
   }
   updateIsMobile()
   const media = window.matchMedia('(max-width: 767px)')
