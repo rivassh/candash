@@ -57,6 +57,27 @@ class JobVisionCrawler
             '&role=employer'
         );
 
+        Log::info('[JobVision] Request: fetchBearerTokenWithCookies', [
+            'url' => $this->accountUrl() . '/Employer/SignIn',
+            'headers' => [
+                'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0',
+                'Accept' => 'application/json, text/plain, */*',
+                'Accept-Language' => 'en-US,en;q=0.5',
+                'Accept-Encoding' => 'gzip, deflate, br, zstd',
+                'Content-Type' => 'application/json;charset=utf-8',
+                'Origin' => $this->accountUrl(),
+                'Referer' => $this->accountUrl() . '/Employer?returnUrl=' . $returnUrl,
+                'Sec-Fetch-Dest' => 'empty',
+                'Sec-Fetch-Mode' => 'cors',
+                'Sec-Fetch-Site' => 'same-origin',
+            ],
+            'payload' => [
+                'Password' => $password ? 'set' : 'not set',
+                'ReturnUrl' => $returnUrl,
+                'CaptchaToken' => $captcha ? 'set' : 'not set',
+            ],
+        ]);
+
         $response = Http::timeout(30)
             ->withHeaders([
                 'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0',
@@ -76,6 +97,11 @@ class JobVisionCrawler
                 'ReturnUrl' => $returnUrl,
                 'CaptchaToken' => $captcha,
             ]);
+
+        Log::info('[JobVision] Response: fetchBearerTokenWithCookies', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
 
         if ($response->failed()) {
             Log::error('JobVision sign-in failed', [
@@ -130,6 +156,11 @@ class JobVisionCrawler
 
 public function authenticate(): string
     {
+        Log::info('[JobVision] authenticate start', [
+            'bearerToken' => $this->bearerToken ? 'set' : 'not set',
+            'cookies' => array_keys($this->cookies),
+        ]);
+
         // Load cookies from config if available (needed for API access)
         if (empty($this->cookies)) {
             $this->loadExistingCookies();
@@ -141,6 +172,10 @@ public function authenticate(): string
         }
 
         if ($this->bearerToken) {
+            Log::info('[JobVision] authenticate using bearer token', [
+                'tokenLength' => strlen($this->bearerToken),
+                'tokenPrefix' => substr($this->bearerToken, 0, 30) . '...',
+            ]);
             return $this->bearerToken;
         }
 
@@ -215,8 +250,65 @@ public function authenticate(): string
         return $this->bearerToken ?? '';
     }
 
+    private function logRequest(string $label, string $url, array $headers, array $payload, ?array $response = null): void
+    {
+        Log::info("[JobVision] {$label}", [
+            'url' => $url,
+            'headers' => $headers,
+            'payload' => $payload,
+            'response_status' => $response['status'] ?? null,
+            'response_body' => $response['body'] ?? null,
+            'response_headers' => $response['headers'] ?? null,
+        ]);
+    }
+
+    private function sendRequest(string $label, string $url, array $payload): ?array
+    {
+        $headers = $this->authHeaders();
+        Log::info("[JobVision] Request: {$label}", [
+            'url' => $url,
+            'method' => 'POST',
+            'headers' => $headers,
+            'payload' => $payload,
+        ]);
+
+        $response = Http::timeout(30)
+            ->withHeaders($headers)
+            ->withCookies($this->cookies, 'employerapi.jobvision.ir')
+            ->retry(2, 500)
+            ->post($url, $payload);
+
+        $body = $response->body();
+        $status = $response->status();
+        $respHeaders = $response->headers();
+
+        Log::info("[JobVision] Response: {$label}", [
+            'url' => $url,
+            'status' => $status,
+            'body' => $body,
+            'headers' => $respHeaders,
+        ]);
+
+        if ($response->failed()) {
+            Log::error("[JobVision] FAILED: {$label}", [
+                'url' => $url,
+                'status' => $status,
+                'body' => $body,
+            ]);
+        }
+
+        return ['status' => $status, 'body' => $body, 'headers' => $respHeaders];
+    }
+
     public function crawlJobPosts(int $pageNumber = 1, int $pageSize = 50): array
     {
+        Log::info("[JobVision] crawJobPosts start", [
+            'pageNumber' => $pageNumber,
+            'pageSize' => $pageSize,
+            'bearerToken' => $this->bearerToken ? 'set' : 'not set',
+            'cookies' => array_keys($this->cookies),
+        ]);
+
         $url = $this->apiUrl() . '/api/v1.0/JobPost/GetListOfJobPostBadges';
 
         // Build payload with job post IDs - using a default set if none specified
@@ -224,6 +316,12 @@ public function authenticate(): string
             1503606, 1426362, 1426184, 1425037, 1422232,
             1219058, 1219051, 1219050, 1219047, 1205337
         ];
+
+        Log::info("[JobVision] Request details", [
+            'url' => $url,
+            'headers' => $this->authHeaders(),
+            'payload' => ['jobPostIds' => $jobPostIds],
+        ]);
 
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
@@ -277,6 +375,13 @@ public function authenticate(): string
 
         $url = $this->apiUrl() . '/api/v1.0/JobPostApplication/GetListOfApplicationsSummary';
 
+        Log::info('[JobVision] Request: crawlApplicationsSummary', [
+            'url' => $url,
+            'jobPostId' => $jobPostId,
+            'applicationIds' => count($applicationIds),
+            'headers' => $this->authHeaders(),
+        ]);
+
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
@@ -286,10 +391,16 @@ public function authenticate(): string
                 'listOfApplicationsId' => $applicationIds,
             ]);
 
+        Log::info('[JobVision] Response: crawlApplicationsSummary', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
         if ($response->failed()) {
             Log::error('JobVision GetListOfApplicationsSummary failed', [
                 'jobPostId' => $jobPostId,
                 'status' => $response->status(),
+                'body' => $response->body(),
             ]);
             return;
         }
@@ -314,16 +425,28 @@ public function authenticate(): string
         $url = $this->apiUrl() . '/api/v1.0/JobPostApplication/GetApplicationHeader';
         $fullUrl = $url . '?applicationId=' . $applicationId;
 
+        Log::info('[JobVision] Request: crawlApplicationHeader', [
+            'url' => $fullUrl,
+            'applicationId' => $applicationId,
+            'headers' => $this->authHeaders(),
+        ]);
+
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
             ->retry(2, 500)
             ->get($fullUrl);
 
+        Log::info('[JobVision] Response: crawlApplicationHeader', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
         if ($response->failed()) {
             Log::error('JobVision GetApplicationHeader failed', [
                 'applicationId' => $applicationId,
                 'status' => $response->status(),
+                'body' => $response->body(),
             ]);
             return;
         }
@@ -348,16 +471,29 @@ public function authenticate(): string
         $url = $this->apiUrl() . '/api/v1.0/JobPostApplication/GetApplicationDetails2';
         $fullUrl = $url . '?applicationId=' . $applicationId . '&cvlang=' . $cvLang;
 
+        Log::info('[JobVision] Request: crawlApplicationDetails', [
+            'url' => $fullUrl,
+            'applicationId' => $applicationId,
+            'cvLang' => $cvLang,
+            'headers' => $this->authHeaders(),
+        ]);
+
         $response = Http::timeout(30)
             ->withHeaders($this->authHeaders())
             ->withCookies($this->cookies, 'employerapi.jobvision.ir')
             ->retry(2, 500)
             ->get($fullUrl);
 
+        Log::info('[JobVision] Response: crawlApplicationDetails', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
+
         if ($response->failed()) {
             Log::error('JobVision GetApplicationDetails2 failed', [
                 'applicationId' => $applicationId,
                 'status' => $response->status(),
+                'body' => $response->body(),
             ]);
             return;
         }
@@ -387,6 +523,10 @@ public function authenticate(): string
         ];
 
         $this->authenticate();
+
+        Log::info('[JobVision] crawlAll start', [
+            'jobPostLimit' => $jobPostLimit,
+        ]);
 
         $page = 1;
         $allJobPosts = [];
