@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from '#app'
+import { useAuthStore } from '@/stores/auth'
+
 definePageMeta({ layout: 'default' })
 
 const nav = [
   { label: 'داشبورد', icon: '📊', to: '/dashboard' },
-  { label: 'موقعیت‌های شغلی', icon: '💼', to: '/positions' },
+  { label: ' موقعیت‌های شغلی', icon: '💼', to: '/positions' },
   { label: 'کاندیداها', icon: '👤', to: '/candidates' },
   { label: 'تطبیق', icon: '🔗', to: '/matches' },
   { label: 'مهارت‌ها', icon: '🎯', to: '/skills' },
@@ -13,17 +17,42 @@ const nav = [
 const route = useRoute()
 const authStore = useAuthStore()
 const router = useRouter()
+const sidebarOpen = ref(false)
+const isMobile = ref(false)
+
+const sidebarVisible = computed(() => !isMobile.value || sidebarOpen.value)
+
+function toggleSidebar() {
+  sidebarOpen.value = !sidebarOpen.value
+}
 
 async function logout() {
   await authStore.logout()
   router.push('/')
 }
+
+onMounted(() => {
+  const updateIsMobile = () => {
+    isMobile.value = window.matchMedia('(max-width: 767px)').matches
+  }
+  updateIsMobile()
+  const media = window.matchMedia('(max-width: 767px)')
+  media.addEventListener('change', updateIsMobile)
+})
 </script>
 
 <template>
-  <div class="flex min-h-screen">
+  <div class="relative min-h-screen">
+    <!-- Mobile Menu Button -->
+    <button @click="toggleSidebar" class="md:hidden fixed top-4 left-4 z-30 p-4">
+      ☰
+    </button>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-white border-l border-gray-200 flex flex-col">
+    <aside
+      class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 flex flex-col z-20 transition-transform duration-300"
+      :class="{ 'translate-x-0': sidebarVisible, '-translate-x-full': !sidebarVisible }"
+    >
       <div class="p-5 border-b border-gray-100">
         <h1 class="text-lg font-bold text-primary-700">TalentMatch</h1>
         <p class="text-xs text-gray-400 mt-0.5">سامانه مدیریت استعداد</p>
@@ -59,7 +88,10 @@ async function logout() {
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 p-6 overflow-auto">
+    <main
+      class="flex-1 p-6 overflow-auto transition-margin duration-300"
+      :class="{ 'ml-64': !isMobile }"
+    >
       <slot />
     </main>
   </div>
