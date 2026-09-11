@@ -11,6 +11,14 @@ class JobVisionCrawler
     private ?string $bearerToken = null;
     private array $cookies = [];
 
+    private function loadBearerToken(): void
+    {
+        $token = config('talentmatch.jobvision.token');
+        if ($token) {
+            $this->bearerToken = $token;
+        }
+    }
+
     private function accountUrl(): string
     {
         return config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
@@ -31,6 +39,66 @@ class JobVisionCrawler
     private function apiUrl(): string
     {
         return config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir');
+    }
+
+    private function fetchBearerTokenWithCookies(): ?string
+    {
+        $username = config('talentmatch.jobvision.username');
+        $password = config('talentmatch.jobvision.password');
+        $captcha  = config('talentmatch.jobvision.captcha');
+
+        $returnUrl = urlencode(
+            '/connect/authorize/callback?client_id=EmployerClient' .
+            '&redirect_uri=https%3A%2F%2Femployer.jobvision.ir%2Fauth-callback' .
+            '&response_type=id_token%20token' .
+            '&scope=openid%20profile%20JobVisionApi%20roles%20offline_access%20IdentityServerApi' .
+            '&nonce=effd4ca29c5ec5fabb2cef5b73c4cb0653NSLY4L3' .
+            '&state=8d08543dc194023ea41022a42fd633abd3Hg77sjR' .
+            '&role=employer'
+        );
+
+        $response = Http::timeout(30)
+            ->withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0',
+                'Accept' => 'application/json, text/plain, */*',
+                'Accept-Language' => 'en-US,en;q=0.5',
+                'Accept-Encoding' => 'gzip, deflate, br, zstd',
+                'Content-Type' => 'application/json;charset=utf-8',
+                'Origin' => $this->accountUrl(),
+                'Referer' => $this->accountUrl() . '/Employer?returnUrl=' . $returnUrl,
+                'Sec-Fetch-Dest' => 'empty',
+                'Sec-Fetch-Mode' => 'cors',
+                'Sec-Fetch-Site' => 'same-origin',
+            ])
+            ->withCookies($this->cookies, 'account.jobvision.ir')
+            ->post($this->accountUrl() . '/Employer/SignIn', [
+                'Password' => $password,
+                'ReturnUrl' => $returnUrl,
+                'CaptchaToken' => $captcha,
+            ]);
+
+        if ($response->failed()) {
+            Log::error('JobVision sign-in failed', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+            throw new \RuntimeException('JobVision authentication failed: HTTP ' . $response->status());
+        }
+
+        $body = $response->json() ?? [];
+        if (!($body['isValid'] ?? true)) {
+            $errors = $body['errors'] ?? [];
+            Log::error('JobVision sign-in invalid', ['errors' => $errors]);
+            throw new \RuntimeException('JobVision sign-in rejected: ' . json_encode($errors));
+        }
+
+        foreach ($response->cookies() as $cookie) {
+            $this->cookies[$cookie->getName()] = $cookie->getValue();
+        }
+
+        return $body['access_token']
+            ?? $body['id_token']
+            ?? ($body['token'] ?? null);
     }
 
     private function defaultHeaders(): array
@@ -58,12 +126,22 @@ class JobVisionCrawler
         return $headers;
     }
 
-    public function authenticate(): string
+public function authenticate(): string
     {
+        // Use bearer token directly if available (no captcha required)
+        if (! $this->bearerToken) {
+            $this->loadBearerToken();
+        }
+
+        if ($this->bearerToken) {
+            return $this->bearerToken;
+        }
+
         $cookieValue = config('talentmatch.jobvision.cookie');
         if ($cookieValue) {
             $this->loadExistingCookies();
-            return '';
+            $this->bearerToken = $this->fetchBearerTokenWithCookies();
+            return $this->bearerToken ?? '';
         }
 
         $username = config('talentmatch.jobvision.username');

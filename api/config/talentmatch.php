@@ -9,6 +9,7 @@ return [
     ],
 
     'jobvision' => [
+        'token'       => env('JOBVISION_TOKEN'),
         'username'    => env('JOBVISION_USERNAME'),
         'password'    => env('JOBVISION_PASSWORD'),
         'captcha'     => env('JOBVISION_CAPTCHA_TOKEN'),
