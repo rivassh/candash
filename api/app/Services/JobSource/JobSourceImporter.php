@@ -8,6 +8,7 @@ use App\Models\Candidate;
 use App\Enums\JobPositionStatus;
 use App\Enums\CandidateStatus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class JobSourceImporter
 {
@@ -20,7 +21,11 @@ class JobSourceImporter
      */
     public function importPositions(): array
     {
+        Log::info('[JobSourceImporter] importPositions start', ['driver' => $this->source->driverName()]);
+
         $positions = $this->source->listPositions();
+        Log::info('[JobSourceImporter] Positions fetched', ['count' => count($positions)]);
+
         $created = 0;
         $updated = 0;
 
@@ -47,6 +52,12 @@ class JobSourceImporter
             }
         }
 
+        Log::info('[JobSourceImporter] importPositions done', [
+            'created' => $created,
+            'updated' => $updated,
+            'driver' => $this->source->driverName(),
+        ]);
+
         return ['created' => $created, 'updated' => $updated, 'driver' => $this->source->driverName()];
     }
 
@@ -55,7 +66,11 @@ class JobSourceImporter
      */
     public function importCandidates(): array
     {
+        Log::info('[JobSourceImporter] importCandidates start', ['driver' => $this->source->driverName()]);
+
         $candidates = $this->source->listCandidates();
+        Log::info('[JobSourceImporter] Candidates fetched', ['count' => count($candidates)]);
+
         $created = 0;
 
         foreach ($candidates as $dto) {
@@ -82,6 +97,11 @@ class JobSourceImporter
                 }
             });
         }
+
+        Log::info('[JobSourceImporter] importCandidates done', [
+            'created' => $created,
+            'driver' => $this->source->driverName(),
+        ]);
 
         return ['created' => $created, 'driver' => $this->source->driverName()];
     }
