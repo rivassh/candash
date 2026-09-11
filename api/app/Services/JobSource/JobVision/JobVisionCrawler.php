@@ -60,7 +60,11 @@ class JobVisionCrawler
 
     public function authenticate(): string
     {
-        $this->loadExistingCookies();
+        $cookieValue = config('talentmatch.jobvision.cookie');
+        if ($cookieValue) {
+            $this->loadExistingCookies();
+            return '';
+        }
 
         $username = config('talentmatch.jobvision.username');
         $password = config('talentmatch.jobvision.password');
@@ -104,11 +108,17 @@ class JobVisionCrawler
             throw new \RuntimeException('JobVision authentication failed: HTTP ' . $response->status());
         }
 
+        $body = $response->json() ?? [];
+        if (!($body['isValid'] ?? true)) {
+            $errors = $body['errors'] ?? [];
+            Log::error('JobVision sign-in invalid', ['errors' => $errors]);
+            throw new \RuntimeException('JobVision sign-in rejected: ' . json_encode($errors));
+        }
+
         foreach ($response->cookies() as $cookie) {
             $this->cookies[$cookie->getName()] = $cookie->getValue();
         }
 
-        $body = $response->json() ?? [];
         $this->bearerToken = $body['access_token']
             ?? $body['id_token']
             ?? ($body['token'] ?? null);
