@@ -24,6 +24,17 @@ class JobVisionCrawler
     {
         Log::info('[JobVision] authenticate start');
 
+        // Cookie-only path: load cookies from DB first, no captcha, no sign-in
+        $cookieValue = $this->tokenProvider()->cookie;
+        if ($cookieValue) {
+            $this->cookies = $this->parseCookies($cookieValue);
+            Log::info('[JobVision] cookie-based authentication, no token from provider', [
+                'cookiesCount' => count($this->cookies),
+                'cookieKeys' => array_keys($this->cookies),
+            ]);
+            return '';
+        }
+
         // Use token provider to get a valid token
         $token = $this->tokenProvider()->getToken();
         if ($token) {
@@ -32,16 +43,6 @@ class JobVisionCrawler
                 'tokenLength' => strlen($token),
             ]);
             return $this->bearerToken;
-        }
-
-        // Cookie-only path: load cookies from DB, no captcha, no sign-in
-        $cookieValue = $this->tokenProvider()->cookie;
-        if ($cookieValue) {
-            $this->cookies = $this->parseCookies($cookieValue);
-            Log::info('[JobVision] cookie-based authentication, no token from provider', [
-                'cookiesCount' => count($this->cookies),
-            ]);
-            return '';
         }
 
         // No credentials available at all — admin must configure via panel
@@ -239,6 +240,20 @@ class JobVisionCrawler
 
     private function parseCookies(string $cookieValue): array
     {
+        $cookieValue = trim($cookieValue);
+        if (str_starts_with($cookieValue, '[')) {
+            $decoded = json_decode($cookieValue, true);
+            if (is_array($decoded)) {
+                $cookies = [];
+                foreach ($decoded as $cookie) {
+                    if (is_array($cookie) && isset($cookie['name'], $cookie['value'])) {
+                        $cookies[$cookie['name']] = $cookie['value'];
+                    }
+                }
+                return $cookies;
+            }
+        }
+
         $cookies = [];
         foreach (preg_split('/[\s;]+/', $cookieValue) as $part) {
             if (preg_match('/^([^=]+)=(.*)$/', $part, $m)) {

@@ -54,6 +54,11 @@ class JobVisionTokenProvider
             return $token;
         }
 
+        // اگر cookie داریم، sign-in/captcha رو انجام نده و مستقیم cookie-based auth رو فعال کن
+        if (!empty($this->cookie)) {
+            return null;
+        }
+
         // Try cache
         $cached = Cache::get(self::CACHE_KEY);
         if ($cached && $this->isValid($cached)) {
@@ -121,14 +126,7 @@ class JobVisionTokenProvider
             '&role=employer'
         );
 
-        $cookies = [];
-        if ($this->cookie) {
-            foreach (preg_split('/[\s;]+/', $this->cookie) as $part) {
-                if (preg_match('/^([^=]+)=(.*)$/', $part, $m)) {
-                    $cookies[$m[1]] = $m[2];
-                }
-            }
-        }
+        $cookies = $this->parseCookies($this->cookie);
 
         $response = Http::timeout(30)
             ->withHeaders([
@@ -220,5 +218,30 @@ class JobVisionTokenProvider
         // Strip whitespace
         $token = trim($token);
         return $token;
+    }
+
+    private function parseCookies(string $cookieValue): array
+    {
+        $cookieValue = trim($cookieValue);
+        if (str_starts_with($cookieValue, '[')) {
+            $decoded = json_decode($cookieValue, true);
+            if (is_array($decoded)) {
+                $cookies = [];
+                foreach ($decoded as $cookie) {
+                    if (is_array($cookie) && isset($cookie['name'], $cookie['value'])) {
+                        $cookies[$cookie['name']] = $cookie['value'];
+                    }
+                }
+                return $cookies;
+            }
+        }
+
+        $cookies = [];
+        foreach (preg_split('/[\s;]+/', $cookieValue) as $part) {
+            if (preg_match('/^([^=]+)=(.*)$/', $part, $m)) {
+                $cookies[$m[1]] = $m[2];
+            }
+        }
+        return $cookies;
     }
 }
