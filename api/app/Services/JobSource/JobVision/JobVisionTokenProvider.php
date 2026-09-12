@@ -18,8 +18,8 @@ class JobVisionTokenProvider
         // Fetch credentials from database first (priority 1)
         $dbCredential = JobVisionCredential::where('is_active', true)
             ->where(function ($query) {
-                $query->whereNull('expires_at')
-                    ->orWhere('expires_at', '>', now());
+                $query->whereNull('expire_at')
+                    ->orWhere('expire_at', '>', now());
             })
             ->orderBy('updated_at', 'desc')
             ->first();
@@ -29,17 +29,15 @@ class JobVisionTokenProvider
             $this->accountUrl = $dbCredential->account_url;
             $this->username = $dbCredential->username;
             $this->password = $dbCredential->password;
-            $this->captcha = $dbCredential->captcha_token;
             $this->cookie = $dbCredential->cookie;
             $this->jobPostIds = $dbCredential->job_post_ids ?? [];
             $this->isExpired = $dbCredential->isExpired();
         } else {
-            // Fallback to .env (priority 2)
+            // Fallback to .env (priority 2) - no captcha support
             $this->apiUrl = config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir');
             $this->accountUrl = config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
             $this->username = config('talentmatch.jobvision.username');
             $this->password = config('talentmatch.jobvision.password');
-            $this->captcha = config('talentmatch.jobvision.captcha');
             $this->cookie = config('talentmatch.jobvision.cookie');
             $this->jobPostIds = config('talentmatch.jobvision.job_post_ids', []);
             $this->isExpired = false; // .env doesn't have explicit expiry
@@ -152,7 +150,7 @@ class JobVisionTokenProvider
                 // CaptchaToken intentionally omitted — captcha sign-in is disabled
             ]);
 
-        $this->logTokenStatus($response->status(), $response->body());
+        Log::info('JobVision login response', ['status' => $response->status()]);
 
         if ($response->failed()) {
             Log::error('JobVision login failed', ['status' => $response->status()]);
@@ -211,21 +209,6 @@ class JobVisionTokenProvider
         ]);
     }
 
-    /**
-     * Log token status without exposing the token.
-     */
-    private function logTokenStatus(int $status, string $body): void
-    {
-        Log::info('JobVision login response', [
-            'status' => $status,
-            'body_length' => strlen($body),
-            'body_preview' => substr($body, 0, 200),
-        ]);
-    }
-
-    /**
-     * Load token from config (never from cache).
-     */
     private function loadFromConfig(): ?string
     {
         $token = config('talentmatch.jobvision.token');

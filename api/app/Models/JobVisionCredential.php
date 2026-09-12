@@ -16,18 +16,18 @@ class JobVisionCredential extends Model
         'api_url',
         'account_url',
         'job_post_ids',
-        'expires_at',
+        'expire_at',
         'is_active',
     ];
 
     protected $casts = [
         'job_post_ids' => 'array',
-        'expires_at' => 'datetime',
+        'expire_at' => 'datetime',
         'is_active' => 'boolean',
     ];
 
     public function isExpired(): bool
     {
-        return $this->expires_at !== null && $this->expires_at->isPast();
+        return $this->expire_at !== null && $this->expire_at->isPast();
     }
 }

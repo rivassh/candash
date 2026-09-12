@@ -12,8 +12,6 @@ class JobVisionCrawler
     private ?string $bearerToken = null;
     private array $cookies = [];
     private JobVisionTokenProvider $tokenProvider;
-    private bool $tokenRefreshed = false;
-
     private function tokenProvider(): JobVisionTokenProvider
     {
         if (!isset($this->tokenProvider)) {
@@ -239,16 +237,15 @@ class JobVisionCrawler
         return ['status' => $status, 'body' => $body, 'headers' => $respHeaders];
     }
 
-    private function loadExistingCookies(): void
+    private function parseCookies(string $cookieValue): array
     {
-        $cookieValue = config('talentmatch.jobvision.cookie');
-        if ($cookieValue) {
-            foreach (preg_split('/[\s;]+/', $cookieValue) as $part) {
-                if (preg_match('/^([^=]+)=(.*)$/', $part, $m)) {
-                    $this->cookies[$m[1]] = $m[2];
-                }
+        $cookies = [];
+        foreach (preg_split('/[\s;]+/', $cookieValue) as $part) {
+            if (preg_match('/^([^=]+)=(.*)$/', $part, $m)) {
+                $cookies[$m[1]] = $m[2];
             }
         }
+        return $cookies;
     }
 
     private function apiUrl(): string
@@ -261,80 +258,4 @@ class JobVisionCrawler
         return config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
     }
 
-    private function fetchBearerTokenWithCookies(): ?string
-    {
-        $username = config('talentmatch.jobvision.username');
-        $password = config('talentmatch.jobvision.password');
-        $captcha  = config('talentmatch.jobvision.captcha');
-
-        $returnUrl = urlencode(
-            '/connect/authorize/callback?client_id=EmployerClient' .
-            '&redirect_uri=https%3A%2F%2Femployer.jobvision.ir%2Fauth-callback' .
-            '&response_type=id_token%20token' .
-            '&scope=openid%20profile%20JobVisionApi%20roles%20offline_access%20IdentityServerApi' .
-            '&nonce=effd4ca29c5ec5fabb2cef5b73c4cb0653NSLY4L3' .
-            '&state=8d08543dc194023ea41022a42fd633abd3Hg77sjR' .
-            '&role=employer'
-        );
-
-        $response = Http::timeout(30)
-            ->withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0',
-                'Accept' => 'application/json, text/plain, */*',
-                'Accept-Language' => 'en-US,en;q=0.5',
-                'Accept-Encoding' => 'gzip, deflate, br, zstd',
-                'Content-Type' => 'application/json;charset=utf-8',
-                'Origin' => $this->accountUrl(),
-                'Referer' => $this->accountUrl() . '/Employer?returnUrl=' . $returnUrl,
-                'Sec-Fetch-Dest' => 'empty',
-                'Sec-Fetch-Mode' => 'cors',
-                'Sec-Fetch-Site' => 'same-origin',
-            ])
-            ->withCookies($this->cookies, 'account.jobvision.ir')
-            ->post($this->accountUrl() . '/Employer/SignIn', [
-                'Password' => $password,
-                'ReturnUrl' => $returnUrl,
-                'CaptchaToken' => $captcha,
-            ]);
-
-        $this->logTokenStatus($response->status(), $response->body());
-
-        if ($response->failed()) {
-            Log::error('JobVision sign-in failed', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
-            throw new \RuntimeException('JobVision authentication failed: HTTP ' . $response->status());
-        }
-
-        $body = $response->json() ?? [];
-        if (!($body['isValid'] ?? true)) {
-            $errors = $body['errors'] ?? [];
-            Log::error('JobVision sign-in invalid', ['errors' => $errors]);
-            throw new \RuntimeException('JobVision sign-in rejected: ' . json_encode($errors));
-        }
-
-        foreach ($response->cookies() as $cookie) {
-            $this->cookies[$cookie->getName()] = $cookie->getValue();
-        }
-
-        $this->bearerToken = $body['access_token']
-            ?? $body['id_token']
-            ?? ($body['token'] ?? null);
-
-        if (!$this->bearerToken) {
-            Log::warning('JobVision sign-in response (no token found)', $body);
-        }
-
-        return $this->bearerToken;
-    }
-
-    private function logTokenStatus(int $status, string $body): void
-    {
-        Log::info('JobVision login response', [
-            'status' => $status,
-            'body_length' => strlen($body),
-            'body_preview' => substr($body, 0, 200),
-        ]);
-    }
 }

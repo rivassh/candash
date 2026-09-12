@@ -21,12 +21,11 @@ class JobVisionCredentialController extends Controller
         $validated = $request->validate([
             'username' => 'nullable|string|max:255',
             'password' => 'nullable|string|max:255',
-            'captcha_token' => 'nullable|string',
             'cookie' => 'nullable|string',
             'api_url' => 'required|url',
             'account_url' => 'required|url',
             'job_post_ids' => 'nullable|array',
-            'expires_at' => 'nullable|date',
+            'expire_at' => 'nullable|date',
             'is_active' => 'boolean',
         ]);
 
@@ -49,12 +48,11 @@ class JobVisionCredentialController extends Controller
         $validated = $request->validate([
             'username' => 'nullable|string|max:255',
             'password' => 'nullable|string|max:255',
-            'captcha_token' => 'nullable|string',
             'cookie' => 'nullable|string',
             'api_url' => 'required|url',
             'account_url' => 'required|url',
             'job_post_ids' => 'nullable|array',
-            'expires_at' => 'nullable|date',
+            'expire_at' => 'nullable|date',
             'is_active' => 'boolean',
         ]);
 
