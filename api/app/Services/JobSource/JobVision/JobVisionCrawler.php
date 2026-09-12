@@ -17,28 +17,14 @@ class JobVisionCrawler
     private function tokenProvider(): JobVisionTokenProvider
     {
         if (!isset($this->tokenProvider)) {
-            $this->tokenProvider = new JobVisionTokenProvider(
-                config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir'),
-                config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir'),
-                config('talentmatch.jobvision.username'),
-                config('talentmatch.jobvision.password'),
-                config('talentmatch.jobvision.captcha'),
-                config('talentmatch.jobvision.cookie'),
-            );
+            $this->tokenProvider = new JobVisionTokenProvider();
         }
         return $this->tokenProvider;
     }
 
     public function authenticate(): string
     {
-        Log::info('[JobVision] authenticate start', [
-            'cookies' => array_keys($this->cookies),
-        ]);
-
-        // Load cookies from config if available (needed for API access)
-        if (empty($this->cookies)) {
-            $this->loadExistingCookies();
-        }
+        Log::info('[JobVision] authenticate start');
 
         // Use token provider to get a valid token
         $token = $this->tokenProvider()->getToken();
@@ -50,77 +36,21 @@ class JobVisionCrawler
             return $this->bearerToken;
         }
 
-        // Fallback: try cookie-based login
-        $cookieValue = config('talentmatch.jobvision.cookie');
+        // Cookie-only path: load cookies from DB, no captcha, no sign-in
+        $cookieValue = $this->tokenProvider()->cookie;
         if ($cookieValue) {
-            $this->loadExistingCookies();
-            $this->bearerToken = $this->fetchBearerTokenWithCookies();
-            return $this->bearerToken ?? '';
+            $this->cookies = $this->parseCookies($cookieValue);
+            Log::info('[JobVision] cookie-based authentication, no token from provider', [
+                'cookiesCount' => count($this->cookies),
+            ]);
+            return '';
         }
 
-        // Full sign-in flow
-        $username = config('talentmatch.jobvision.username');
-        $password = config('talentmatch.jobvision.password');
-        $captcha  = config('talentmatch.jobvision.captcha');
-
-        $returnUrl = urlencode(
-            '/connect/authorize/callback?client_id=EmployerClient' .
-            '&redirect_uri=https%3A%2F%2Femployer.jobvision.ir%2Fauth-callback' .
-            '&response_type=id_token%20token' .
-            '&scope=openid%20profile%20JobVisionApi%20roles%20offline_access%20IdentityServerApi' .
-            '&nonce=effd4ca29c5ec5fabb2cef5b73c4cb0653NSLY4L3' .
-            '&state=8d08543dc194023ea41022a42fd633abd3Hg77sjR' .
-            '&role=employer'
+        // No credentials available at all — admin must configure via panel
+        Log::warning('[JobVision] No credentials configured: neither DB nor .env has cookie');
+        throw new \RuntimeException(
+            'JobVision credentials not configured. Admin must fill JobVision credentials in the admin panel.'
         );
-
-        $response = Http::timeout(30)
-            ->withHeaders([
-                'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0',
-                'Accept' => 'application/json, text/plain, */*',
-                'Accept-Language' => 'en-US,en;q=0.5',
-                'Accept-Encoding' => 'gzip, deflate, br, zstd',
-                'Content-Type' => 'application/json;charset=utf-8',
-                'Origin' => $this->accountUrl(),
-                'Referer' => $this->accountUrl() . '/Employer?returnUrl=' . $returnUrl,
-                'Sec-Fetch-Dest' => 'empty',
-                'Sec-Fetch-Mode' => 'cors',
-                'Sec-Fetch-Site' => 'same-origin',
-            ])
-            ->withCookies($this->cookies, 'account.jobvision.ir')
-            ->post($this->accountUrl() . '/Employer/SignIn', [
-                'Password' => $password,
-                'ReturnUrl' => $returnUrl,
-                'CaptchaToken' => $captcha,
-            ]);
-
-        if ($response->failed()) {
-            Log::error('JobVision sign-in failed', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
-            throw new \RuntimeException('JobVision authentication failed: HTTP ' . $response->status());
-        }
-
-        $body = $response->json() ?? [];
-        if (!($body['isValid'] ?? true)) {
-            $errors = $body['errors'] ?? [];
-            Log::error('JobVision sign-in invalid', ['errors' => $errors]);
-            throw new \RuntimeException('JobVision sign-in rejected: ' . json_encode($errors));
-        }
-
-        foreach ($response->cookies() as $cookie) {
-            $this->cookies[$cookie->getName()] = $cookie->getValue();
-        }
-
-        $this->bearerToken = $body['access_token']
-            ?? $body['id_token']
-            ?? ($body['token'] ?? null);
-
-        if (!$this->bearerToken) {
-            Log::warning('JobVision sign-in response (no token found)', $body);
-        }
-
-        return $this->bearerToken ?? '';
     }
 
     private function defaultHeaders(): array

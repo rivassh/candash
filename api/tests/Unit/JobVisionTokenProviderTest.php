@@ -9,14 +9,7 @@ class JobVisionTokenProviderTest extends TestCase
 {
     public function test_token_provider_rejects_expired_token(): void
     {
-        $provider = new JobVisionTokenProvider(
-            'https://employerapi.jobvision.ir',
-            'https://account.jobvision.ir',
-            null,
-            null,
-            null,
-            null
-        );
+        $provider = new JobVisionTokenProvider();
 
         $header = base64_encode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
         $payload = base64_encode(json_encode(['exp' => time() - 100, 'iat' => time() - 200, 'client_id' => 'EmployerClient']));
@@ -29,28 +22,14 @@ class JobVisionTokenProviderTest extends TestCase
     public function test_token_provider_rejects_invalid_segment_count(): void
     {
         $twoSegment = "header.payload";
-        $provider = new JobVisionTokenProvider(
-            'https://employerapi.jobvision.ir',
-            'https://account.jobvision.ir',
-            null,
-            null,
-            null,
-            null
-        );
+        $provider = new JobVisionTokenProvider();
 
         $this->assertFalse($provider->isValid($twoSegment));
     }
 
     public function test_token_provider_rejects_malformed_payload(): void
     {
-        $provider = new JobVisionTokenProvider(
-            'https://employerapi.jobvision.ir',
-            'https://account.jobvision.ir',
-            null,
-            null,
-            null,
-            null
-        );
+        $provider = new JobVisionTokenProvider();
 
         // Payload with invalid base64 that produces malformed JSON
         $header = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9';
@@ -61,16 +40,44 @@ class JobVisionTokenProviderTest extends TestCase
 
     public function test_token_provider_accepts_valid_token(): void
     {
-        $validToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkZEMjczNDJEQjU4RTFFREZEMzJBODQ4MUVGODU0REUwQzI5Q0I3MzdSUzI1NiIsIng1dCI6Il9TYzBMYldPSHRfVEtvU0I3NFZONE1LY3R6YyIsInR5cCI6ImF0K2p3dCJ9.eyJpc3MiOiJodHRwczovL2FjY291bnQuam9idmlzaW9uLmlyIiwibmJmIjoxNzg5MTE0MjQ5LCJpYXQiOjE3ODkxMTQyNDksImV4cCI6MTc4OTEzNTg0OSwiYXVkIjpbIkpvYlZpc2lvbkFwaSIsIklkZW50aXR5U2VydmVyQXBpIl0sInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJKb2JWaXNpb25BcGkiLCJyb2xlcyIsIklkZW50aXR5U2VydmVyQXBpIiwib2ZmbGluZV9hY2Nlc3MiXSwiYW1yIjpbInB3ZCJdLCJjbGllbnRfaWQiOiJFbXBsb3llckNsaWVudCIsInN1YiI6IjIzMTgiLCJhdXRoX3RpbWUiOjE3ODkwNDUxOTgsImlkcCI6ImxvY2FsIiwiZW1haWwiOiJzaGFyaWZpbnZAbWFwc2FlbmcuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRW1wbG95ZXIiLCJIYXNoZWRMaXZlQ2hhdElkIjoiZjI3MzMxMjU2YWFmNjg1NTgwYmIzYWIwODFkN2M1NTc0MGM1MzM0NjRhNjg1Y2M1OGRiMWFjY2M3NDk4MzE4MiIsIlJvbGUiOiJFbXBsb3llciIsIkNvbXBhbnlJRCI6IjY5OTQ1IiwiQ29tcGFueU5hbWUiOiLZhdm-2LXYpyIsIkNvbXBhbnlFbk5hbWUiOiJNYXBzYSIsIklzQ29tcGFueUFjdGl2YXRlZCI6IjEiLCJFbWFpbENvbmZpcm1lZCI6IjEiLCJGdWxsTmFtZSI6ItmG2YjbjNivINi02LHbjNmB24wiLCJJc1Byb2ZpbGVDb21wbGV0ZWQiOiIxIiwiSXNPcGVyYXRvclByb2ZpbGVDb21wbGV0ZWQiOiIxIiwiSXNBZG1pbiI6IjEiLCJJc0FkbWluT3BlcmF0b3IiOiIxIiwiSXNOZXdDb21wYW55IjoiMCIsIklzTmV3T3BlcmF0b3IiOiIxIiwiRkNQIjoiMCIsIkZMIjoiMCIsInNpZCI6IjlBMjgzQkE0MUREMEUxREUxMjgzQ0ExNUREQThDMkU4IiwianRpIjoiQzY2MDA2NDYyNDNEMUJDODEwNUE2RjVGQTU0NjNBNDkifQ.TiDKEGsOvAA4imi3CjHYNdUTkC0wFntR3HxWPzN5FAZrWZZocJntWm_RwO4kgEekk-gByRe47_cPoTtGhATlAabgmXPWcx1sqCjCVXO1EKw4fwjDyv6J5ryrHVEJs0osE5XeIDPRC1kXjbb8Xc6o-H1h5OXH5YZXb4f8mDUOZsY2vI0KB3B6FbEjTve848Ar_Act0w74x7vRvCOuRB7pLJa6XrYvd2C9ghAcDRnXcL1ul2pIYn53uGcWs4hpOvG1BlTyrPQIGZDnH7_u_naff0nv78hM8Ve_jwjMkzEzfT2yv9QDH686QpWr-76WdHm8J-iY3_IfzwpnwmVKT7e6_g";
+        $header = base64_encode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
+        $payload = base64_encode(json_encode([
+            'iss' => 'https://account.jobvision.ir',
+            'nbf' => time(),
+            'iat' => time(),
+            'exp' => time() + 3600,
+            'aud' => ['JobVisionApi', 'IdentityServerApi'],
+            'scope' => ['openid', 'profile', 'JobVisionApi', 'roles', 'offline_access', 'IdentityServerApi'],
+            'amr' => ['pwd'],
+            'client_id' => 'EmployerClient',
+            'sub' => '2318',
+            'auth_time' => time(),
+            'idp' => 'local',
+            'email' => 'sharifinv@mapsa.com',
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role' => 'Employer',
+            'HashLastLvidId' => 'f27331256aaf685580bb081d7c55740c533464a685cc98da2accc74983182',
+            'Role' => 'Employer',
+            'CompanyID' => '69945',
+            'CompanyName' => 'Yalķin-2',
+            'CompanyEnName' => 'Mapsa',
+            'IsCompanyActive' => '1',
+            'EmailConfirmed' => '1',
+            'FullName' => 'Yalķin-2',
+            'IsProfileComplete' => '1',
+            'IsOwnerProfileComplete' => '1',
+            'IsAdmin' => '1',
+            'IsAdminOperator' => '1',
+            'IsNewCompany' => '0',
+            'IsNewOperator' => '1',
+            'FCP' => '0',
+            'FL' => '0',
+            'sid' => '9A283BA43DE1E1123CA15DA8C2E8',
+            'jti' => 'C6600646243D0BC810A6F5A5463AD9',
+        ]));
+        $sig = base64_encode('fake-signature');
+        $validToken = "$header.$payload.$sig";
 
-        $provider = new JobVisionTokenProvider(
-            'https://employerapi.jobvision.ir',
-            'https://account.jobvision.ir',
-            null,
-            null,
-            null,
-            null
-        );
+        $provider = new JobVisionTokenProvider();
 
         $this->assertTrue($provider->isValid($validToken));
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services\JobSource\JobVision;
 
+use App\Models\JobVisionCredential;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -12,14 +13,38 @@ class JobVisionTokenProvider
     private const CACHE_TTL = 3600;
     private const MAX_RETRIES = 1;
 
-    public function __construct(
-        private string $apiUrl,
-        private string $accountUrl,
-        private ?string $username,
-        private ?string $password,
-        private ?string $captcha,
-        private ?string $cookie,
-    ) {}
+    public function __construct()
+    {
+        // Fetch credentials from database first (priority 1)
+        $dbCredential = JobVisionCredential::where('is_active', true)
+            ->where(function ($query) {
+                $query->whereNull('expires_at')
+                    ->orWhere('expires_at', '>', now());
+            })
+            ->orderBy('updated_at', 'desc')
+            ->first();
+
+        if ($dbCredential) {
+            $this->apiUrl = $dbCredential->api_url;
+            $this->accountUrl = $dbCredential->account_url;
+            $this->username = $dbCredential->username;
+            $this->password = $dbCredential->password;
+            $this->captcha = $dbCredential->captcha_token;
+            $this->cookie = $dbCredential->cookie;
+            $this->jobPostIds = $dbCredential->job_post_ids ?? [];
+            $this->isExpired = $dbCredential->isExpired();
+        } else {
+            // Fallback to .env (priority 2)
+            $this->apiUrl = config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir');
+            $this->accountUrl = config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
+            $this->username = config('talentmatch.jobvision.username');
+            $this->password = config('talentmatch.jobvision.password');
+            $this->captcha = config('talentmatch.jobvision.captcha');
+            $this->cookie = config('talentmatch.jobvision.cookie');
+            $this->jobPostIds = config('talentmatch.jobvision.job_post_ids', []);
+            $this->isExpired = false; // .env doesn't have explicit expiry
+        }
+    }
 
     /**
      * Get a valid access token. Returns null if unable to obtain one.
@@ -124,7 +149,7 @@ class JobVisionTokenProvider
             ->post($this->accountUrl . '/Employer/SignIn', [
                 'Password' => $this->password,
                 'ReturnUrl' => $returnUrl,
-                'CaptchaToken' => $this->captcha,
+                // CaptchaToken intentionally omitted — captcha sign-in is disabled
             ]);
 
         $this->logTokenStatus($response->status(), $response->body());

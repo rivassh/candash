@@ -39,5 +39,9 @@ Route::middleware('api')->group(function () {
 
         // Audit logs
         Route::get('/audit-logs', [\App\Http\Controllers\Api\AuditLogController::class, 'index']);
+
+        // JobVision Credentials (Admin only)
+        Route::apiResource('jobvision-credentials', \App\Http\Controllers\Api\JobVisionCredentialController::class);
+        Route::post('/jobvision-credentials/{credential}/activate', [\App\Http\Controllers\Api\JobVisionCredentialController::class, 'activate']);
     });
 });
