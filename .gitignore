@@ -2,6 +2,7 @@
 # Logs & temp
 logs/
 *.log
+# Do NOT modify .env — use .env.test for testing
 .env
 .env.local
 

@@ -39,3 +39,32 @@ Feature: Matching Operations
       """
     Then the response status should be 200
     And the response should contain "status" with value "shortlisted"
+
+  @search
+  Scenario: Can search match results
+    Given I created a match result with id "123"
+    When I send a GET request to "/api/match/results?search=shortlisted"
+    Then the response status should be 200
+    And the response should contain "data" as an array
+
+  @save
+  Scenario: Can save a match result
+    When I send a POST request to "/api/match/results" with body:
+      """
+      {
+        "id": "save-123",
+        "candidateId": "candidate-1",
+        "jobPositionId": "job-position-1",
+        "totalScore": 90,
+        "status": "pending"
+      }
+      """
+    Then the response status should be 201
+    And the response should contain "id"
+    And the response should contain "totalScore"
+
+  @remove
+  Scenario: Can remove a match result
+    Given I created a match result with id "remove-123"
+    When I send a DELETE request to "/api/match/results/remove-123"
+    Then the response status should be 204

@@ -41,3 +41,29 @@ Feature: Candidates CRUD Operations
   Scenario: Can search candidates by name
     When I send a GET request to "/api/candidates?search=Ahmed"
     Then the response status should be 200
+
+  @show
+  Scenario: Can view a specific candidate
+    Given I created a candidate with name "Show Test Candidate"
+    When I send a GET request to "/api/candidates/{id}"
+    Then the response status should be 200
+    And the response should contain "name" with value "Show Test Candidate"
+
+  @update
+  Scenario: Can update a candidate profile
+    Given I created a candidate with name "Update Test Candidate"
+    When I send a PUT request to "/api/candidates/{id}/profile" with body:
+      """
+      {
+        "name": "Updated Candidate",
+        "summary": "Updated summary"
+      }
+      """
+    Then the response status should be 200
+    And the response should contain "name" with value "Updated Candidate"
+
+  @delete
+  Scenario: Can delete a candidate
+    Given I created a candidate with name "Delete Test Candidate"
+    When I send a DELETE request to "/api/candidates/{id}"
+    Then the response status should be 204

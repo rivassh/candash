@@ -12,10 +12,13 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     async login(email: string, password: string) {
+      console.log('login called with:', { email, password, emailType: typeof email, passwordType: typeof password })
       const config = useRuntimeConfig()
+      const loginBody = { email, password }
+      console.log('sending body:', JSON.stringify(loginBody))
       const { data, error } = await useFetch(`${config.public.apiBase}/auth/login`, {
         method: 'POST',
-        body: { email, password },
+        body: loginBody,
       })
       if (error.value) throw new Error(error.value.data?.message || 'ورود ناموفق')
       this.token = data.value.token

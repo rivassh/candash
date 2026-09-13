@@ -17,6 +17,9 @@ const nav = [
 const route = useRoute()
 const authStore = useAuthStore()
 const router = useRouter()
+
+const adminNav = [{ label: 'JobVision Auth', icon: '🔐', to: '/admin/jobvision-credentials' }]
+const navItems = computed(() => authStore.isAdmin ? [...nav, ...adminNav] : nav)
 const sidebarOpen = ref(true)
 const isMobile = ref(false)
 
@@ -65,8 +68,8 @@ onMounted(() => {
       </div>
 
       <nav class="flex-1 p-3 space-y-1">
-        <NuxtLink
-          v-for="item in nav"
+<NuxtLink
+            v-for="item in navItems"
           :key="item.to"
           :to="item.to"
           class="nav-link"

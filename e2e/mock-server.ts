@@ -222,7 +222,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    const candidateMatch = pathname.match(/^\/api\/candidates\/(.+)$/);
+    const candidateMatch = pathname.match(/^\/api\/candidates\/(.+?)(?:\/profile)?$/);
     if (candidateMatch && method === 'GET') {
       const candidate = mockData.candidates.find(c => c.id === candidateMatch[1]);
       if (!candidate) {
@@ -277,7 +277,29 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (pathname === '/api/match/results' && method === 'GET') {
-      sendJson(res, 200, { data: mockData.matches, meta: { current_page: 1, last_page: 1, per_page: 20, total: mockData.matches.length } });
+      const search = new URL(req.url ?? '', `http://${req.headers.host}`).searchParams.get('search');
+      let matches = mockData.matches;
+      if (search) {
+        matches = matches.filter(m =>
+          (m.candidateId ?? '').toLowerCase().includes(search.toLowerCase()) ||
+          (m.status ?? '').toLowerCase().includes(search.toLowerCase())
+        );
+      }
+      sendJson(res, 200, { data: matches, meta: { current_page: 1, last_page: 1, per_page: 20, total: matches.length } });
+      return;
+    }
+
+    if (pathname === '/api/match/results' && method === 'POST') {
+      const body = await parseBody(req);
+      const newMatch = {
+        id: body.id ?? randomUUID(),
+        candidateId: body.candidateId ?? 'candidate-1',
+        jobPositionId: body.jobPosition_id ?? mockData.jobPositions[0]?.id,
+        totalScore: body.totalScore ?? 85,
+        status: body.status ?? 'pending',
+      };
+      mockData.matches.push(newMatch);
+      sendJson(res, 201, newMatch);
       return;
     }
 
@@ -301,6 +323,18 @@ const server = http.createServer(async (req, res) => {
       }
       match.status = body.status;
       sendJson(res, 200, match);
+      return;
+    }
+
+    if (matchResultMatch && method === 'DELETE') {
+      const index = mockData.matches.findIndex(m => m.id === matchResultMatch[1]);
+      if (index === -1) {
+        sendJson(res, 404, { error: 'Match result not found' });
+        return;
+      }
+      mockData.matches.splice(index, 1);
+      res.statusCode = 204;
+      res.end();
       return;
     }
 

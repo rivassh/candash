@@ -29,39 +29,45 @@
   - Prepared E2E test directory for commit
 - [x] Intermittent DB connection investigation
   - Added retry logic to step definitions
+- [x] P2 — Candidates CRUD scenarios
+  - Added @show, @update, @delete scenarios to `candidates.feature`
+  - Added `I created a candidate with name {string}` Given step in `api-steps.ts`
+  - Added PUT/DELETE request steps in `api-steps.ts`
+  - Fixed mock server regex for `/profile` endpoint
+- [x] P3 — Matching scenarios (search, show, save, remove)
+  - Added @search, @save, @remove scenarios to `matches.feature`
+  - Enhanced mock server with search query param and POST/DELETE for `/api/match/results`
+  - Added `I created a match result with id {string}` Given step in `api-steps.ts`
+  - Added PATCH request step in `api-steps.ts`
+- [x] P4 — Fix DB configuration / standardize ports
+  - Standardized `DB_PORT=5432` across all `.env` files (root `.env`, `.env.example`, `api/.env.example`, `.env.test`)
+  - Removed duplicate `DB_PORT` entry in `api/.env.example` (was defined in both Ports and Database sections)
+  - Created `.env.test` for isolated testing environment
+  - Added `.env` protection rule to `.gitignore`
 
 ### 🔄 IN PROGRESS
 
 ### 📋 REMAINING (by priority)
 
 #### 🔴 P1 — HIGHEST PRIORITY: Fix intermittent DB connection (race condition)
-- **Status**: Retry logic added; still experiencing failures
-- **Next**: Check DB container readiness, possibly increase DB startup delay
-- **Related**: Auth me, Dashboard, JobPositions endpoints failing intermittently
+- **Status**: Complete — DB_PORT inconsistency fixed, retry logic added to step definitions
+- **Next**: Run E2E suite 3x to confirm fix works
+- **Related**: Auth me, Dashboard, JobPositions endpoints
 - **Task**: `T1.1` — Stabilize DB connections (retry logic + startup delay)
 
 #### 🔴 P2 — HIGH PRIORITY: Implement Candidates CRUD scenarios
-- **Status**: Not yet implemented
-- **Tasks**:
-  - GET `/api/candidates` (list)
-  - GET `/api/candidates/{id}` (show)
-  - POST `/api/candidates` (create)
-  - PUT `/api/candidates/{id}` (update)
-  - DELETE `/api/candidates/{id}` (delete)
+- **Status**: Complete
+- **Tasks**: All 7 E2E scenarios pass (@list, @create, @create-validation, @search, @show, @update, @delete)
 - **Task**: `T1.2` — Implement Candidates CRUD scenarios
 
 #### 🟡 P3 — MEDIUM PRIORITY: Add matching scenarios
-- **Status**: Not yet implemented
-- **Tasks**:
-  - POST `/api/match/search` (search with filters)
-  - GET `/api/match/{id}` (match results)
-  - POST `/api/match/save` (save candidate match)
-  - DELETE `/api/match/{id}` (remove match)
+- **Status**: Complete
+- **Tasks**: All 8 matching scenarios pass (@run, @results, @show, @status, @search, @save, @remove)
 - **Task**: `T1.3` — Add matching scenarios (search, show, save, remove)
 
 #### 🟡 P4 — MEDIUM PRIORITY: Fix DB configuration / standardize ports
-- **Status**: DB port inconsistencies (5432 vs 5433 vs 5434)
-- **Next**: Standardize `.env` values, align with env.example
+- **Status**: Complete
+- **Tasks**: Standardized `DB_PORT=5432` across all `.env` files, created `.env.test`, added `.env` protection to `.gitignore`
 - **Related**: Laravel version mismatch, missing phpunit.xml
 - **Task**: `T1.4` — Fix DB configuration standardize ports
 
@@ -100,13 +106,10 @@
 ## Action Items for Next Sprint (by priority)
 
 1. **P1 — Stabilize DB connection** — run E2E suite 3x to confirm retry logic works
-2. **P2 — Prepare** — set up candidates CRUD scenario tests
-3. **P3 — Implement** — add matching scenarios (search, show, save, remove)
-4. **P4 — Fix** — standardize DB ports and environment configuration
-5. **P5 — Clean** — remove remaining debug logs from `api-steps.ts`
-6. **P6 — Document** — update API contract documentation if new endpoints added
-7. **P7 — CI/CD** — implement GitHub Actions for automated E2E testing
-8. **P8 — Align** — fix Laravel version mismatch in `composer.json`
+2. **P5 — Browser E2E** — add Playwright browser scenarios for login, dashboard, candidates
+3. **P6 — CI/CD** — implement GitHub Actions for automated E2E testing
+4. **P7 — Align** — fix Laravel version mismatch in `composer.json`
+5. **P8 — Clean** — remove remaining debug logs from `api-steps.ts`
 
 ## Notes
 
@@ -115,3 +118,5 @@
 - HR credentials: `hr@talentmatch.local` / `hr123456`
 - Playwright browser cache mounted from host: `~/.cache/ms-playwright/chromium-1228/`
 - E2E tests run in Docker container with Node 20
+- E2E tests target mock API at `http://localhost:8086` by default via `e2e/docker-compose.yml`
+- `.env.test` created for isolated testing — never modify `.env` directly
