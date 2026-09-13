@@ -43,5 +43,11 @@ Route::middleware('api')->group(function () {
         // JobVision Credentials (Admin only)
         Route::apiResource('jobvision-credentials', \App\Http\Controllers\Api\JobVisionCredentialController::class);
         Route::post('/jobvision-credentials/{credential}/activate', [\App\Http\Controllers\Api\JobVisionCredentialController::class, 'activate']);
+
+        // Browser-assisted JobVision login
+        Route::post('/admin/jobvision-browser-login', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'start']);
+        Route::post('/admin/jobvision-browser-login/status', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'status']);
+        Route::post('/admin/jobvision-browser-login/screenshot', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'screenshot']);
+        Route::post('/admin/jobvision-browser-login/complete', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'complete']);
     });
 });
