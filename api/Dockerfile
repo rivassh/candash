@@ -1,17 +1,22 @@
 # ---- Base ----
 FROM php:8.4-fpm-alpine AS base
 
-# Install system deps (including Node.js for browser agent)
+# Install system deps (PHP extensions)
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup && \
     apk add --no-cache \
         git curl unzip libpq-dev icu-dev oniguruma-dev libzip-dev \
         autoconf g++ make linux-headers tzdata \
-        nodejs npm \
     && docker-php-ext-install pdo pdo_pgsql intl mbstring zip bcmath \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && cp /usr/share/zoneinfo/Asia/Tehran /etc/localtime \
     && echo "Asia/Tehran" > /etc/timezone
+
+# Install Node.js for browser agent (separate RUN to avoid Alpine cache conflicts)
+RUN apk add --no-cache nodejs npm 2>/dev/null || apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community nodejs npm 2>/dev/null || true
+
+# Install VNC stack for browser automation
+RUN apk add --no-cache xvfb x11vnc novnc websockify tcl tk 2>/dev/null || true
 
 # Install Playwright browsers
 RUN npm install -g playwright && \
@@ -38,7 +43,7 @@ RUN composer dump-autoload --optimize --no-interaction \
     && mkdir -p storage/framework/{cache,sessions,views} storage/logs bootstrap/cache \
     && chown -R appgroup:appuser storage bootstrap/cache
 
-EXPOSE 8000 9999
+EXPOSE 8000 9999 6080
 
 USER appuser
 

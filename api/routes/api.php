@@ -46,8 +46,12 @@ Route::middleware('api')->group(function () {
 
         // Browser-assisted JobVision login
         Route::post('/admin/jobvision-browser-login', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'start']);
-        Route::post('/admin/jobvision-browser-login/status', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'status']);
-        Route::post('/admin/jobvision-browser-login/screenshot', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'screenshot']);
+        Route::get('/admin/jobvision-browser-login/status', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'status']);
+        Route::get('/admin/jobvision-browser-login/screenshot', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'screenshot']);
         Route::post('/admin/jobvision-browser-login/complete', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'complete']);
+        Route::delete('/admin/jobvision-browser-login/{sessionId}', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'destroy']);
     });
+
+    // VNC endpoint - public, iframe proxy to browser agent
+    Route::get('/admin/jobvision-browser-login/vnc', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'vnc']);
 });

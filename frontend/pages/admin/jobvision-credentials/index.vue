@@ -24,7 +24,6 @@ const errorMsg = ref('')
 const browserLoginOpen = ref(false)
 const browserSessionId = ref('')
 const browserStatus = ref('idle')
-const browserScreenshot = ref('')
 const browserError = ref('')
 let pollTimer: number | null = null
 
@@ -120,7 +119,6 @@ async function remove(id: number) {
 async function startBrowserLogin() {
   browserLoginOpen.value = true
   browserStatus.value = 'starting'
-  browserScreenshot.value = ''
   browserError.value = ''
   try {
     const res = await api.post<any>('/admin/jobvision-browser-login', {
@@ -148,15 +146,22 @@ async function pollBrowserStatus() {
       if (res.cookies) { browserStatus.value = 'complete'; stopPolling() }
     } catch {}
   }, 2000)
-  refreshScreenshot()
+}
 }
 
-async function refreshScreenshot() {
-  if (!browserSessionId.value) return
-  try {
-    const res = await api.get<any>(`/admin/jobvision-browser-login/screenshot?session_id=${browserSessionId.value}`)
-    browserScreenshot.value = `data:image/png;base64,${res.data}`
-  } catch {}
+function stopPolling() {
+  if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
+}
+
+async function pollBrowserStatus() {
+  stopPolling()
+  pollTimer = window.setInterval(async () => {
+    try {
+      const res = await api.get<any>(`/admin/jobvision-browser-login/status?session_id=${browserSessionId.value}`)
+      browserStatus.value = res.status
+      if (res.cookies) { browserStatus.value = 'complete'; stopPolling() }
+    } catch {}
+  }, 2000)
 }
 
 async function cancelBrowserLogin() {
@@ -307,11 +312,11 @@ async function cancelBrowserLogin() {
           <span v-if="browserStatus === 'complete'" class="text-green-700">کوکی‌ها به‌صورت خودکار ذخیره شدند.</span>
         </div>
 
-        <div class="flex-1 overflow-hidden relative bg-black" style="min-height: 400px;">
-          <img v-if="browserScreenshot" :src="browserScreenshot" class="w-full h-full object-contain" alt="Browser" />
-          <div v-else class="absolute inset-0 flex items-center justify-center text-white">
-            <span>{{ browserStatus === 'complete' ? 'تمام شد' : 'در حال بارگذاری مرورگر...' }}</span>
-          </div>
+        <div class="flex-1 overflow-hidden relative bg-black flex items-center justify-center">
+          <div v-if="browserStatus === 'starting'" class="text-white text-sm">در حال راه‌اندازی مرورگر...</div>
+          <iframe v-else-if="browserStatus === 'waiting_for_login'" :src="`/admin/jobvision-browser-login/vnc?session_id=${browserSessionId}`" style="width:100%;height:100%;border:none;position:absolute;inset:0;"></iframe>
+          <div v-else-if="browserStatus === 'error' || browserStatus === 'timeout'" class="text-red-400">{{ browserStatus === 'error' ? (browserError || 'خطا') : 'زمان‌بندی تمام شد' }}</div>
+          <div v-else class="text-white">تمام شد</div>
         </div>
 
         <div class="px-6 py-4 border-t flex justify-end gap-2">

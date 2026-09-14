@@ -7,6 +7,7 @@ use App\Models\JobVisionCredential;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 
 class JobVisionBrowserLoginController extends Controller
@@ -30,6 +31,7 @@ class JobVisionBrowserLoginController extends Controller
         ]);
 
         if (!$response->successful()) {
+            Log::error('Browser agent start failed', ['response' => $response->body()]);
             return response()->json(['error' => 'Failed to start browser session'], 500);
         }
 
@@ -107,20 +109,32 @@ class JobVisionBrowserLoginController extends Controller
         return response()->json(['message' => 'Cookies saved successfully']);
     }
 
-    private function formatCookiesForDb(array $cookiesData): string
+    public function destroy(Request $request, string $sessionId): JsonResponse
     {
-        if (empty($cookiesData)) {
-            return '';
+        Http::timeout(5)->delete($this->browserAgentUrl . '/sessions/' . $sessionId);
+        Redis::del($this->redisPrefix . $sessionId . ':status');
+        Redis::del($this->redisPrefix . $sessionId . ':cookies');
+        return response()->json(['message' => 'Session deleted']);
+    }
+
+    public function vnc(Request $request)
+    {
+        $sessionId = $request->query('session_id');
+        if (!$sessionId) {
+            return response()->json(['error' => 'session_id required'], 400);
         }
 
-        if (isset($cookiesData[0]['name']) && isset($cookiesData[0]['value'])) {
-            return json_encode($cookiesData);
+        $response = Http::timeout(5)->get($this->browserAgentUrl . '/sessions/' . $sessionId . '/vnc');
+
+        if (!$response->successful()) {
+            Log::error('VNC proxy failed', ['session_id' => $sessionId, 'status' => $response->status()]);
+            return response()->json(['error' => 'VNC session not found or not ready'], 404);
         }
 
-        $cookies = array_map(function($cookie) {
-            return $cookie['name'] . '=' . $cookie['value'];
-        }, $cookiesData);
+        $html = $response->body();
+        $publicHost = $request->getHost();
+        $html = preg_replace('/(src="http:\/\/)[^":]+(?=:)([\/?].*)$/', '$1' . $publicHost . '$2', $html);
 
-        return implode('; ', $cookies);
+        return response($html, 200, ['Content-Type' => 'text/html']);
     }
 }
