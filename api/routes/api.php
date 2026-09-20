@@ -1,57 +1,25 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\JobPositionController;
+use App\Http\Controllers\Api\JobSourceCredentialController;
+use App\Http\Controllers\Api\JobVisionCredentialController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('api')->group(function () {
+Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('job-positions/import-from-source', [JobPositionController::class, 'importFromSource'])->middleware('auth:sanctum');
 
-    // Public
-    Route::post('/auth/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
-    Route::get('/health', fn () => response()->json(['status' => 'ok', 'app' => 'TalentMatch']));
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('auth/logout', [AuthController::class, 'logout']);
+    Route::get('auth/me', [AuthController::class, 'me']);
+    Route::get('job-source-credentials/providers', [JobSourceCredentialController::class, 'providers']);
+    Route::post('job-source-credentials', [JobSourceCredentialController::class, 'store']);
+    Route::put('job-source-credentials/{credential}', [JobSourceCredentialController::class, 'update']);
+    Route::delete('job-source-credentials/{credential}', [JobSourceCredentialController::class, 'destroy']);
+    Route::post('job-source-credentials/{credential}/activate', [JobSourceCredentialController::class, 'activate']);
+    Route::get('job-source-credentials', [JobSourceCredentialController::class, 'index']);
+});
 
-    // Authenticated
-    Route::middleware(['auth:sanctum'])->group(function () {
-
-        Route::post('/auth/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
-        Route::get('/auth/me', [\App\Http\Controllers\Api\AuthController::class, 'me']);
-
-        // Dashboard
-        Route::get('/dashboard/summary', [\App\Http\Controllers\Api\DashboardController::class, 'summary']);
-
-        // Job Positions
-        Route::apiResource('JobPositions', \App\Http\Controllers\Api\JobPositionController::class);
-        Route::post('/job-positions/import-from-source', [\App\Http\Controllers\Api\JobPositionController::class, 'importFromSource']);
-
-        // Candidates
-        Route::apiResource('candidates', \App\Http\Controllers\Api\CandidateController::class);
-        Route::post('/candidates/{candidate}/resume', [\App\Http\Controllers\Api\CandidateController::class, 'uploadResume']);
-        Route::post('/candidates/{candidate}/enrich-linkedin', [\App\Http\Controllers\Api\CandidateController::class, 'enrichLinkedin']);
-        Route::put('/candidates/{candidate}/profile', [\App\Http\Controllers\Api\CandidateController::class, 'updateProfile']);
-
-        // Skills dictionary
-        Route::apiResource('skills', \App\Http\Controllers\Api\SkillController::class);
-
-        // Match
-        Route::post('/match/run', [\App\Http\Controllers\Api\MatchController::class, 'run']);
-        Route::get('/match/results', [\App\Http\Controllers\Api\MatchController::class, 'index']);
-        Route::get('/match/results/{matchResult}', [\App\Http\Controllers\Api\MatchController::class, 'show']);
-        Route::patch('/match/results/{matchResult}/status', [\App\Http\Controllers\Api\MatchController::class, 'updateStatus']);
-
-        // Audit logs
-        Route::get('/audit-logs', [\App\Http\Controllers\Api\AuditLogController::class, 'index']);
-
-        // JobVision Credentials (Admin only)
-        Route::apiResource('jobvision-credentials', \App\Http\Controllers\Api\JobVisionCredentialController::class);
-        Route::post('/jobvision-credentials/{credential}/activate', [\App\Http\Controllers\Api\JobVisionCredentialController::class, 'activate']);
-
-        // Browser-assisted JobVision login
-        Route::post('/admin/jobvision-browser-login', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'start']);
-        Route::get('/admin/jobvision-browser-login/status', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'status']);
-        Route::get('/admin/jobvision-browser-login/screenshot', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'screenshot']);
-        Route::post('/admin/jobvision-browser-login/complete', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'complete']);
-        Route::delete('/admin/jobvision-browser-login/{sessionId}', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'destroy']);
-    });
-
-    // VNC endpoint - public, iframe proxy to browser agent
-    Route::get('/admin/jobvision-browser-login/vnc', [\App\Http\Controllers\Api\JobVisionBrowserLoginController::class, 'vnc']);
+Route::get('health', function () {
+    return response()->json(['status' => 'ok', 'app' => 'TalentMatch']);
 });

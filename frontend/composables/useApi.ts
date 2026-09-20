@@ -1,6 +1,7 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
   const authStore = useAuthStore()
+  const { showErrorModal } = useJobVisionError()
 
   const headers = computed(() => ({
     'Content-Type': 'application/json',
@@ -19,7 +20,13 @@ export const useApi = () => {
     })
     if (!res.ok) {
       const body = await res.json().catch(() => ({}))
-      throw new Error(body.message || `خطای HTTP ${res.status}`)
+      const message = body.message || `خطای HTTP ${res.status}`
+
+      if (res.status === 401) {
+        showErrorModal(message, path, options)
+      }
+
+      throw new Error(message)
     }
     return res.json()
   }

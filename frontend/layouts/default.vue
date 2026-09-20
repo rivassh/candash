@@ -9,6 +9,7 @@ const nav = [
   { label: 'داشبورد', icon: '📊', to: '/dashboard' },
   { label: 'موقعیت‌های شغلی', icon: '💼', to: '/positions' },
   { label: 'کاندیداها', icon: '👤', to: '/candidates' },
+  { label: 'جستجوی هوشمند', icon: '🔍', to: '/search' },
   { label: 'تطبیق', icon: '🔗', to: '/matches' },
   { label: 'مهارت‌ها', icon: '🎯', to: '/skills' },
   { label: 'گزارش‌ها', icon: '📋', to: '/audit' },
@@ -18,7 +19,9 @@ const route = useRoute()
 const authStore = useAuthStore()
 const router = useRouter()
 
-const adminNav = [{ label: 'JobVision Auth', icon: '🔐', to: '/admin/jobvision-credentials' }]
+const adminNav = [
+  { label: 'Credentials', icon: '🔐', to: '/admin/credentials' }
+]
 const navItems = computed(() => authStore.isAdmin ? [...nav, ...adminNav] : nav)
 const sidebarOpen = ref(true)
 const isMobile = ref(false)
