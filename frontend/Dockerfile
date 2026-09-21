@@ -4,7 +4,7 @@ WORKDIR /app
 
 FROM base AS deps
 COPY package*.json ./
-RUN npm install --legacy-peer-deps
+RUN npm install --legacy-peer-deps --no-scripts && npm install vite@6.0.0 --save-dev --no-scripts
 
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
