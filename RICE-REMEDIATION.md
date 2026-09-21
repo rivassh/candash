@@ -1,5 +1,29 @@
 # RICE Remediation Plan — TalentMatch Codebase Review
 
+## Status (2026-09-21)
+
+| Status | ID | Finding | Score |
+|--------|----|---------|-------|
+| ✅ Done | T11/T18 | Register missing search routes (/api/search/*) | 1000 |
+| ✅ Done | T6 | Fix search pagination (nextPage/prevPage no longer reset page) | 288 |
+| ✅ Done | T19 | Fix normalizer test (copy fixture to container + JSON_THROWN_ON_ERROR typo) | ~96 |
+| ✅ Done | T2 | Fix MatchingServiceTest (candidate->fresh() after create) | 67.5 |
+| ✅ Done | T7 | XSS fix: replaced v-html with escaped text in resume view | 216 |
+| ✅ Done | T5 | Remove hardcoded secrets: docker-compose now uses ${VAR:-default} | 190 |
+| ✅ Done | T9 | Remove demo credentials from login.vue (placeholder text only) | 180 |
+| ✅ Done | T10 | Add throttle middleware to auth endpoints (10 req/min) | 170 |
+| ✅ Done | T13 | PII fix: removed email/phone from search API responses | 108 |
+| ✅ Done | T17 | Log fix: maskedAuthHeaders() used in sendRequest() log output | 96 |
+| ⬜ Todo | T3 | Auth bypass risk | 135 |
+| ⬜ Todo | T4 | JWT in localStorage → httpOnly cookie | 127.5 |
+| ⬜ Todo | T16 | Duplicate fetchWithRetry + API casing | 102 |
+| ⬜ Todo | T8 | Admin credentials page wrong API response shape | 76 |
+| ⬜ Todo | T12 | File upload MIME verification | 64 |
+| ⬜ Todo | T14 | Contract drift (jobsource.yaml) | 28 |
+| ⬜ Todo | T15 | E2E + CI/CD | 23.3 |
+
+All 40 PHPUnit tests pass. Frontend builds clean.
+
 RICE = (Reach × Impact × Confidence) / Effort
 
 ## Priority Order

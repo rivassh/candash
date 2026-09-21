@@ -1,0 +1,106 @@
+# Candash — Docker Compose for local development
+# Run: docker compose up --build
+# Healthchecks: docker compose ps or docker compose exec api curl -f http://127.0.0.1:8000
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-talentmatch}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: ${POSTGRES_DB:-talentmatch}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U talentmatch"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  meilisearch:
+    image: getmeili/meilisearch:latest
+    environment:
+      - MEILI_MASTER_KEY=${MEILI_MASTER_KEY:-local-dev-key}
+      - MEILI_ENV=development
+    ports:
+      - "${MEILI_PORT:-7700}:7700"
+    volumes:
+      - meili-data:/meili_data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:7700/health || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      meilisearch:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-8082}:8000"
+    environment:
+      APP_ENV: local
+      APP_DEBUG: ${APP_DEBUG:-false}
+      APP_URL: ${APP_URL:-http://localhost:8082}
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: ${DB_PORT:-5432}
+      DB_DATABASE: ${DB_DATABASE:-talentmatch}
+      DB_USERNAME: ${DB_USERNAME:-talentmatch}
+      DB_PASSWORD: ${DB_PASSWORD:-change-me}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MEILI_HOST: meilisearch
+      MEILI_PORT: 7700
+      BROADCAST_DRIVER: log
+      CACHE_DRIVER: file
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: file
+      SESSION_LIFETIME: 120
+    volumes:
+      - ./api/storage:/var/www/html/storage
+      - ./api/bootstrap/cache:/var/www/html/bootstrap/cache
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:8000/up || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${FRONTEND_PORT:-3080}:3000"
+    environment:
+      API_URL: http://api:8000
+    volumes:
+      - ./frontend:/app
+
+volumes:
+  db-data:
+  redis-data:
+  meili-data:
