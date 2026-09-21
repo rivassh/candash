@@ -16,9 +16,9 @@ class MatchingServiceTest extends TestCase
 
     public function test_matching_produces_deterministic_score(): void
     {
-        $php = Skill::create(['name' => 'PHP', 'normalized_name' => 'php', 'category' => 'Backend']);
-        $laravel = Skill::create(['name' => 'Laravel', 'normalized_name' => 'laravel', 'category' => 'Backend']);
-        $docker = Skill::create(['name' => 'Docker', 'normalized_name' => 'docker', 'category' => 'DevOps']);
+        $php = Skill::create(['name' => 'PHP', 'normalized_name' => 'php', 'category' => 'Backend', 'is_active' => true]);
+        $laravel = Skill::create(['name' => 'Laravel', 'normalized_name' => 'laravel', 'category' => 'Backend', 'is_active' => true]);
+        $docker = Skill::create(['name' => 'Docker', 'normalized_name' => 'docker', 'category' => 'DevOps', 'is_active' => true]);
         $redis = Skill::create(['name' => 'Redis', 'normalized_name' => 'redis', 'category' => 'Database']);
 
         $candidate = Candidate::create(['name' => 'تست', 'email' => 'test@test.com']);
@@ -48,6 +48,7 @@ class MatchingServiceTest extends TestCase
             'preferred_skills' => ['Redis'],
         ]);
 
+        $candidate = $candidate->fresh();
         $service = app(MatchingService::class);
         $result = $service->run($candidate, $position);
 

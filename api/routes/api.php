@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobPositionController;
 use App\Http\Controllers\Api\JobSourceCredentialController;
 use App\Http\Controllers\Api\JobVisionCredentialController;
+use App\Http\Controllers\Api\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('auth/login', [AuthController::class, 'login']);
@@ -18,6 +19,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('job-source-credentials/{credential}', [JobSourceCredentialController::class, 'destroy']);
     Route::post('job-source-credentials/{credential}/activate', [JobSourceCredentialController::class, 'activate']);
     Route::get('job-source-credentials', [JobSourceCredentialController::class, 'index']);
+});
+
+Route::middleware('auth:sanctum')->prefix('search')->group(function () {
+    Route::get('health', [SearchController::class, 'index']);
+    Route::get('candidates', [SearchController::class, 'candidates']);
+    Route::get('jobs', [SearchController::class, 'jobs']);
+    Route::post('reindex', [SearchController::class, 'reindex']);
+    Route::get('match', [SearchController::class, 'matchWithSearch']);
 });
 
 Route::get('health', function () {
