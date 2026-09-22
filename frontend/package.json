@@ -22,6 +22,6 @@
     "@nuxtjs/tailwindcss": "^6.14.0",
     "@vueuse/nuxt": "^12.0.0",
     "typescript": "^5.7.0",
-    "vite": "^6.0.0"
+    "vite": "^6.4.3"
   }
 }
