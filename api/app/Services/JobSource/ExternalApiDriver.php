@@ -77,4 +77,46 @@ class ExternalApiDriver implements JobSourceInterface
     {
         return 'external';
     }
+
+    public function listApplications(int $jobPostId): array
+    {
+        $response = Http::withToken($this->token ?? '')
+            ->timeout(15)
+            ->get(rtrim($this->baseUrl, '/').'/api/v1/applications', ['jobPostId' => $jobPostId]);
+
+        if ($response->failed()) {
+            return [];
+        }
+
+        return $response->json() ?? [];
+    }
+
+    public function getApplicationDetails(string $applicationId): ?array
+    {
+        $response = Http::withToken($this->token ?? '')
+            ->timeout(15)
+            ->get(rtrim($this->baseUrl, '/')."/api/v1/applications/{$applicationId}");
+
+        if ($response->failed()) {
+            return null;
+        }
+
+        return $response->json();
+    }
+
+    public function importPositions(int $page = 1, int $pageSize = 50): array
+    {
+        $response = Http::withToken($this->token ?? '')
+            ->timeout(15)
+            ->get(rtrim($this->baseUrl, '/').'/api/v1/positions', ['page' => $page, 'pageSize' => $pageSize]);
+
+        if ($response->failed()) {
+            return [];
+        }
+
+        return array_map(
+            fn($item) => PositionDto::fromArray($item),
+            $response->json() ?? []
+        );
+    }
 }

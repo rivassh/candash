@@ -157,6 +157,134 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (pathname === '/api/search/candidates' && method === 'GET') {
+      const q = url.searchParams.get('q') ?? '';
+      const status = url.searchParams.get('status');
+      const skill_ids = url.searchParams.get('skill_ids');
+      const min_experience = url.searchParams.get('min_experience');
+      const page = parseInt(url.searchParams.get('page') ?? '1', 10);
+      const perPage = 20;
+      
+      let results = mockData.candidates;
+      if (q) {
+        results = results.filter(c => c.name.toLowerCase().includes(q.toLowerCase()));
+      }
+      if (status) {
+        results = results.filter(c => c.status === status);
+      }
+      
+      const total = results.length;
+      const offset = (page - 1) * perPage;
+      const paginated = results.slice(offset, offset + perPage);
+      
+      sendJson(res, 200, {
+        data: paginated.map(c => ({
+          id: c.id,
+          name: c.name,
+          status: c.status,
+          score: 0.9,
+          skills: c.skills?.map(s => s.name) ?? [],
+        })),
+        meta: {
+          total,
+          page,
+          per_page: perPage,
+          last_page: Math.ceil(total / perPage),
+        },
+      });
+      return;
+    }
+
+    if (pathname === '/api/search/jobs' && method === 'GET') {
+      const q = url.searchParams.get('q') ?? '';
+      const level = url.searchParams.get('level');
+      const employment_type = url.searchParams.get('employment_type');
+      const department = url.searchParams.get('department');
+      const page = parseInt(url.searchParams.get('page') ?? '1', 10);
+      const perPage = 20;
+      
+      let results = mockData.jobPositions;
+      if (q) {
+        results = results.filter(j => j.title.toLowerCase().includes(q.toLowerCase()));
+      }
+      if (level) {
+        results = results.filter(j => j.level === level);
+      }
+      if (employment_type) {
+        results = results.filter(j => j.employment_type === employment_type);
+      }
+      if (department) {
+        results = results.filter(j => j.department === department);
+      }
+      
+      const total = results.length;
+      const offset = (page - 1) * perPage;
+      const paginated = results.slice(offset, offset + perPage);
+      
+      sendJson(res, 200, {
+        data: paginated.map(j => ({
+          id: j.id,
+          title: j.title,
+          department: j.department,
+          level: j.level,
+          employment_type: j.employment_type,
+          required_skills: j.required_skills ?? [],
+          preferred_skills: j.preferred_skills ?? [],
+          score: 0.9,
+          status: 'open',
+        })),
+        meta: {
+          total,
+          page,
+          per_page: perPage,
+          last_page: Math.ceil(total / perPage),
+        },
+      });
+      return;
+    }
+
+    if (pathname === '/api/search/health' && method === 'GET') {
+      sendJson(res, 200, { status: 'ok', meilisearch: 'available' });
+      return;
+    }
+
+    if (pathname === '/api/search/reindex' && method === 'POST') {
+      sendJson(res, 200, { message: 'Reindexed 5 candidates', type: 'candidates' });
+      return;
+    }
+
+    if (pathname === '/api/search/match' && method === 'GET') {
+      const jobPositionId = url.searchParams.get('job_position_id');
+      if (!jobPositionId || !mockData.jobPositions.find(j => j.id === jobPositionId)) {
+        sendJson(res, 404, { message: 'Job position not found.' });
+        return;
+      }
+      const page = parseInt(url.searchParams.get('page') ?? '1', 10);
+      const perPage = 20;
+      
+      const results = mockData.candidates.map(c => ({
+        id: c.id,
+        name: c.name,
+        status: c.status,
+        score: 0.9,
+        match_score: 85,
+        match_breakdown: { skills: 50, experience: 35 },
+        skills: c.skills?.map(s => s.name) ?? [],
+      }));
+      
+      sendJson(res, 200, {
+        data: results,
+        meta: {
+          total: results.length,
+          page,
+          per_page: perPage,
+          last_page: 1,
+        },
+        job_position: mockData.jobPositions.find(j => j.id === jobPositionId),
+      });
+      return;
+    }
+
     // Dashboard
     if (pathname === '/api/dashboard/summary' && method === 'GET') {
       const totalCandidates = mockData.candidates.length;

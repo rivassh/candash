@@ -11,8 +11,11 @@ services:
     restart: "no"
     networks:
       - sail
+      - candash_default
     environment:
       PORT: "8086"
+    ports:
+      - "8086:8086"
     command: ["npm", "run", "mock"]
 
   e2e:
@@ -23,9 +26,11 @@ services:
     restart: "no"
     networks:
       - sail
+      - candash_default
     depends_on:
       - mock-api
     environment:
+      CANDASH_API: "http://candash-api-1:8000"
       MOCK_API_URL: http://mock-api:8086
     volumes:
       - ./features:/tests/features
@@ -36,4 +41,6 @@ services:
 
 networks:
   sail:
+    external: true
+  candash_default:
     external: true

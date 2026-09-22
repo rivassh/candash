@@ -53,4 +53,9 @@ class Candidate extends Model
     {
         return $this->hasMany(MatchResult::class);
     }
+
+    protected static function booted(): void
+    {
+        static::observe(\App\Observers\CandidateObserver::class);
+    }
 }

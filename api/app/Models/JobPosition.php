@@ -46,4 +46,9 @@ class JobPosition extends Model
     {
         return $q->where('status', JobPositionStatus::Open);
     }
+
+    protected static function booted(): void
+    {
+        static::observe(\App\Observers\JobPositionObserver::class);
+    }
 }

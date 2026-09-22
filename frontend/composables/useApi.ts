@@ -1,21 +1,15 @@
 export const useApi = () => {
   const config = useRuntimeConfig()
-  const authStore = useAuthStore()
-  const { showErrorModal } = useJobVisionError()
-
-  const headers = computed(() => ({
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    Authorization: authStore.token ? `Bearer ${authStore.token}` : '',
-  }))
 
   const apiFetch = async <T>(path: string, options: RequestInit = {}): Promise<T> => {
     const url = `${config.public.apiBase}${path}`
     const res = await fetch(url, {
       ...options,
+      credentials: 'include',
       headers: {
-        ...headers.value,
-        ...(options.headers || {}),
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        ...options.headers,
       },
     })
     if (!res.ok) {
@@ -23,6 +17,7 @@ export const useApi = () => {
       const message = body.message || `خطای HTTP ${res.status}`
 
       if (res.status === 401) {
+        const { showErrorModal } = useJobVisionError()
         showErrorModal(message, path, options)
       }
 

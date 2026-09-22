@@ -4,6 +4,9 @@ namespace App\Services\JobSource\JobVision;
 
 use App\DTOs\JobSource\PositionDto;
 use App\DTOs\JobSource\CandidateDto;
+use App\DTOs\JobSource\ApplicationSummaryDto;
+use App\DTOs\JobSource\ApplicationHeaderDto;
+use App\DTOs\JobSource\ApplicationDetailsDto;
 
 class JobVisionResponseNormalizer
 {
@@ -97,6 +100,50 @@ class JobVisionResponseNormalizer
             name: $name,
             email: $email,
             phone: $phone,
+        );
+    }
+
+    public static function toApplicationSummaryDto(array $summary): ApplicationSummaryDto
+    {
+        $applicationId = (string) ($summary['applicationId'] ?? $summary['id'] ?? '');
+        $jobPostId = (string) ($summary['jobPostId'] ?? $summary['job_post_id'] ?? '');
+
+        return new ApplicationSummaryDto(
+            externalId: $applicationId,
+            jobPostId: $jobPostId,
+            applicationId: $applicationId,
+            status: $summary['status'] ?? $summary['applicationStatus'] ?? null,
+            submittedAt: $summary['submittedAt'] ?? $summary['submitted_at'] ?? $summary['applicationDate'] ?? null,
+            candidateName: $summary['candidateName'] ?? $summary['candidate_name'] ?? $summary['fullName'] ?? $summary['full_name'] ?? null,
+        );
+    }
+
+    public static function toApplicationHeaderDto(array $header): ApplicationHeaderDto
+    {
+        $applicationId = (string) ($header['applicationId'] ?? $header['id'] ?? '');
+        $jobPostId = (string) ($header['jobPostId'] ?? $header['job_post_id'] ?? '');
+
+        return new ApplicationHeaderDto(
+            externalId: $applicationId,
+            applicationId: $applicationId,
+            jobPostId: $jobPostId,
+            candidateName: $header['candidateName'] ?? $header['candidate_name'] ?? $header['fullName'] ?? $header['full_name'] ?? null,
+            email: $header['email'] ?? $header['emailAddress'] ?? $header['applicantEmail'] ?? null,
+            phone: $header['phone'] ?? $header['mobile'] ?? $header['mobileNumber'] ?? $header['applicantPhone'] ?? null,
+            status: $header['status'] ?? $header['applicationStatus'] ?? $header['application_status'] ?? null,
+            submittedAt: $header['submittedAt'] ?? $header['submitted_at'] ?? $header['applicationDate'] ?? null,
+        );
+    }
+
+    public static function toApplicationDetailsDto(array $details): ApplicationDetailsDto
+    {
+        $applicationId = (string) ($details['applicationId'] ?? $details['id'] ?? '');
+
+        return new ApplicationDetailsDto(
+            externalId: $applicationId,
+            applicationId: $applicationId,
+            resumeText: $details['resumeText'] ?? $details['resume_text'] ?? $details['cvText'] ?? $details['cv_text'] ?? null,
+            details: $details['details'] ?? $details['data'] ?? [],
         );
     }
 

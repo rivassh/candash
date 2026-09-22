@@ -132,8 +132,8 @@ class JobVisionBrowserLoginController extends Controller
         }
 
         $html = $response->body();
-        $publicHost = $request->getHost();
-        $html = preg_replace('/(src="http:\/\/)[^":]+(?=:)([\/?].*)$/', '$1' . $publicHost . '$2', $html);
+        $html = preg_replace('/<iframe[^>]*>/', '', $html);
+        $html = preg_replace('/<\/iframe>/', '', $html);
 
         return response($html, 200, ['Content-Type' => 'text/html']);
     }

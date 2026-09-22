@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-COMPOSE := docker compose -f /root/nginx-certbot/ymls/candash.yml --env-file /root/nginx-certbot/ymls/candash.env
+COMPOSE := docker compose -f docker-compose.yml
 EXEC_API := $(COMPOSE) exec -T api
 EXEC_FRONTEND := $(COMPOSE) exec -T frontend
 
@@ -9,6 +9,7 @@ help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN{FS=":.*?## "}{printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 up: ## Build and start all containers
+	@if docker compose -f docker-compose.yml ps 2>/dev/null | grep -q "Up\|up"; then echo "⚠️  Warning: Some services are already running. Run 'make down' first to stop them."; fi
 	$(COMPOSE) up -d --build
 
 down: ## Stop and remove containers
@@ -36,7 +37,7 @@ fresh: ## Fresh migration + seed
 	$(EXEC_API) php artisan migrate:fresh --seed --force
 
 test: ## Run API tests
-	$(EXEC_API) php artisan test
+	$(EXEC_API) vendor/bin/phpunit
 
 bash-api: ## Open bash in api container
 	$(COMPOSE) exec api bash
@@ -65,4 +66,4 @@ init: ## Initial setup (up, key, migrate, seed)
 	$(EXEC_API) php artisan key:generate --force || true
 	$(EXEC_API) php artisan migrate --force
 	$(EXEC_API) php artisan db:seed --force
-	@echo "TalentMatch is ready at http://localhost:3000"
+	@echo "TalentMatch is ready at http://localhost:${FRONTEND_PORT:-3080}"

@@ -6,13 +6,11 @@ use Illuminate\Support\ServiceProvider;
 use App\Contracts\JobSource\JobSourceInterface;
 use App\Contracts\Resume\ResumeExtractorInterface;
 use App\Contracts\Enrichment\EnrichmentInterface;
-use App\Services\JobSource\MockDriver;
-use App\Services\JobSource\ExternalApiDriver;
-use App\Services\JobSource\JobVisionDriver;
+use App\Services\JobSource\JobSourceDriverFactory;
 use App\Services\Resume\MockResumeExtractor;
 use App\Services\Enrichment\MockEnrichmentService;
-use App\Services\Matching\MatchingService;
 use App\Services\Matching\SkillMatcher;
+use App\Services\Matching\MatchingService;
 
 class DomainServiceProvider extends ServiceProvider
 {
@@ -20,20 +18,13 @@ class DomainServiceProvider extends ServiceProvider
     {
         $this->app->singleton(JobSourceInterface::class, function ($app) {
             $driver = config('talentmatch.client.driver', 'mock');
-            return match ($driver) {
-                'external' => new ExternalApiDriver(
-                    config('talentmatch.client.base_url'),
-                    config('talentmatch.client.token'),
-                ),
-                'jobvision' => new JobVisionDriver(),
-                default => new MockDriver(),
-            };
+            return JobSourceDriverFactory::make($driver);
         });
 
         $this->app->singleton(ResumeExtractorInterface::class, MockResumeExtractor::class);
         $this->app->singleton(EnrichmentInterface::class, MockEnrichmentService::class);
 
-        $this->app->singleton(SkillMatcher::class);
-        $this->app->singleton(MatchingService::class);
+        $this->app->bind(SkillMatcher::class);
+        $this->app->bind(MatchingService::class);
     }
 }

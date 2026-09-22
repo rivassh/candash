@@ -1,0 +1,70 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      mock-api:
+        image: candash-e2e-mock:latest
+        ports: ["8086:8086"]
+        env:
+          PORT: "8086"
+        volumes:
+          - ./e2e:/tests
+        options: --network candash_default --network-alias mock-api
+      api:
+        image: candash-api:latest
+        ports: ["8082:8000"]
+        env:
+          DATABASE_URL: "postgres://candash_user:candash_pass@db:5432/candash"
+          REDIS_URL: "redis://redis:6379"
+          JOBSOURCE_BASE_URL: "http://mock-jobsource:4000"
+        volumes:
+          - ./api:/var/www/html
+        depends_on: [db, redis, mock-api]
+      db:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: "candash_user"
+          POSTGRES_PASSWORD: "candash_pass"
+          POSTGRES_DB: "candash"
+        ports: ["5432:5432"]
+        volumes: ["pg_data:/var/lib/postgresql/data"]
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Docker Compose
+        run: sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose
+      - name: Start E2E stack
+        run: docker compose -f e2e/docker-compose.yml up -d
+      - name: Wait for services
+        run: |
+          for i in $(seq 1 30); do
+            if curl -f http://localhost:8086/api/health > /dev/null 2>&1 && curl -f http://localhost:8082/api/health > /dev/null 2>&1; then
+              echo "All services ready"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 10
+          done
+      - name: Run E2E tests (mock API)
+        run: docker exec $(docker ps -q -f name=candash-e2e) npm test
+      - name: Run E2E tests (real API)
+        run: docker exec $(docker ps -q -f name=candash-api-1) vendor/bin/phpunit
+      - name: Publish reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-reports
+          path: /tests/reports/**
+
+volumes:
+  pg_data:

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreJobPositionRequest;
 use App\Http\Requests\UpdateJobPositionRequest;
 use App\Http\Resources\JobPositionResource;
 use App\Models\JobPosition;
+use App\Services\JobSource\JobSourceDriverFactory;
 use App\Services\JobSource\JobSourceImporter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -66,9 +67,9 @@ class JobPositionController extends Controller
 
     public function importFromSource(): JsonResponse
     {
-        $importer = new JobSourceImporter(
-            app(\App\Contracts\JobSource\JobSourceInterface::class)
-        );
+        $provider = request('provider', config('talentmatch.client.driver', 'jobvision'));
+        $driver = JobSourceDriverFactory::make($provider);
+        $importer = new JobSourceImporter($driver);
         $result = $importer->importPositions();
 
         return response()->json([
@@ -77,6 +78,20 @@ class JobPositionController extends Controller
             'created' => $result['created'],
             'updated' => $result['updated'],
         ]);
+    }
+
+    public function importCurlCommand(): JsonResponse
+    {
+        $provider = new \App\Services\JobSource\JobVision\JobVisionTokenProvider();
+        $token = $provider->getToken();
+
+        if (!$token) {
+            return response()->json(['message' => 'Unable to obtain JobVision token'], 500);
+        }
+
+        $curl = "curl 'https://employerapi.jobvision.ir/api/v1.0/JobPost/GetListOfJobPosts' \\\n  --compressed \\\n  -X POST \\\n  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0' \\\n  -H 'Accept: application/json, text/plain, */*' \\\n  -H 'Accept-Language: en-US,en;q=0.5' \\\n  -H 'Accept-Encoding: gzip, deflate, br, zstd' \\\n  -H 'Authorization: Bearer " . $token . "' \\\n  -H 'Content-Type: application/json' \\\n  -H 'Origin: https://employer.jobvision.ir' \\\n  -H 'Connection: keep-alive' \\\n  -H 'Referer: https://employer.jobvision.ir/' \\\n  -H 'Sec-Fetch-Dest: empty' \\\n  -H 'Sec-Fetch-Mode: cors' \\\n  -H 'Sec-Fetch-Site: same-site' \\\n  -H 'Priority: u=0' \\\n  -H 'TE: trailers' \\\n  --data-raw '{\"statusId\":3,\"keyword\":\"\",\"pageNumber\":1,\"pageSize\":10}'";
+
+        return response()->json(['curl' => $curl]);
     }
 
     protected function normalizeSkills(array $skills): array

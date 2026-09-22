@@ -54,11 +54,6 @@ class JobVisionTokenProvider
             return $token;
         }
 
-        // اگر cookie داریم، sign-in/captcha رو انجام نده و مستقیم cookie-based auth رو فعال کن
-        if (!empty($this->cookie)) {
-            return null;
-        }
-
         // Try cache
         $cached = Cache::get(self::CACHE_KEY);
         if ($cached && $this->isValid($cached)) {
@@ -90,13 +85,11 @@ class JobVisionTokenProvider
             return false;
         }
 
-        $exp = $payload['exp'] ?? null;
-        if ($exp === null) {
+        if (isset($payload['exp']) && is_numeric($payload['exp']) && time() > (int) $payload['exp']) {
             return false;
         }
 
-        // Reject if expired or expiring within 60 seconds
-        return ($exp - time()) > 60;
+        return true;
     }
 
     /**
@@ -145,7 +138,7 @@ class JobVisionTokenProvider
             ->post($this->accountUrl . '/Employer/SignIn', [
                 'Password' => $this->password,
                 'ReturnUrl' => $returnUrl,
-                // CaptchaToken intentionally omitted — captcha sign-in is disabled
+                'CaptchaToken' => $this->captcha,
             ]);
 
         Log::info('JobVision login response', ['status' => $response->status()]);

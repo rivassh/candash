@@ -12,11 +12,8 @@ class JobVisionCrawlerTest extends TestCase
         $jobPostIds = config('talentmatch.jobvision.job_post_ids');
 
         $this->assertIsArray($jobPostIds);
-        $this->assertCount(10, $jobPostIds);
-        $this->assertEquals([
-            1503606, 1426362, 1426184, 1425037, 1422232,
-            1219058, 1219051, 1219050, 1219047, 1205337
-        ], $jobPostIds);
+        // Config should be empty - IDs are now fetched dynamically from API
+        $this->assertEmpty($jobPostIds);
     }
 
     public function test_crawler_uses_configured_job_post_ids(): void
@@ -27,5 +24,25 @@ class JobVisionCrawlerTest extends TestCase
 
         $this->assertNotNull($method);
         $this->assertTrue($method->isPublic());
+    }
+
+    public function test_crawler_has_fetch_job_post_summaries_method(): void
+    {
+        $crawler = new JobVisionCrawler();
+        $reflection = new \ReflectionClass($crawler);
+        $method = $reflection->getMethod('fetchJobPostSummaries');
+
+        $this->assertNotNull($method);
+        $this->assertTrue($method->isPrivate());
+    }
+
+    public function test_crawler_has_crawl_all_pages_method(): void
+    {
+        $crawler = new JobVisionCrawler();
+        $reflection = new \ReflectionClass($crawler);
+        $method = $reflection->getMethod('crawlAllPages');
+
+        $this->assertNotNull($method);
+        $this->assertTrue($method->isPrivate());
     }
 }

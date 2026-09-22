@@ -6,6 +6,14 @@ const { data, pending, refresh } = await useAsyncData('jobvision-credentials', (
   api.get<any[]>('/jobvision-credentials')
 )
 
+const credentialList = computed(() => {
+  const d: any = data.value
+  if (!d) return []
+  if (Array.isArray(d)) return d
+  if (Array.isArray(d?.data)) return d.data
+  return []
+})
+
 const form = ref({
   username: '',
   password: '',
@@ -25,6 +33,8 @@ const browserLoginOpen = ref(false)
 const browserSessionId = ref('')
 const browserStatus = ref('idle')
 const browserError = ref('')
+const viewerConnected = ref(false)
+const viewerMessage = ref('')
 let pollTimer: number | null = null
 
 function resetForm() {
@@ -116,16 +126,28 @@ async function remove(id: number) {
   }
 }
 
+function onVncIframeLoad() {
+  viewerConnected.value = true
+  viewerMessage.value = 'مرورگر متصل شد'
+}
+
+function onVncIframeError() {
+  viewerConnected.value = false
+  viewerMessage.value = 'خطا در اتصال به مرورگر'
+}
+
 async function startBrowserLogin() {
   browserLoginOpen.value = true
   browserStatus.value = 'starting'
   browserError.value = ''
+  viewerConnected.value = false
+  viewerMessage.value = 'در حال بارگذاری مرورگر…'
   try {
     const res = await api.post<any>('/admin/jobvision-browser-login', {
       account_url: form.value.account_url,
     })
     browserSessionId.value = res.session_id
-    browserStatus.value = 'waiting_for_login'
+    browserStatus.value = 'starting'
     pollBrowserStatus()
   } catch (e: any) {
     browserError.value = e.message
@@ -142,25 +164,23 @@ async function pollBrowserStatus() {
   pollTimer = window.setInterval(async () => {
     try {
       const res = await api.get<any>(`/admin/jobvision-browser-login/status?session_id=${browserSessionId.value}`)
-      browserStatus.value = res.status
-      if (res.cookies) { browserStatus.value = 'complete'; stopPolling() }
-    } catch {}
-  }, 2000)
-}
-}
-
-function stopPolling() {
-  if (pollTimer) { clearInterval(pollTimer); pollTimer = null }
-}
-
-async function pollBrowserStatus() {
-  stopPolling()
-  pollTimer = window.setInterval(async () => {
-    try {
-      const res = await api.get<any>(`/admin/jobvision-browser-login/status?session_id=${browserSessionId.value}`)
-      browserStatus.value = res.status
-      if (res.cookies) { browserStatus.value = 'complete'; stopPolling() }
-    } catch {}
+      if (res.status === 'complete' || res.cookies) {
+        browserStatus.value = 'complete'
+        stopPolling()
+        return
+      }
+      if (res.status === 'error' || res.status === 'timeout') {
+        browserError.value = res.error || 'Browser session failed'
+        browserStatus.value = res.status
+        stopPolling()
+        return
+      }
+      browserStatus.value = res.status || 'starting'
+    } catch (e: any) {
+      browserError.value = e.message || 'Unable to check browser status'
+      browserStatus.value = 'error'
+      stopPolling()
+    }
   }, 2000)
 }
 
@@ -171,6 +191,9 @@ async function cancelBrowserLogin() {
   }
   browserLoginOpen.value = false
   browserStatus.value = 'idle'
+  browserError.value = ''
+  viewerConnected.value = false
+  viewerMessage.value = ''
 }
 </script>
 
@@ -201,8 +224,8 @@ async function cancelBrowserLogin() {
             <th class="px-4 py-3 text-right">عملیات</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="cred in data" :key="cred.id" class="table-row">
+<tbody>
+           <tr v-for="cred in credentialList.value" :key="cred.id" class="table-row">
             <td class="px-4 py-3">{{ cred.id }}</td>
             <td class="px-4 py-3">{{ cred.username || '—' }}</td>
             <td class="px-4 py-3 text-xs">{{ cred.api_url }}</td>
@@ -224,7 +247,7 @@ async function cancelBrowserLogin() {
               <button @click="remove(cred.id)" class="btn-danger text-xs">🗑️</button>
             </td>
           </tr>
-          <tr v-if="!data?.length">
+          <tr v-if="!credentialList.value.length">
             <td colspan="7" class="px-4 py-8 text-center text-gray-400">هیچ credential ثبت نشده است.</td>
           </tr>
         </tbody>
@@ -313,9 +336,16 @@ async function cancelBrowserLogin() {
         </div>
 
         <div class="flex-1 overflow-hidden relative bg-black flex items-center justify-center">
-          <div v-if="browserStatus === 'starting'" class="text-white text-sm">در حال راه‌اندازی مرورگر...</div>
-          <iframe v-else-if="browserStatus === 'waiting_for_login'" :src="`/admin/jobvision-browser-login/vnc?session_id=${browserSessionId}`" style="width:100%;height:100%;border:none;position:absolute;inset:0;"></iframe>
-          <div v-else-if="browserStatus === 'error' || browserStatus === 'timeout'" class="text-red-400">{{ browserStatus === 'error' ? (browserError || 'خطا') : 'زمان‌بندی تمام شد' }}</div>
+          <div v-if="browserStatus === 'idle'" class="text-white text-sm">آماده</div>
+          <div v-else-if="browserStatus === 'starting' || browserStatus === 'waiting_for_login'" class="w-full h-full relative">
+            <iframe :id="`vnc-iframe-${browserSessionId}`" :src="`/api/admin/jobvision-browser-login/vnc?session_id=${browserSessionId}`" @load="onVncIframeLoad" @error="onVncIframeError" style="width:100%;height:100%;border:none;position:absolute;inset:0;"></iframe>
+            <div v-if="!viewerConnected" class="absolute inset-0 flex items-center justify-center text-white text-sm bg-black/70">
+              {{ viewerMessage }}
+            </div>
+          </div>
+          <div v-else-if="browserStatus === 'error' || browserStatus === 'timeout'" class="text-red-400 text-center p-4">
+            {{ browserStatus === 'error' ? (browserError || 'خطا') : 'زمان‌بندی تمام شد' }}
+          </div>
           <div v-else class="text-white">تمام شد</div>
         </div>
 

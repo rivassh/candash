@@ -13,14 +13,18 @@ use Illuminate\Support\Collection;
 class SkillMatcher
 {
     protected array $skillIndex = [];
+    protected bool $indexLoaded = false;
 
     public function __construct()
     {
-        $this->loadIndex();
     }
 
     protected function loadIndex(): void
     {
+        if ($this->indexLoaded) {
+            return;
+        }
+        $this->skillIndex = [];
         Skill::where('is_active', true)->get(['id', 'name', 'normalized_name', 'aliases'])
             ->each(function (Skill $skill) {
                 $this->skillIndex[$skill->normalized_name] = $skill->id;
@@ -28,6 +32,13 @@ class SkillMatcher
                     $this->skillIndex[mb_strtolower(trim($alias))] = $skill->id;
                 }
             });
+        $this->indexLoaded = true;
+    }
+
+    protected function getIndex(): array
+    {
+        $this->loadIndex();
+        return $this->skillIndex;
     }
 
     /**
@@ -36,7 +47,7 @@ class SkillMatcher
     public function resolveSkillId(string $name): ?int
     {
         $normalized = mb_strtolower(trim($name));
-        return $this->skillIndex[$normalized] ?? null;
+        return $this->getIndex()[$normalized] ?? null;
     }
 
     /**

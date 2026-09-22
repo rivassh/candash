@@ -9,6 +9,9 @@ const { data, pending, refresh } = await useAsyncData('positions', () =>
 )
 
 const showModal = ref(false)
+const showImportModal = ref(false)
+const importError = ref('')
+const importCurl = ref('')
 const form = ref({
   title: '', department: '', level: 'mid', employment_type: 'full_time',
   min_experience_years: 0, education_requirements: '', description: '',
@@ -69,8 +72,36 @@ async function importFromSource() {
     alert(`ایجاد: ${result.created} | به‌روزرسانی: ${result.updated}`)
     await refresh()
   } catch (e: any) {
-    alert(e.message)
+    importError.value = e.message
+    try {
+      const res = await api.get<{ curl: string }>('/job-positions/import-curl')
+      importCurl.value = res.curl
+    } catch {
+      importCurl.value = `curl 'https://employerapi.jobvision.ir/api/v1.0/JobPost/GetListOfJobPosts' \\
+  --compressed \\
+  -X POST \\
+  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0' \\
+  -H 'Accept: application/json, text/plain, */*' \\
+  -H 'Accept-Language: en-US,en;q=0.5' \\
+  -H 'Accept-Encoding: gzip, deflate, br, zstd' \\
+  -H 'Authorization: Bearer YOUR_TOKEN_HERE' \\
+  -H 'Content-Type: application/json' \\
+  -H 'Origin: https://employer.jobvision.ir' \\
+  -H 'Connection: keep-alive' \\
+  -H 'Referer: https://employer.jobvision.ir/' \\
+  -H 'Sec-Fetch-Dest: empty' \\
+  -H 'Sec-Fetch-Mode: cors' \\
+  -H 'Sec-Fetch-Site: same-site' \\
+  -H 'Priority: u=0' \\
+  -H 'TE: trailers' \\
+  --data-raw '{"statusId":3,"keyword":"","pageNumber":1,"pageSize":10}'`
+    }
+    showImportModal.value = true
   }
+}
+
+function viewApplications(position: any) {
+  router.push(`/positions/${position.external_id}/applications`)
 }
 </script>
 
@@ -97,10 +128,11 @@ async function importFromSource() {
             <th class="px-4 py-3 text-right">حداقل سابقه</th>
             <th class="px-4 py-3 text-right">مهارت‌های الزامی</th>
             <th class="px-4 py-3 text-right">وضعیت</th>
+            <th class="px-4 py-3 text-right">عملیات</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pos in data?.data" :key="pos.id" class="table-row">
+          <tr v-for="pos in data?.data" :key="pos.id" class="table-row" @click="viewApplications(pos)">
             <td class="px-4 py-3 font-medium">{{ pos.title }}</td>
             <td class="px-4 py-3">{{ pos.department }}</td>
             <td class="px-4 py-3">{{ levelLabels[pos.level] || pos.level }}</td>
@@ -122,94 +154,47 @@ async function importFromSource() {
                 {{ { draft: 'پیش‌نویس', open: 'باز', closed: 'بسته', archived: 'آرشیو' }[pos.status] || pos.status }}
               </span>
             </td>
+            <td class="px-4 py-3">
+              <button class="btn-secondary text-xs" @click.stop="viewApplications(pos)">📋 درخواست‌ها</button>
+            </td>
           </tr>
           <tr v-if="!data?.data?.length">
-            <td colspan="7" class="px-4 py-8 text-center text-gray-400">موقعیتی یافت نشد.</td>
+            <td colspan="8" class="px-4 py-8 text-center text-gray-400">موقعیتی یافت نشد.</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Modal -->
-    <div v-if="showModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+    <!-- Import Error Modal -->
+    <div v-if="showImportModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 mx-4">
-        <h2 class="text-lg font-bold mb-4">ثبت موقعیت شغلی جدید</h2>
+        <h2 class="text-lg font-bold mb-4">خطای احراز هویت در ایمپورت از منبع</h2>
+        
+        <div v-if="importError" class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">
+          {{ importError }}
+        </div>
 
-        <div v-if="error" class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-4">{{ error }}</div>
+        <div class="mb-4">
+          <p class="text-sm font-medium mb-2">برای رفع خطا، توکن احراز هویت JobVision را به‌روزرسانی کنید:</p>
+          <div class="font-mono text-xs bg-gray-50 p-3 rounded border" v-text="importCurl"></div>
+          <button @click="navigator.clipboard.writeText(importCurl).then(() => alert('لیست curl کپی شد'))"
+                  class="btn-secondary mt-2">
+            📋 کپی کردن دستور curl
+          </button>
+        </div>
 
-        <form @submit.prevent="submit" class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div class="col-span-2">
-              <label class="label">عنوان موقعیت *</label>
-              <input v-model="form.title" class="input" placeholder="مثال: Senior Backend Developer" required />
-            </div>
-            <div>
-              <label class="label">دپارتمان *</label>
-              <input v-model="form.department" class="input" placeholder="Engineering" required />
-            </div>
-            <div>
-              <label class="label">سطح *</label>
-              <select v-model="form.level" class="input">
-                <option v-for="l in levels" :key="l" :value="l">{{ levelLabels[l] }}</option>
-              </select>
-            </div>
-            <div>
-              <label class="label">نوع استخدام *</label>
-              <select v-model="form.employment_type" class="input">
-                <option v-for="t in empTypes" :key="t" :value="t">{{ empLabels[t] }}</option>
-              </select>
-            </div>
-            <div>
-              <label class="label">حداقل سابقه (سال)</label>
-              <input v-model.number="form.min_experience_years" type="number" min="0" class="input" />
-            </div>
-            <div class="col-span-2">
-              <label class="label">الزامات تحصیلی</label>
-              <input v-model="form.education_requirements" class="input" placeholder="مثال: کارشناسی مهندسی کامپیوتر" />
-            </div>
-            <div class="col-span-2">
-              <label class="label">توضیحات</label>
-              <textarea v-model="form.description" class="input" rows="3"></textarea>
-            </div>
-          </div>
+        <div class="mt-4">
+          <p class="text-sm font-medium mb-2">یا می‌توانید از پنل مدیریت برای به‌روزرسانی اطلاعات احراز هویت استفاده کنید:</p>
+          <button @click="showImportModal = false; router.push('/admin/jobvision-credentials')"
+                  class="btn-primary">
+            ⚙️ رفتن به پنل تنظیمات JobVision
+          </button>
+        </div>
 
-          <!-- Required Skills -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <label class="label mb-0">مهارت‌های الزامی</label>
-              <button type="button" @click="addSkill" class="text-xs text-primary-600 hover:underline">+ افزودن</button>
-            </div>
-            <div v-for="(skill, i) in form.required_skills" :key="i" class="flex gap-2 mb-2 items-center">
-              <input v-model="skill.name" class="input flex-1" placeholder="نام مهارت (مثال: PHP)" />
-              <input v-model.number="skill.weight" type="number" min="1" max="10" class="input w-16" title="وزن" placeholder="وزن" />
-              <input v-model.number="skill.min_years" type="number" min="0" class="input w-20" title="حداقل سال" placeholder="حداقل سال" />
-              <button type="button" @click="removeSkill(i)" class="text-danger-500 hover:text-danger-700 text-sm">✕</button>
-            </div>
-          </div>
-
-          <!-- Preferred Skills -->
-          <div>
-            <label class="label">مهارت‌های ترجیحی</label>
-            <div class="flex gap-2">
-              <input @keydown.enter.prevent="addPreferred(($event.target as HTMLInputElement).value); ($event.target as HTMLInputElement).value = ''"
-                class="input flex-1" placeholder="نام مهارت + Enter" />
-            </div>
-            <div class="flex flex-wrap gap-1 mt-2">
-              <span v-for="s in form.preferred_skills" :key="s"
-                class="badge-info flex items-center gap-1">
-                {{ s }}
-                <button type="button" @click="form.preferred_skills = form.preferred_skills.filter(x => x !== s)" class="hover:text-red-600">✕</button>
-              </span>
-            </div>
-          </div>
-
-          <div class="flex justify-end gap-2 pt-4 border-t">
-            <button type="button" @click="showModal = false" class="btn-secondary">انصراف</button>
-            <button type="submit" class="btn-primary" :disabled="saving">
-              {{ saving ? 'در حال ذخیره...' : 'ثبت موقعیت' }}
-            </button>
-          </div>
-        </form>
+        <div class="flex justify-end gap-2 pt-4 border-t">
+          <button type="button" @click="showImportModal = false" class="btn-secondary">بستن</button>
+          <button @click="importFromSource()" class="btn-primary">Retry with New Token</button>
+        </div>
       </div>
     </div>
   </div>

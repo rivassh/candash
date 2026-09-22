@@ -14,15 +14,16 @@
 | ✅ Done | T10 | Add throttle middleware to auth endpoints (10 req/min) | 170 |
 | ✅ Done | T13 | PII fix: removed email/phone from search API responses | 108 |
 | ✅ Done | T17 | Log fix: maskedAuthHeaders() used in sendRequest() log output | 96 |
-| ⬜ Todo | T3 | Auth bypass risk | 135 |
-| ⬜ Todo | T4 | JWT in localStorage → httpOnly cookie | 127.5 |
-| ⬜ Todo | T16 | Duplicate fetchWithRetry + API casing | 102 |
-| ⬜ Todo | T8 | Admin credentials page wrong API response shape | 76 |
-| ⬜ Todo | T12 | File upload MIME verification | 64 |
-| ⬜ Todo | T14 | Contract drift (jobsource.yaml) | 28 |
-| ⬜ Todo | T15 | E2E + CI/CD | 23.3 |
+| ✅ Done | T3 | Auth bypass risk — added EnsureAdmin middleware to credential routes | 135 |
+| ✅ Done | T4 | JWT in localStorage → httpOnly cookie | 127.5 |
+| ✅ Done | T16 | Duplicate fetchWithRetry + API casing | 102 |
+| ✅ Done | T8 | Admin credentials page wrong API response shape | 76 |
+| ✅ Done | T12 | File upload MIME verification | 64 |
+| ✅ Done | T2 | SQLi + IDOR in JobSourceCredentialController | 67.5 |
+| ✅ Done | T14 | Contract drift (jobsource.yaml) | 28 |
+| ✅ Done | T15 | E2E tests + CI/CD pipeline (.github/workflows/e2e.yml) | 23.3 |
 
-All 40 PHPUnit tests pass. Frontend builds clean.
+All 40 PHPUnit tests pass. E2E tests pass (43 scenarios).
 
 RICE = (Reach × Impact × Confidence) / Effort
 

@@ -166,4 +166,19 @@ TEXT;
     {
         return 'mock';
     }
+
+    public function listApplications(int $jobPostId): array
+    {
+        return [];
+    }
+
+    public function getApplicationDetails(string $applicationId): ?array
+    {
+        return null;
+    }
+
+    public function importPositions(int $page = 1, int $pageSize = 50): array
+    {
+        return array_map(fn($p) => PositionDto::fromArray($p), $this->positions);
+    }
 }

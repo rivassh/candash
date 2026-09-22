@@ -19,6 +19,14 @@ const { data, pending, refresh } = await useAsyncData('credentials', () =>
   api.get<any[]>('/job-source-credentials')
 )
 
+const credentialList = computed(() => {
+  const d: any = data.value
+  if (!d) return []
+  if (Array.isArray(d)) return d
+  if (Array.isArray(d?.data)) return d.data
+  return []
+})
+
 onMounted(async () => {
   const res = await api.get('/job-source-credentials/providers')
   providers.value = res.providers || []
@@ -28,6 +36,8 @@ onMounted(async () => {
 function resetForm() {
   form.value = {}
   editingId.value = null
+  selectedProvider.value = ''
+  schemaFields.value = []
   errorMsg.value = ''
 }
 
@@ -147,7 +157,7 @@ async function remove(cred: any) {
         </template>
 
         <div class="flex justify-end gap-3">
-          <button type="button" @click="openCreate" class="btn btn-outline">Cancel</button>
+          <button type="button" @click="showingForm.value = false" class="btn btn-outline">Cancel</button>
           <button type="submit" :disabled="saving" class="btn btn-primary">
             {{ saving ? 'Saving...' : editingId ? 'Update' : 'Create' }}
           </button>
@@ -163,7 +173,7 @@ async function remove(cred: any) {
       <div v-if="pending" class="text-center py-12 text-gray-400">Loading credentials...</div>
 
       <div v-else>
-        <div v-if="data.length === 0" class="text-center py-8">
+        <div v-if="credentialList.value.length === 0" class="text-center py-8">
           <p class="text-gray-500">No credentials found. Click "Add New Credential" to get started.</p>
         </div>
 
@@ -178,7 +188,7 @@ async function remove(cred: any) {
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="cred in data" :key="cred.id" class="hover:bg-gray-50">
+            <tr v-for="cred in credentialList.value" :key="cred.id" class="hover:bg-gray-50">
               <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ cred.id }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ cred.provider || '—' }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

@@ -6,7 +6,7 @@
 
 ## معماری
 
-- **api** — Laravel 11 + PHP 8.4 — موتور تطبیق، REST API، احراز هویت Sanctum
+- **api** — Laravel 13 + PHP 8.4 — موتور تطبیق، REST API، احراز هویت Sanctum
 - **frontend** — Nuxt 3 + Vue 3 + Tailwind — رابط فارسی RTL
 - **db** — PostgreSQL 16 + pgvector
 - **redis** — صف و کش
@@ -21,8 +21,8 @@ make seed
 ```
 
 سپس:
-- فرانت‌اند: http://localhost:3000
-- API: http://localhost:8080/api
+- فرانت‌اند: http://localhost:3080
+- API: http://localhost:8082/api
 - Mock JobSource: http://localhost:4000
 
 **اطلاعات ورود:**

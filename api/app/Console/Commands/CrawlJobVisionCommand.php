@@ -26,18 +26,17 @@ class CrawlJobVisionCommand extends Command
         $driver = new JobVisionDriver();
         $crawler = $driver->getCrawler();
 
-        $limit = (int) $this->option('limit');
+        $limit = (int) max(1, $this->option('limit'));
         $this->info("Fetching up to {$limit} pages of job posts...");
 
-        $stats = $crawler->crawlAll($limit);
+        $stats = $crawler->crawlJobPosts(1, $limit);
 
         $this->table(
             ['Entity Type', 'Count'],
             [
-                ['Job Posts', $stats['job_posts']],
-                ['Application IDs (from summaries)', $stats['applications']],
-                ['Application Headers', $stats['headers']],
-                ['Application Details (CVs)', $stats['details']],
+                ['Job Posts', JobVisionRawPayload::where('entity_type', JobVisionRawPayload::ENTITY_JOB_POST)->count()],
+                ['Application Headers', JobVisionRawPayload::where('entity_type', JobVisionRawPayload::ENTITY_APPLICATION_HEADER)->count()],
+                ['Application Details (CVs)', JobVisionRawPayload::where('entity_type', JobVisionRawPayload::ENTITY_APPLICATION_DETAILS)->count()],
             ]
         );
 
@@ -48,6 +47,10 @@ class CrawlJobVisionCommand extends Command
         $importer = new JobSourceImporter($driver);
         $posResult = $importer->importPositions();
         $this->info("Positions: {$posResult['created']} created, {$posResult['updated']} updated (driver: {$posResult['driver']})");
+
+        $this->info('Crawling applications for all job posts...');
+        $appStats = $crawler->crawlApplications();
+        $this->info("Applications: {$appStats['headers']} headers, {$appStats['details']} details fetched");
 
         $this->info('Importing candidates and resumes...');
         $candResult = $importer->importCandidates();

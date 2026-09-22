@@ -1,9 +1,7 @@
 openapi: 3.0.3
 info:
-  title: JobSource Contract
-  description: |
-    قرارداد منبع شغلی TalentMatch.
-    این سرویس داده‌های موقعیت‌های شغلی و رزومه‌های متصل را ارائه می‌دهد.
+  title: TalentMatch JobSource Contract
+  description: TalentMatch JobSource API contract for external job sources
   version: 1.0.0
 
 servers:
@@ -15,8 +13,7 @@ servers:
 paths:
   /api/v1/positions:
     get:
-      summary: دریافت لیست موقعیت‌های شغلی
-      description: تمام موقعیت‌های شغلی فعال را برمی‌گرداند.
+      summary: Get list of job positions
       tags:
         - positions
       parameters:
@@ -31,7 +28,7 @@ paths:
             type: string
       responses:
         '200':
-          description: لیست موقعیت‌ها
+          description: List of positions
           content:
             application/json:
               schema:
@@ -41,7 +38,7 @@ paths:
 
   /api/v1/positions/{id}:
     get:
-      summary: دریافت یک موقعیت شغلی
+      summary: Get a job position by external ID
       tags:
         - positions
       parameters:
@@ -52,20 +49,22 @@ paths:
             type: string
       responses:
         '200':
-          description: موقعیت شغلی
+          description: Job position
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Position'
+        '404':
+          description: Not found
 
   /api/v1/candidates:
     get:
-      summary: دریافت لیست کاندیداهای متصل
+      summary: Get list of candidates
       tags:
         - candidates
       responses:
         '200':
-          description: لیست کاندیداها
+          description: List of candidates
           content:
             application/json:
               schema:
@@ -75,7 +74,7 @@ paths:
 
   /api/v1/candidates/{id}/resume:
     get:
-      summary: دریافت رزومه یک کاندیدا
+      summary: Get candidate resume
       tags:
         - candidates
       parameters:
@@ -86,11 +85,31 @@ paths:
             type: string
       responses:
         '200':
-          description: رزومه کاندیدا
+          description: Candidate resume
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Resume'
+        '404':
+          description: Not found
+
+  /health:
+    get:
+      summary: Health check
+      tags:
+        - health
+      responses:
+        '200':
+          description: Service health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  service:
+                    type: string
 
 components:
   schemas:

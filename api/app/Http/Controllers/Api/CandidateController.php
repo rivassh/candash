@@ -83,11 +83,17 @@ class CandidateController extends Controller
     public function uploadResume(Request $request, Candidate $candidate): JsonResponse
     {
         $request->validate([
-            'file' => ['required', 'file', 'mimes:txt,pdf,docx', 'max:10240'],
+            'file' => ['required', 'file', 'mimes:txt,pdf,docx', 'mimetypes:text/plain,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'max:10240'],
         ]);
 
-        $path = $request->file('file')->store('resumes', 'public');
-        $rawText = $request->file('file')->get();
+        $uploaded = $request->file('file');
+        $mime = $uploaded->getMimeType();
+        $allowed = ['text/plain' => 'txt', 'application/pdf' => 'pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => 'docx'];
+        if (!isset($allowed[$mime])) {
+            return response()->json(['message' => 'Invalid file type.'], 422);
+        }
+        $path = $uploaded->store('resumes', 'public');
+        $rawText = $uploaded->get();
 
         $resume = $candidate->resumes()->create([
             'file_path' => $path,

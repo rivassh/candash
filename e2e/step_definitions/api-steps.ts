@@ -83,7 +83,7 @@ Given('I created a candidate with name {string}', async function (this: CustomWo
       Accept: 'application/json',
       ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
     },
-    body: JSON.stringify({ name, email: `${name.toLowerCase().replace(/\s+/g, '.')}@example.com`, phone: '+123456789', status: 'active' }),
+    body: JSON.stringify({ name, email: `${name.toLowerCase().replace(/\s+/g, '.')}@example.com`, phone: '+123456789', status: 'new' }),
   })
   const body = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(`Failed to create candidate: ${JSON.stringify(body)}`)

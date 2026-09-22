@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Cookie;
 
 class AuthController extends Controller
 {
@@ -30,21 +31,35 @@ class AuthController extends Controller
 
         $token = $user->createToken('api-token')->plainTextToken;
 
+        $cookie = Cookie::make(
+            'auth_token',
+            $token,
+            60 * 24, // 24 hours
+            '/',
+            null,
+            true, // secure (HTTPS)
+            true, // httpOnly
+            false, // raw
+            'strict' // SameSite
+        );
+
         return response()->json([
-            'token' => $token,
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
                 'role' => $user->role->value,
             ],
-        ]);
+        ])->withCookie($cookie);
     }
 
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'خروج موفقیت‌آمیز']);
+
+        $cookie = Cookie::make('auth_token', '', -1, '/', null, true, true, false, 'strict');
+
+        return response()->json(['message' => 'خروج موفقیت‌آمیز'])->withCookie($cookie);
     }
 
     public function me(Request $request): JsonResponse
