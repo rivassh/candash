@@ -9,6 +9,8 @@ use App\Http\Resources\JobPositionResource;
 use App\Models\JobPosition;
 use App\Services\JobSource\JobSourceDriverFactory;
 use App\Services\JobSource\JobSourceImporter;
+use App\Services\JobSource\JobVisionSimpleCollectionService;
+use App\Services\JobSource\JobVisionSimpleClient;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -16,11 +18,12 @@ class JobPositionController extends Controller
 {
     public function index(): AnonymousResourceCollection
     {
+        $perPage = request('per_page', 20);
         $positions = JobPosition::query()
             ->when(request('status'), fn($q, $s) => $q->where('status', $s))
             ->when(request('department'), fn($q, $d) => $q->where('department', $d))
             ->orderByDesc('id')
-            ->paginate(20);
+            ->paginate($perPage);
 
         return JobPositionResource::collection($positions);
     }
@@ -92,6 +95,39 @@ class JobPositionController extends Controller
         $curl = "curl 'https://employerapi.jobvision.ir/api/v1.0/JobPost/GetListOfJobPosts' \\\n  --compressed \\\n  -X POST \\\n  -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0' \\\n  -H 'Accept: application/json, text/plain, */*' \\\n  -H 'Accept-Language: en-US,en;q=0.5' \\\n  -H 'Accept-Encoding: gzip, deflate, br, zstd' \\\n  -H 'Authorization: Bearer " . $token . "' \\\n  -H 'Content-Type: application/json' \\\n  -H 'Origin: https://employer.jobvision.ir' \\\n  -H 'Connection: keep-alive' \\\n  -H 'Referer: https://employer.jobvision.ir/' \\\n  -H 'Sec-Fetch-Dest: empty' \\\n  -H 'Sec-Fetch-Mode: cors' \\\n  -H 'Sec-Fetch-Site: same-site' \\\n  -H 'Priority: u=0' \\\n  -H 'TE: trailers' \\\n  --data-raw '{\"statusId\":3,\"keyword\":\"\",\"pageNumber\":1,\"pageSize\":10}'";
 
         return response()->json(['curl' => $curl]);
+    }
+
+    public function simpleCollect(): JsonResponse
+    {
+        if (!config('talentmatch.jobvision_simple.enabled')) {
+            return response()->json([
+                'error' => 'Simple collection is not enabled',
+                'hint' => 'Set USE_NEW_JOBVISION_API=true to enable simple collection',
+            ], 400);
+        }
+
+        $client = new JobVisionSimpleClient();
+        $service = new JobVisionSimpleCollectionService($client);
+        $result = $service->collect();
+
+        return response()->json([
+            'message' => 'Simple collection completed',
+            'success' => $result['success'],
+            'page_count' => $result['page_count'],
+            'item_count' => $result['item_count'],
+            'is_complete' => $result['is_complete'],
+            'error' => $result['error'] ?? null,
+        ]);
+    }
+
+    public function simpleStatus(): JsonResponse
+    {
+        $enabled = config('talentmatch.jobvision_simple.enabled');
+
+        return response()->json([
+            'enabled' => $enabled,
+            'endpoint' => config('jobvision_simple.base_uri') . '/' . config('jobvision_simple.endpoint'),
+        ]);
     }
 
     protected function normalizeSkills(array $skills): array

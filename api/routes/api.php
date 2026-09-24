@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 Route::post('job-positions/import-from-source', [JobPositionController::class, 'importFromSource'])->middleware('auth:sanctum');
 
+Route::post('job-positions/simple-collect', [JobPositionController::class, 'simpleCollect'])->middleware('auth:sanctum');
+
+Route::post('job-positions/simple-status', [JobPositionController::class, 'simpleStatus'])->middleware('auth:sanctum');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('auth/logout', [AuthController::class, 'logout']);
     Route::get('auth/me', [AuthController::class, 'me']);
@@ -22,6 +26,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('job-source-credentials', [JobSourceCredentialController::class, 'index']);
     });
 });
+
+// Simple JobVision API endpoints (read-only)
+Route::get('job-positions', [JobPositionController::class, 'index']);
+Route::get('job-positions/simple-collect', [JobPositionController::class, 'simpleCollect']);
+Route::get('job-positions/simple-status', [JobPositionController::class, 'simpleStatus']);
+
+
 
 Route::middleware('auth:sanctum')->prefix('search')->group(function () {
     Route::get('health', [SearchController::class, 'index']);

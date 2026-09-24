@@ -22,12 +22,15 @@ const jobPositionsLoaded = ref(false)
 
 async function loadJobPositions() {
   try {
-    const res = await api.get<any>('/JobPositions?paginate=false')
+    const res = await api.get<any>('/job-positions', { per_page: '1000' })
     positions.value = res.data || []
     jobPositionsLoaded.value = true
   } catch (e) {
     // ignore
   }
+}
+
+onMounted(() => loadJobPositions())
 }
 
 async function search(resetPage = true) {

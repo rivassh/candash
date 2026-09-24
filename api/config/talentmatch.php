@@ -18,7 +18,7 @@ return [
         'timeout' => 10,
     ],
 
-'jobvision' => [
+    'jobvision' => [
         'token'       => env('JOBVISION_TOKEN'),
         'username'    => env('talentmatch.jobvision.username'),
         'password'    => env('talentmatch.jobvision.password'),
@@ -27,6 +27,15 @@ return [
         'account_url' => env('JOBVISION_ACCOUNT_URL', 'https://account.jobvision.ir'),
         'api_url'     => env('JOBVISION_API_URL', 'https://employerapi.jobvision.ir'),
         'job_post_ids' => [],
+    ],
+
+    'jobvision_simple' => [
+        'enabled' => env('USE_NEW_JOBVISION_API', false),
+        'base_uri' => env('JOBVISION_SIMPLE_BASE_URL', 'https://api.jobvision.com'),
+        'endpoint' => env('JOBVISION_SIMPLE_ENDPOINT', 'api/v1.0/JobPost/GetListOfJobPosts'),
+        'page_size' => env('JOBVISION_SIMPLE_PAGE_SIZE', 50),
+        'source_key' => env('JOBVISION_SIMPLE_SOURCE_KEY', 'jobvision'),
+        'corpus_key' => env('JOBVISION_SIMPLE_CORPUS_KEY', 'job_posts'),
     ],
 
     'ai' => [
