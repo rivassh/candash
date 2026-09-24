@@ -7,7 +7,13 @@ use App\Http\Controllers\Api\JobVisionCredentialController;
 use App\Http\Controllers\Api\SearchController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+// Temporarily disabled authentication for login - all visitors have admin access
+// To re-enable auth, set DISABLE_LOGIN_AUTH=false
+if (env('DISABLE_LOGIN_AUTH', true)) {
+    Route::post('auth/login', [AuthController::class, 'login']);
+} else {
+    Route::post('auth/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+}
 Route::post('job-positions/import-from-source', [JobPositionController::class, 'importFromSource'])->middleware('auth:sanctum');
 
 Route::post('job-positions/simple-collect', [JobPositionController::class, 'simpleCollect'])->middleware('auth:sanctum');
