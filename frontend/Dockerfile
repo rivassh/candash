@@ -1,18 +1,13 @@
-FROM node:20-alpine AS base
-
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-FROM base AS deps
 COPY package*.json ./
-RUN npm install --legacy-peer-deps --no-scripts && npm install vite@6.0.0 --save-dev --no-scripts
-
-FROM base AS builder
-COPY --from=deps /app/node_modules ./node_modules
+COPY node_modules ./node_modules
 COPY . .
 RUN npm run build
 
-FROM base AS runner
+FROM node:20-alpine AS runner
 ENV NODE_ENV=production
+WORKDIR /app
 COPY --from=builder /app/.output ./.output
 EXPOSE 3000
 CMD ["node", ".output/server/index.mjs"]

@@ -18,6 +18,10 @@ The only allowed write operations are:
 - `php artisan migrate --force` to add new columns or tables
 - `php artisan db:seed --force --class=UserSeeder` to restore default users
 
+## Migration Safety
+
+All migrations must be idempotent using Schema::hasTable() and Schema::hasColumn() guards to prevent failures when reapplying to existing databases.
+
 If you need test data, use the mock API or model factories in an isolated test database. Do not modify the shared production database.
 
 Before running any command that may change the database, stop and ask the user for approval.
