@@ -31,7 +31,6 @@ async function loadJobPositions() {
 }
 
 onMounted(() => loadJobPositions())
-}
 
 async function search(resetPage = true) {
   loading.value = true
