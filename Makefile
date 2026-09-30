@@ -66,4 +66,4 @@ init: ## Initial setup (up, key, migrate, seed)
 	$(EXEC_API) php artisan key:generate --force || true
 	$(EXEC_API) php artisan migrate --force
 	$(EXEC_API) php artisan db:seed --force
-	@echo "TalentMatch is ready at http://localhost:${FRONTEND_PORT:-3080}"
+	@echo "CanDash is ready at http://localhost:${FRONTEND_PORT:-3080}"

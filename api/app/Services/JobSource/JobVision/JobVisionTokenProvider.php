@@ -34,12 +34,12 @@ class JobVisionTokenProvider
             $this->isExpired = $dbCredential->isExpired();
         } else {
             // Fallback to .env (priority 2) - no captcha support
-            $this->apiUrl = config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir');
-            $this->accountUrl = config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
-            $this->username = config('talentmatch.jobvision.username');
-            $this->password = config('talentmatch.jobvision.password');
-            $this->cookie = config('talentmatch.jobvision.cookie');
-            $this->jobPostIds = config('talentmatch.jobvision.job_post_ids', []);
+            $this->apiUrl = config('candash.jobvision.api_url', 'https://employerapi.jobvision.ir');
+            $this->accountUrl = config('candash.jobvision.account_url', 'https://account.jobvision.ir');
+            $this->username = config('candash.jobvision.username');
+            $this->password = config('candash.jobvision.password');
+            $this->cookie = config('candash.jobvision.cookie');
+            $this->jobPostIds = config('candash.jobvision.job_post_ids', []);
             $this->isExpired = false; // .env doesn't have explicit expiry
         }
     }
@@ -202,7 +202,7 @@ class JobVisionTokenProvider
 
     private function loadFromConfig(): ?string
     {
-        $token = config('talentmatch.jobvision.token');
+        $token = config('candash.jobvision.token');
         if (!$token) {
             return null;
         }

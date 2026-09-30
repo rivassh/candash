@@ -23,7 +23,7 @@ class JobVisionBrowserLoginController extends Controller
     public function start(Request $request): JsonResponse
     {
         $sessionId = 'sess_' . uniqid();
-        $accountUrl = $request->input('account_url', config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir'));
+        $accountUrl = $request->input('account_url', config('candash.jobvision.account_url', 'https://account.jobvision.ir'));
 
         $response = Http::timeout(5)->post($this->browserAgentUrl . '/sessions', [
             'session_id' => $sessionId,

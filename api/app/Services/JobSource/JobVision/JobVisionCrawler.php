@@ -119,7 +119,7 @@ class JobVisionCrawler
 
         if (empty($allIds)) {
             Log::warning('[JobVision] No job post IDs from any page, falling back to config');
-            $allIds = config('talentmatch.jobvision.job_post_ids', [
+            $allIds = config('candash.jobvision.job_post_ids', [
                 1503606, 1426362, 1426184, 1425037, 1422232,
                 1219058, 1219051, 1219050, 1219047, 1205337
             ]);
@@ -599,12 +599,12 @@ class JobVisionCrawler
 
     private function apiUrl(): string
     {
-        return config('talentmatch.jobvision.api_url', 'https://employerapi.jobvision.ir');
+        return config('candash.jobvision.api_url', 'https://employerapi.jobvision.ir');
     }
 
     private function accountUrl(): string
     {
-        return config('talentmatch.jobvision.account_url', 'https://account.jobvision.ir');
+        return config('candash.jobvision.account_url', 'https://account.jobvision.ir');
     }
 
 }

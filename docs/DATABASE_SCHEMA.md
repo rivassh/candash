@@ -1,7 +1,7 @@
-# TalentMatch — Database Schema Documentation
+# CanDash — Database Schema Documentation
 
 ## Overview
-The TalentMatch database is built on **PostgreSQL 16** with **pgvector** extension. It uses a relational schema with JSONB columns for flexible data storage (matching breakdowns, enrichment data, audit changes). All migrations are located in `api/database/migrations/`.
+The CanDash database is built on **PostgreSQL 16** with **pgvector** extension. It uses a relational schema with JSONB columns for flexible data storage (matching breakdowns, enrichment data, audit changes). All migrations are located in `api/database/migrations/`.
 
 ## Schema Diagram
 

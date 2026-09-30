@@ -1,4 +1,4 @@
-# TalentMatch — Architecture Design Document
+# CanDash — Architecture Design Document
 
 ## Overview
 An intelligent talent analysis and management system with client-based architecture using Laravel backend, Nuxt frontend, and PostgreSQL/pgvector database. The system implements a transparent, formula-based matching engine for candidate-job matching.
@@ -15,7 +15,7 @@ An intelligent talent analysis and management system with client-based architect
 9. [Testing Strategy](#testing-strategy)
 
 ## System Overview
-TalentMatch is a client-based talent management system designed to analyze and match candidate profiles with job positions using a deterministic, explainable scoring formula. The architecture separates concerns into distinct layers with clear interfaces and dependency injection for testability and extensibility.
+CanDash is a client-based talent management system designed to analyze and match candidate profiles with job positions using a deterministic, explainable scoring formula. The architecture separates concerns into distinct layers with clear interfaces and dependency injection for testability and extensibility.
 
 ## Architecture Layers
 
@@ -47,7 +47,7 @@ TalentMatch is a client-based talent management system designed to analyze and m
 - `app/Http/Controllers/` - RESTful API endpoints
 - `app/DTOs/` - Data transfer objects
 - `app/Enums/` - Type-safe enumerations
-- `config/talentmatch.php` - Application configuration
+- `config/candash.php` - Application configuration
 - `database/` - Migrations and seeders
 
 **Services Architecture:**
@@ -155,7 +155,7 @@ total_score = 0.40 × required_skills
 - **Scoring:** Computes skill match scores based on experience years
 
 #### Configuration
-**Location:** `config/talentmatch.php`
+**Location:** `config/candash.php`
 ```php
 'matching' => [
     'weights' => [
@@ -262,7 +262,7 @@ total_score = 0.40 × required_skills
 **Key Variables:**
 ```env
 # Application
-APP_NAME=TalentMatch
+APP_NAME=CanDash
 APP_ENV=local
 APP_DEBUG=true
 
@@ -291,7 +291,7 @@ ENRICHMENT_DRIVER=mock
 ```
 
 ### Laravel Configuration
-**File:** `config/talentmatch.php`
+**File:** `config/candash.php`
 **Sections:**
 - `client`: JobSource driver configuration
 - `jobvision`: JobVision.ai integration settings
@@ -301,7 +301,7 @@ ENRICHMENT_DRIVER=mock
 ### Extensibility Points
 1. **New Job Sources:** Implement `JobSourceInterface`
 2. **New AI Services:** Implement `EnrichmentInterface` or `ResumeExtractorInterface`
-3. **Matching Formula:** Adjust weights in config/talentmatch.php
+3. **Matching Formula:** Adjust weights in config/candash.php
 4. **Seniority Levels:** Modify seniority_levels configuration
 5. **Additional Data:** Extend Eloquent models and migrations
 
@@ -449,4 +449,4 @@ docker-compose.yml (via Makefile)
 5. Internationalization (i18n) beyond Persian/English
 
 ## Conclusion
-The TalentMatch architecture provides a solid foundation for a talent management system with a focus on transparency, testability, and extensibility. The modular design allows for gradual enhancement while maintaining a reliable core system. The combination of Laravel's robust backend features with Nuxt's modern frontend capabilities creates a productive development environment suitable for both rapid iteration and enterprise-scale deployment.
+The CanDash architecture provides a solid foundation for a talent management system with a focus on transparency, testability, and extensibility. The modular design allows for gradual enhancement while maintaining a reliable core system. The combination of Laravel's robust backend features with Nuxt's modern frontend capabilities creates a productive development environment suitable for both rapid iteration and enterprise-scale deployment.

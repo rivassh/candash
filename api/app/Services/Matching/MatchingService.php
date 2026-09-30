@@ -39,7 +39,7 @@ class MatchingService
             'stability'       => $this->scoreStability($candidate, $job),
         ];
 
-        $weights = config('talentmatch.matching.weights');
+        $weights = config('candash.matching.weights');
 
         $totalScore = 0;
         foreach ($breakdown as $key => $data) {
@@ -188,7 +188,7 @@ class MatchingService
     public function scoreSeniority(Candidate $candidate, JobPosition $job): array
     {
         $totalYears = $candidate->experiences->sum(fn($e) => $e->getDurationYears());
-        $levels = config('talentmatch.matching.seniority_levels');
+        $levels = config('candash.matching.seniority_levels');
         $jobLevel = $job->level?->value ?? JobLevel::Mid->value;
 
         $expected = $levels[$jobLevel] ?? $levels['mid'];

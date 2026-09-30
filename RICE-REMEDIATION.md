@@ -1,4 +1,4 @@
-# RICE Remediation Plan — TalentMatch Codebase Review
+# RICE Remediation Plan — CanDash Codebase Review
 
 ## Status (2026-09-21)
 

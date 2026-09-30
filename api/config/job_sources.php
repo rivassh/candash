@@ -60,7 +60,7 @@ return [
         ],
     ],
 
-    // External API provider — proxy to an external TalentMatch-compatible API.
+    // External API provider — proxy to an external CanDash-compatible API.
     'external' => [
         'name' => 'External API',
         'fields' => [

@@ -20,10 +20,10 @@ return [
 
     'jobvision' => [
         'token'       => env('JOBVISION_TOKEN'),
-        'username'    => env('talentmatch.jobvision.username'),
-        'password'    => env('talentmatch.jobvision.password'),
-        'captcha'     => env('talentmatch.jobvision.captcha'),
-        'cookie'      => env('talentmatch.jobvision.cookie'),
+        'username'    => env('JOBVISION_USERNAME'),
+        'password'    => env('JOBVISION_PASSWORD'),
+        'captcha'     => env('JOBVISION_CAPTCHA_TOKEN'),
+        'cookie'      => env('JOBVISION_COOKIE'),
         'account_url' => env('JOBVISION_ACCOUNT_URL', 'https://account.jobvision.ir'),
         'api_url'     => env('JOBVISION_API_URL', 'https://employerapi.jobvision.ir'),
         'job_post_ids' => [],

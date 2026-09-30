@@ -30,12 +30,12 @@ class SearchService
 
     public function candidatesIndexName(): string
     {
-        return config('talentmatch.search.index_candidates', 'candidates');
+        return config('candash.search.index_candidates', 'candidates');
     }
 
     public function jobPositionsIndexName(): string
     {
-        return config('talentmatch.search.index_jobs', 'job_positions');
+        return config('candash.search.index_jobs', 'job_positions');
     }
 
     public function getCandidatesIndex(): \Meilisearch\Endpoints\Indexes

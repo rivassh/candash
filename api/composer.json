@@ -1,7 +1,7 @@
 {
-    "name": "talentmatch/api",
+    "name": "candash/api",
     "type": "project",
-    "description": "TalentMatch — سامانه هوشمند تحلیل و مدیریت استعداد",
+    "description": "CanDash — سامانه هوشمند تحلیل و مدیریت استعداد",
     "license": "proprietary",
     "require": {
         "php": "^8.4",

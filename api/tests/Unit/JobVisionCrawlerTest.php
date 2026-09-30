@@ -9,7 +9,7 @@ class JobVisionCrawlerTest extends TestCase
 {
     public function test_job_post_ids_are_configured(): void
     {
-        $jobPostIds = config('talentmatch.jobvision.job_post_ids');
+        $jobPostIds = config('candash.jobvision.job_post_ids');
 
         $this->assertIsArray($jobPostIds);
         // Config should be empty - IDs are now fetched dynamically from API

@@ -8,9 +8,9 @@ return [
             'url' => env('DB_URL'),
             'host' => env('DB_HOST', 'db'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'talentmatch'),
-            'username' => env('DB_USERNAME', 'talentmatch'),
-            'password' => env('DB_PASSWORD', 'talentmatch_secret'),
+            'database' => env('DB_DATABASE', 'candash'),
+            'username' => env('DB_USERNAME', 'candash'),
+            'password' => env('DB_PASSWORD', 'candash_secret'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
@@ -23,7 +23,7 @@ return [
         'client' => env('REDIS_CLIENT', 'predis'),
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', 'talentmatch_'),
+            'prefix' => env('REDIS_PREFIX', 'candash_'),
         ],
         'default' => [
             'url' => env('REDIS_URL'),

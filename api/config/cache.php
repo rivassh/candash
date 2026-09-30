@@ -13,5 +13,5 @@ return [
             'lock_connection' => 'default',
         ],
     ],
-    'prefix' => env('CACHE_PREFIX', 'talentmatch_cache'),
+    'prefix' => env('CACHE_PREFIX', 'candash_cache'),
 ];

@@ -1,4 +1,4 @@
-# TalentMatch
+# CanDash
 
 سامانه هوشمند تحلیل و مدیریت استعداد (Client-based).
 

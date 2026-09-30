@@ -98,7 +98,7 @@ All notable changes to the Candash project are documented in this file.
   - Updated filter syntax and search parameters
 - **JobVision Authentication**: Captcha sign-in permanently disabled
   - Removed `CaptchaToken` from `JobVisionTokenProvider::login()`
-  - Updated `.env` configuration to consolidate `talentmatch.jobvision.*` keys
+  - Updated `.env` configuration to consolidate `candash.jobvision.*` keys
 
 #### Technical Issues Resolved
 - **Build Failures**: Vue template syntax errors resolved

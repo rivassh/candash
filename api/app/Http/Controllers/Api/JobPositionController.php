@@ -70,7 +70,7 @@ class JobPositionController extends Controller
 
     public function importFromSource(): JsonResponse
     {
-        $provider = request('provider', config('talentmatch.client.driver', 'jobvision'));
+        $provider = request('provider', config('candash.client.driver', 'jobvision'));
         $driver = JobSourceDriverFactory::make($provider);
         $importer = new JobSourceImporter($driver);
         $result = $importer->importPositions();
@@ -99,7 +99,7 @@ class JobPositionController extends Controller
 
     public function simpleCollect(): JsonResponse
     {
-        if (!config('talentmatch.jobvision_simple.enabled')) {
+        if (!config('candash.jobvision_simple.enabled')) {
             return response()->json([
                 'error' => 'Simple collection is not enabled',
                 'hint' => 'Set USE_NEW_JOBVISION_API=true to enable simple collection',
@@ -122,7 +122,7 @@ class JobPositionController extends Controller
 
     public function simpleStatus(): JsonResponse
     {
-        $enabled = config('talentmatch.jobvision_simple.enabled');
+        $enabled = config('candash.jobvision_simple.enabled');
 
         return response()->json([
             'enabled' => $enabled,

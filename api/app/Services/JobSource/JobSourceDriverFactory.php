@@ -54,8 +54,8 @@ class JobSourceDriverFactory
             'jobvision' => new JobVisionDriver(),
             'mock' => new MockDriver(),
             'external' => new ExternalApiDriver(
-                config('talentmatch.client.base_url'),
-                config('talentmatch.client.token'),
+                config('candash.client.base_url'),
+                config('candash.client.token'),
             ),
             default => throw new \InvalidArgumentException("Unsupported job source provider: {$providerKey}"),
         };

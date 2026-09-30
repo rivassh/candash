@@ -11,7 +11,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'TalentMatch - سامانه هوشمند مدیریت استعداد',
+      title: 'CanDash - سامانه هوشمند مدیریت استعداد',
       htmlAttrs: { dir: 'rtl', lang: 'fa' },
       meta: [
         { charset: 'utf-8' },

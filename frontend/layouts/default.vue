@@ -66,7 +66,7 @@ onMounted(() => {
       :class="{ 'translate-x-0': sidebarVisible, '-translate-x-full': !sidebarVisible }"
     >
       <div class="p-5 border-b border-gray-100">
-        <h1 class="text-lg font-bold text-primary-700">TalentMatch</h1>
+        <h1 class="text-lg font-bold text-primary-700">CanDash</h1>
         <p class="text-xs text-gray-400 mt-0.5">سامانه مدیریت استعداد</p>
       </div>
 

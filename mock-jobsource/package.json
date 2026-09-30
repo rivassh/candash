@@ -1,7 +1,7 @@
 {
-  "name": "talentmatch-mock-jobsource",
+  "name": "candash-mock-jobsource",
   "version": "1.0.0",
-  "description": "Mock JobSource service for TalentMatch",
+  "description": "Mock JobSource service for CanDash",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

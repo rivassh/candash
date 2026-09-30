@@ -10,7 +10,7 @@ return [
     'table' => 'sessions',
     'store' => null,
     'lottery' => [2, 100],
-    'cookie' => env('SESSION_COOKIE', 'talentmatch_session'),
+    'cookie' => env('SESSION_COOKIE', 'candash_session'),
     'path' => '/',
     'domain' => env('SESSION_DOMAIN', 'localhost'),
     'secure' => null,

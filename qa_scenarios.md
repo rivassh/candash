@@ -1,4 +1,4 @@
-# QA Scenarios for TalentMatch (candash)
+# QA Scenarios for CanDash (candash)
 
 > Version: v2.0.0 | Updated: 2026-09-18
 > API base: `http://localhost:8082/api` | Frontend: `http://localhost:3080/search`
@@ -142,6 +142,6 @@ docker compose -f docker-compose.yml exec api vendor/bin/phpunit   # 32 tests
 
 ## Owner
 
-- QA Lead: TalentMatch Team
+- QA Lead: CanDash Team
 - Reviewer: Engineering Team
 - Frequency: Daily smoke, weekly regression

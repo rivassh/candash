@@ -26,7 +26,7 @@ async function handleLogin() {
   <div class="min-h-screen flex items-center justify-center bg-gradient-to-bl from-primary-700 to-primary-900">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
       <div class="text-center mb-8">
-        <h1 class="text-2xl font-bold text-gray-800">TalentMatch</h1>
+        <h1 class="text-2xl font-bold text-gray-800">CanDash</h1>
         <p class="text-gray-500 text-sm mt-1">سامانه هوشمند مدیریت استعداد</p>
       </div>
 

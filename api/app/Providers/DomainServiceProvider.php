@@ -17,7 +17,7 @@ class DomainServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(JobSourceInterface::class, function ($app) {
-            $driver = config('talentmatch.client.driver', 'mock');
+            $driver = config('candash.client.driver', 'mock');
             return JobSourceDriverFactory::make($driver);
         });
 

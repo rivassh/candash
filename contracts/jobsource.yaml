@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: TalentMatch JobSource Contract
-  description: TalentMatch JobSource API contract for external job sources
+  title: CanDash JobSource Contract
+  description: CanDash JobSource API contract for external job sources
   version: 1.0.0
 
 servers:

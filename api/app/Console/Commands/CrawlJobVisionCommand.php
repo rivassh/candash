@@ -9,7 +9,7 @@ use App\Models\JobVisionRawPayload;
 
 class CrawlJobVisionCommand extends Command
 {
-    protected $signature = 'talentmatch:crawl-jobvision
+    protected $signature = 'candash:crawl-jobvision
                             {--limit=10 : تعداد صفحات JobPost برای پردازش}
                             {--refresh : پاک کردن payloadهای قبلی}';
 

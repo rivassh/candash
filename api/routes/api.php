@@ -49,5 +49,5 @@ Route::middleware('auth:sanctum')->prefix('search')->group(function () {
 });
 
 Route::get('health', function () {
-    return response()->json(['status' => 'ok', 'app' => 'TalentMatch']);
+    return response()->json(['status' => 'ok', 'app' => 'CanDash']);
 });
